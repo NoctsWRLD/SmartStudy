@@ -50,7 +50,7 @@ export default function SchedulePage() {
   }
 
   function getTasksForDay(dateStr) {
-    return tasks.filter(t => t.dueDate === dateStr);
+    return tasks.filter(t => t.dueDate === dateStr && !t.completed);
   }
 
   function handleDayClick(dateStr) {

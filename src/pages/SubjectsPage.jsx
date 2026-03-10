@@ -2,12 +2,20 @@ import { useState } from 'react';
 import SUBJECT_COLORS from '../utils/colors';
 import { useSubjects, useTasks } from '../hooks/useFirestore';
 import SubjectModal from '../components/SubjectModal';
+import SubjectTaskModal from '../components/SubjectTaskModal';
 
 export default function SubjectsPage() {
   const { subjects, loading, addSubject, updateSubject, deleteSubject } = useSubjects();
-  const { tasks } = useTasks();
+  const { tasks, toggleTask, deleteTask } = useTasks();
   const [modalOpen, setModalOpen] = useState(false);
   const [editSubject, setEditSubject] = useState(null);
+  const [taskModalOpen, setTaskModalOpen] = useState(false);
+  const [selectedSubject, setSelectedSubject] = useState(null);
+
+  function handleSubjectClick(subj) {
+    setSelectedSubject(subj);
+    setTaskModalOpen(true);
+  }
 
   function handleSave(data) {
     if (editSubject) {
@@ -78,7 +86,8 @@ export default function SubjectsPage() {
 
             return (
               <div key={subj.id}
-                className="glass-card p-5 animate-fade-in-up group hover:border-slate-600/70 transition-all"
+                onClick={() => handleSubjectClick(subj)}
+                className="glass-card p-5 animate-fade-in-up group hover:border-slate-600/70 transition-all cursor-pointer"
                 style={{ borderLeft: `3px solid ${color.text}` }}>
                 <div className="flex items-start justify-between mb-3">
                   <div className="flex items-center gap-3">
@@ -93,7 +102,7 @@ export default function SubjectsPage() {
                   </div>
                   <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
                     <button
-                      onClick={() => handleEdit(subj)}
+                      onClick={(e) => { e.stopPropagation(); handleEdit(subj); }}
                       className="p-2 rounded-lg text-slate-400 hover:text-indigo-400 hover:bg-indigo-400/10 transition-all">
                       <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
@@ -101,7 +110,7 @@ export default function SubjectsPage() {
                       </svg>
                     </button>
                     <button
-                      onClick={() => handleDelete(subj)}
+                      onClick={(e) => { e.stopPropagation(); handleDelete(subj); }}
                       className="p-2 rounded-lg text-slate-400 hover:text-red-400 hover:bg-red-400/10 transition-all">
                       <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
@@ -135,6 +144,15 @@ export default function SubjectsPage() {
         onClose={() => { setModalOpen(false); setEditSubject(null); }}
         onSave={handleSave}
         subject={editSubject}
+      />
+
+      <SubjectTaskModal
+        isOpen={taskModalOpen}
+        onClose={() => { setTaskModalOpen(false); setSelectedSubject(null); }}
+        subject={selectedSubject}
+        tasks={tasks}
+        onToggleTask={toggleTask}
+        onDeleteTask={deleteTask}
       />
     </div>
   );
