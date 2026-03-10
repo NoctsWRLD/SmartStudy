@@ -6,7 +6,7 @@ import {
   onAuthStateChanged,
   updateProfile,
 } from 'firebase/auth';
-import { doc, setDoc, updateDoc, serverTimestamp } from 'firebase/firestore';
+import { doc, setDoc, updateDoc, serverTimestamp, onSnapshot } from 'firebase/firestore';
 import { auth, db } from '../firebase';
 
 const AuthContext = createContext(null);
@@ -18,6 +18,7 @@ export function useAuth() {
 
 export function AuthProvider({ children }) {
   const [currentUser, setCurrentUser] = useState(null);
+  const [userProfile, setUserProfile] = useState(null);
   const [loading, setLoading] = useState(true);
 
   async function register(email, password, displayName) {
@@ -60,7 +61,16 @@ export function AuthProvider({ children }) {
     return unsubscribe;
   }, []);
 
-  const value = { currentUser, register, login, logout, updateUserProfile };
+  // Real-time Firestore profile listener
+  useEffect(() => {
+    if (!currentUser) { setUserProfile(null); return; }
+    const unsub = onSnapshot(doc(db, 'users', currentUser.uid), (snap) => {
+      if (snap.exists()) setUserProfile({ uid: snap.id, ...snap.data() });
+    });
+    return unsub;
+  }, [currentUser?.uid]);
+
+  const value = { currentUser, userProfile, register, login, logout, updateUserProfile };
 
   return (
     <AuthContext.Provider value={value}>

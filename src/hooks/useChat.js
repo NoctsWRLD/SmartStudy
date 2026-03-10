@@ -2,10 +2,25 @@ import { useState, useEffect } from 'react';
 import {
   collection, query, orderBy, limit, where,
   onSnapshot, addDoc, deleteDoc, doc, updateDoc,
-  getDocs, serverTimestamp,
+  getDocs, serverTimestamp, getDoc,
 } from 'firebase/firestore';
 import { db } from '../firebase';
 import { useAuth } from '../contexts/AuthContext';
+
+// ─── User profile (Firestore) ─────────────────────────────────────────────────
+export function useUserProfile(uid) {
+  const [profile, setProfile] = useState(null);
+
+  useEffect(() => {
+    if (!uid) return;
+    const unsub = onSnapshot(doc(db, 'users', uid), (snap) => {
+      if (snap.exists()) setProfile({ uid: snap.id, ...snap.data() });
+    });
+    return unsub;
+  }, [uid]);
+
+  return { profile };
+}
 
 // ─── Messages ─────────────────────────────────────────────────────────────────
 export function useMessages(chatId) {

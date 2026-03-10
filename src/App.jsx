@@ -10,6 +10,7 @@ import TasksPage from './pages/TasksPage';
 import SchedulePage from './pages/SchedulePage';
 import ChatPage from './pages/ChatPage';
 import ProfilePage from './pages/ProfilePage';
+import FriendsPage from './pages/FriendsPage';
 
 export default function App() {
   return (
@@ -77,6 +78,16 @@ export default function App() {
               <ProtectedRoute>
                 <Layout>
                   <ProfilePage />
+                </Layout>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/friends"
+            element={
+              <ProtectedRoute>
+                <Layout>
+                  <FriendsPage />
                 </Layout>
               </ProtectedRoute>
             }
