@@ -8,6 +8,7 @@ import DashboardPage from './pages/DashboardPage';
 import SubjectsPage from './pages/SubjectsPage';
 import TasksPage from './pages/TasksPage';
 import SchedulePage from './pages/SchedulePage';
+import ChatPage from './pages/ChatPage';
 
 export default function App() {
   return (
@@ -55,6 +56,16 @@ export default function App() {
               <ProtectedRoute>
                 <Layout>
                   <SchedulePage />
+                </Layout>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/chat"
+            element={
+              <ProtectedRoute>
+                <Layout>
+                  <ChatPage />
                 </Layout>
               </ProtectedRoute>
             }
