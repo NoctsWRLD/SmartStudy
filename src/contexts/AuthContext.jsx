@@ -6,7 +6,7 @@ import {
   onAuthStateChanged,
   updateProfile,
 } from 'firebase/auth';
-import { doc, setDoc, serverTimestamp } from 'firebase/firestore';
+import { doc, setDoc, updateDoc, serverTimestamp } from 'firebase/firestore';
 import { auth, db } from '../firebase';
 
 const AuthContext = createContext(null);
@@ -26,6 +26,8 @@ export function AuthProvider({ children }) {
     await setDoc(doc(db, 'users', result.user.uid), {
       displayName,
       email,
+      school: '',
+      photoURL: '',
       createdAt: serverTimestamp(),
     });
     return result;
@@ -39,6 +41,17 @@ export function AuthProvider({ children }) {
     return signOut(auth);
   }
 
+  /** Update display name and/or school */
+  async function updateUserProfile({ displayName, school }) {
+    const user = auth.currentUser;
+    if (displayName) await updateProfile(user, { displayName });
+    await updateDoc(doc(db, 'users', user.uid), {
+      ...(displayName ? { displayName } : {}),
+      ...(school !== undefined ? { school } : {}),
+    });
+    setCurrentUser({ ...user, displayName: displayName || user.displayName });
+  }
+
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       setCurrentUser(user);
@@ -47,7 +60,7 @@ export function AuthProvider({ children }) {
     return unsubscribe;
   }, []);
 
-  const value = { currentUser, register, login, logout };
+  const value = { currentUser, register, login, logout, updateUserProfile };
 
   return (
     <AuthContext.Provider value={value}>

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { NavLink, useNavigate } from 'react-router-dom';
+import { NavLink, Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 
 const NAV_ITEMS = [
@@ -107,17 +107,22 @@ function SidebarContent({ onClose }) {
 
       {/* User section */}
       <div className="px-3 pb-4 border-t border-slate-700/50 pt-4">
-        <div className="flex items-center gap-3 px-4 py-3 rounded-xl mb-2"
+        <Link
+          to="/profile"
+          onClick={onClose}
+          className="flex items-center gap-3 px-4 py-3 rounded-xl mb-2 hover:bg-slate-700/30 transition-all"
           style={{ background: 'rgba(15,23,42,0.5)' }}>
-          <div className="w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0"
+          <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 overflow-hidden"
             style={{ background: 'linear-gradient(135deg, #6366f1, #8b5cf6)' }}>
-            {currentUser?.displayName?.[0]?.toUpperCase() || '?'}
+            {currentUser?.photoURL
+              ? <img src={currentUser.photoURL} alt="avatar" className="w-full h-full object-cover" />
+              : <span className="text-sm font-bold text-white">{currentUser?.displayName?.[0]?.toUpperCase() || '?'}</span>}
           </div>
           <div className="flex-1 min-w-0">
             <p className="text-sm font-medium text-white truncate">{currentUser?.displayName || 'Neznan Uporabnik'}</p>
-            <p className="text-xs text-slate-400 truncate">Učenec</p>
+            <p className="text-xs text-indigo-400 truncate">Uredi profil →</p>
           </div>
-        </div>
+        </Link>
         <button
           onClick={handleLogout}
           className="w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm text-slate-400 hover:text-red-400 hover:bg-red-500/10 transition-all">

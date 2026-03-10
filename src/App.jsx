@@ -9,6 +9,7 @@ import SubjectsPage from './pages/SubjectsPage';
 import TasksPage from './pages/TasksPage';
 import SchedulePage from './pages/SchedulePage';
 import ChatPage from './pages/ChatPage';
+import ProfilePage from './pages/ProfilePage';
 
 export default function App() {
   return (
@@ -66,6 +67,16 @@ export default function App() {
               <ProtectedRoute>
                 <Layout>
                   <ChatPage />
+                </Layout>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/profile"
+            element={
+              <ProtectedRoute>
+                <Layout>
+                  <ProfilePage />
                 </Layout>
               </ProtectedRoute>
             }
