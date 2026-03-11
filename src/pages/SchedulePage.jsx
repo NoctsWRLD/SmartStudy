@@ -83,32 +83,32 @@ export default function SchedulePage() {
           <h1 className="text-2xl font-bold text-white">Urnik</h1>
           <p className="text-slate-400 text-sm mt-0.5">{weekLabel}</p>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2">
           <button
             onClick={() => setWeekOffset(0)}
-            className="px-3 py-1.5 rounded-xl text-xs font-medium text-slate-300 hover:bg-slate-700/50 transition-all"
-            style={{ border: '1px solid rgba(51,65,85,0.5)' }}>
+            className="px-3 py-1.5 rounded-xl text-xs font-semibold transition-all hover:bg-white/5 shadow-sm"
+            style={{ color: 'var(--color-text)', border: '1px solid rgba(144, 140, 170, 0.2)' }}>
             Ta teden
           </button>
           <button
             onClick={() => setWeekOffset(w => w - 1)}
-            className="p-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-700/50 transition-all">
+            className="p-2 rounded-xl transition-all hover:bg-white/5" style={{ color: 'var(--color-muted)' }}>
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M15 19l-7-7 7-7" />
             </svg>
           </button>
           <button
             onClick={() => setWeekOffset(w => w + 1)}
-            className="p-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-700/50 transition-all">
+            className="p-2 rounded-xl transition-all hover:bg-white/5" style={{ color: 'var(--color-muted)' }}>
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
             </svg>
           </button>
           <button
             id="schedule-add-task"
             onClick={() => { setEditTask(null); setPreselectedDate(todayStr); setModalOpen(true); }}
-            className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold text-white transition-all hover:opacity-90"
-            style={{ background: 'linear-gradient(135deg, #6366f1, #8b5cf6)' }}>
+            className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold transition-all hover:opacity-90 shadow-md ml-2"
+            style={{ background: 'linear-gradient(135deg, var(--color-iris), var(--color-rose))', color: '#191724' }}>
             <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 4v16m8-8H4" />
             </svg>
@@ -127,21 +127,21 @@ export default function SchedulePage() {
           return (
             <div key={dateStr} className="flex flex-col">
               {/* Day header */}
-              <div className={`text-center mb-2 pb-2 border-b ${isToday ? 'border-indigo-500/50' : 'border-slate-700/30'}`}>
-                <p className={`text-xs font-medium ${isToday ? 'text-indigo-400' : 'text-slate-400'}`}>
+              <div className={`text-center mb-2 pb-2 border-b ${isToday ? 'border-[color:var(--color-iris)]' : 'border-[color:rgba(144,140,170,0.1)]'}`}>
+                <p className={`text-xs font-bold uppercase tracking-wider ${isToday ? 'text-[color:var(--color-iris)]' : 'text-[color:var(--color-muted)]'}`}>
                   {DAYS_SL[i]}
                 </p>
-                <div className={`w-7 h-7 rounded-full flex items-center justify-center mx-auto mt-1 text-sm font-bold transition-all ${
-                  isToday ? 'text-white' : 'text-slate-300'
+                <div className={`w-8 h-8 rounded-full flex items-center justify-center mx-auto mt-1.5 text-sm font-bold transition-all ${
+                  isToday ? 'shadow-md text-[#191724]' : 'text-[color:var(--color-text)]'
                 }`}
-                  style={isToday ? { background: 'linear-gradient(135deg, #6366f1, #8b5cf6)' } : {}}>
+                  style={isToday ? { background: 'linear-gradient(135deg, var(--color-iris), var(--color-rose))' } : {}}>
                   {day.getDate()}
                 </div>
               </div>
 
               {/* Tasks column */}
               <div
-                className="flex-1 min-h-28 rounded-xl p-1.5 space-y-1.5 cursor-pointer hover:bg-slate-700/20 transition-all"
+                className="flex-1 min-h-[7rem] rounded-xl p-1.5 space-y-2 cursor-pointer hover:bg-white/5 border border-transparent hover:border-[color:rgba(144,140,170,0.1)] transition-all"
                 onClick={() => handleDayClick(dateStr)}
                 title={`Dodaj nalogo – ${DAYS_FULL[i]}`}>
                 {dayTasks.map(task => {
@@ -151,12 +151,12 @@ export default function SchedulePage() {
                     <div
                       key={task.id}
                       onClick={e => { e.stopPropagation(); handleEdit(task); }}
-                      className={`px-2 py-1.5 rounded-lg text-xs leading-tight cursor-pointer hover:opacity-90 transition-all ${task.completed ? 'opacity-50 line-through' : ''}`}
+                      className={`px-2.5 py-2 rounded-lg text-xs leading-tight cursor-pointer hover:opacity-90 transition-all shadow-sm ${task.completed ? 'opacity-40 line-through' : ''}`}
                       style={color
                         ? { background: color.bg, border: `1px solid ${color.border}`, color: color.text }
-                        : { background: 'rgba(99,102,241,0.15)', border: '1px solid rgba(99,102,241,0.3)', color: '#818cf8' }}>
-                      <p className="font-medium truncate">{task.title}</p>
-                      {subj && <p className="opacity-70 truncate mt-0.5">{subj.name}</p>}
+                        : { background: 'rgba(196, 167, 231, 0.1)', border: '1px solid rgba(196, 167, 231, 0.2)', color: 'var(--color-iris)' }}>
+                      <p className="font-semibold truncate">{task.title}</p>
+                      {subj && <p className="opacity-70 truncate mt-0.5" style={{ color: 'var(--color-subtle)' }}>{subj.name}</p>}
                     </div>
                   );
                 })}
@@ -168,7 +168,7 @@ export default function SchedulePage() {
 
       {/* Mobile: day list */}
       <div className="block lg:hidden space-y-4 mt-4">
-        <h2 className="text-base font-semibold text-white">Ta teden po dnevih</h2>
+        <h2 className="text-base font-bold" style={{ color: 'var(--color-text)' }}>Ta teden po dnevih</h2>
         {weekDays.map((day, i) => {
           const dateStr = toDateStr(day);
           const dayTasks = getTasksForDay(dateStr);
@@ -178,14 +178,14 @@ export default function SchedulePage() {
           return (
             <div key={dateStr}>
               <div className="flex items-center gap-2 mb-2">
-                <span className={`text-sm font-semibold ${isToday ? 'text-indigo-400' : 'text-slate-300'}`}>
+                <span className={`text-sm font-bold ${isToday ? 'text-[color:var(--color-iris)]' : 'text-[color:var(--color-text)]'}`}>
                   {DAYS_FULL[i]}, {day.getDate()}. {MONTHS_SL[day.getMonth()]}
                 </span>
-                {isToday && <span className="text-xs px-2 py-0.5 rounded-full text-indigo-300"
-                  style={{ background: 'rgba(99,102,241,0.2)', border: '1px solid rgba(99,102,241,0.3)' }}>Danes</span>}
+                {isToday && <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-md"
+                  style={{ background: 'rgba(196, 167, 231, 0.15)', color: 'var(--color-iris)' }}>Danes</span>}
               </div>
               {dayTasks.length === 0 ? (
-                <p className="text-slate-500 text-xs pl-2">Ni nalog</p>
+                <p className="text-xs pl-2 font-medium" style={{ color: 'var(--color-muted)' }}>Ni nalog</p>
               ) : (
                 <div className="space-y-2">
                   {dayTasks.map(task => {
@@ -196,21 +196,21 @@ export default function SchedulePage() {
                         onClick={() => handleEdit(task)}>
                         <button
                           onClick={e => { e.stopPropagation(); toggleTask(task); }}
-                          className="mt-0.5 w-4 h-4 rounded-full border-2 flex-shrink-0 flex items-center justify-center transition-all"
+                          className="mt-0.5 w-5 h-5 rounded-full border-2 flex-shrink-0 flex items-center justify-center transition-all"
                           style={task.completed
-                            ? { background: 'linear-gradient(135deg,#6366f1,#8b5cf6)', borderColor: 'transparent' }
-                            : { borderColor: '#475569' }}>
+                            ? { background: 'linear-gradient(135deg, var(--color-iris), var(--color-rose))', borderColor: 'transparent' }
+                            : { borderColor: 'var(--color-muted)' }}>
                           {task.completed && (
-                            <svg className="w-2.5 h-2.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <svg className="w-3 h-3 text-[#191724]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
                             </svg>
                           )}
                         </button>
                         <div className="flex-1 min-w-0">
-                          <p className={`text-sm font-medium ${task.completed ? 'line-through text-slate-500' : 'text-white'}`}>
+                          <p className={`text-sm font-bold ${task.completed ? 'line-through opacity-50' : ''}`} style={{ color: 'var(--color-text)' }}>
                             {task.title}
                           </p>
-                          {subj && <Badge colorIndex={subj.colorIndex}>{subj.name}</Badge>}
+                          {subj && <div className="mt-1"><Badge colorIndex={subj.colorIndex}>{subj.name}</Badge></div>}
                         </div>
                       </div>
                     );

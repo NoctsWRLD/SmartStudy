@@ -2,28 +2,46 @@
 @import "tailwindcss";
 
 @theme {
-  --color-primary-50: #eef2ff;
-  --color-primary-100: #e0e7ff;
-  --color-primary-200: #c7d2fe;
-  --color-primary-300: #a5b4fc;
-  --color-primary-400: #818cf8;
-  --color-primary-500: #6366f1;
-  --color-primary-600: #4f46e5;
-  --color-primary-700: #4338ca;
-  --color-primary-800: #3730a3;
-  --color-primary-900: #312e81;
+  /* Rosé Pine Palette */
+  --color-base: #191724;
+  --color-surface: #1f1d2e;
+  --color-overlay: #26233a;
+  --color-muted: #6e6a86;
+  --color-subtle: #908caa;
+  --color-text: #e0def4;
+  --color-love: #eb6f92;
+  --color-gold: #f6c177;
+  --color-rose: #ebbcba;
+  --color-pine: #31748f;
+  --color-foam: #9ccfd8;
+  --color-iris: #c4a7e7;
+  --color-highlight-low: #21202e;
+  --color-highlight-med: #403d52;
+  --color-highlight-high: #524f67;
 
-  --color-surface-50: #f8fafc;
-  --color-surface-100: #f1f5f9;
-  --color-surface-200: #e2e8f0;
-  --color-surface-300: #cbd5e1;
-  --color-surface-400: #94a3b8;
-  --color-surface-500: #64748b;
-  --color-surface-600: #475569;
-  --color-surface-700: #334155;
-  --color-surface-800: #1e293b;
-  --color-surface-900: #0f172a;
-  --color-surface-950: #020617;
+  /* Aliasing for easier transition from existing vars if needed */
+  --color-primary-50: #f4ecf9;
+  --color-primary-100: #e8d9f4;
+  --color-primary-200: #d6bdf0;
+  --color-primary-300: #c4a7e7; /* Iris */
+  --color-primary-400: #b18fde;
+  --color-primary-500: #9e77d6;
+  --color-primary-600: #8c5ccd;
+  --color-primary-700: #7848b8;
+  --color-primary-800: #6a3da8;
+  --color-primary-900: #552f8a;
+
+  --color-surface-50: #6e6a86; /* Muted */
+  --color-surface-100: #524f67; /* High */
+  --color-surface-200: #403d52; /* Med */
+  --color-surface-300: #26233a; /* Overlay */
+  --color-surface-400: #26233a;
+  --color-surface-500: #21202e; /* Low */
+  --color-surface-600: #21202e;
+  --color-surface-700: #1f1d2e; /* Surface */
+  --color-surface-800: #191724; /* Base */
+  --color-surface-900: #191724;
+  --color-surface-950: #13121b;
 
   --font-family-sans: 'Inter', system-ui, sans-serif;
 }
@@ -44,8 +62,8 @@ html {
 
 body {
   margin: 0;
-  background-color: #0f172a;
-  color: #e2e8f0;
+  background-color: var(--color-base);
+  color: var(--color-text);
   min-height: 100vh;
 }
 
@@ -58,11 +76,11 @@ body {
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: #334155;
+  background: var(--color-surface);
   border-radius: 3px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #475569;
+  background: var(--color-highlight-med);
 }
 
 /* Smooth transitions */
@@ -74,15 +92,15 @@ body {
 
 /* Card glass effect */
 .glass-card {
-  background: rgba(30, 41, 59, 0.8);
+  background: rgba(38, 35, 58, 0.8); /* Overlay with opacity */
   backdrop-filter: blur(12px);
-  border: 1px solid rgba(51, 65, 85, 0.5);
+  border: 1px solid rgba(144, 140, 170, 0.2); /* Subtle with opacity */
   border-radius: 16px;
 }
 
 /* Gradient text */
 .gradient-text {
-  background: linear-gradient(135deg, #818cf8 0%, #c084fc 100%);
+  background: linear-gradient(135deg, var(--color-iris) 0%, var(--color-rose) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -101,8 +119,8 @@ body {
 }
 
 @keyframes pulse-glow {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.3); }
-  50% { box-shadow: 0 0 0 8px rgba(99, 102, 241, 0); }
+  0%, 100% { box-shadow: 0 0 0 0 rgba(196, 167, 231, 0.3); } /* Iris */
+  50% { box-shadow: 0 0 0 8px rgba(196, 167, 231, 0); }
 }
 
 .animate-fade-in-up {
