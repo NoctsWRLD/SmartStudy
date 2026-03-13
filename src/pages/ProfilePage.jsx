@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 function EditField({ label, value, onChange, placeholder }) {
   return (
     <div>
-      <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1.5">
+      <label className="block text-xs font-semibold uppercase tracking-wider mb-1.5" style={{ color: '#6e6a86' }}>
         {label}
       </label>
       <input
@@ -14,10 +14,11 @@ function EditField({ label, value, onChange, placeholder }) {
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
-        className="w-full px-4 py-2.5 rounded-xl text-sm text-white placeholder-slate-500 outline-none"
+        className="w-full px-4 py-2.5 rounded-xl text-sm outline-none"
         style={{
-          background: 'rgba(30,41,59,0.8)',
-          border: '1px solid rgba(51,65,85,0.5)',
+          background: 'rgba(38,35,58,0.9)',
+          border: '1px solid rgba(64,61,82,0.5)',
+          color: '#e0def4',
         }}
       />
     </div>
@@ -58,7 +59,7 @@ export default function ProfilePage() {
 
   return (
     <div className="max-w-2xl mx-auto space-y-6 animate-fade-in-up pb-8">
-      <h1 className="text-2xl font-bold text-white">Moj profil</h1>
+      <h1 className="text-2xl font-bold" style={{ color: '#e0def4' }}>Moj profil</h1>
 
       {/* ─── Profile card ─── */}
       <div className="glass-card p-6 space-y-6">
@@ -66,7 +67,7 @@ export default function ProfilePage() {
         <div className="flex justify-center">
           <div
             className="w-24 h-24 rounded-full flex items-center justify-center text-3xl font-bold text-white"
-            style={{ background: 'linear-gradient(135deg, #6366f1, #8b5cf6)' }}
+            style={{ background: 'linear-gradient(135deg, #c4a7e7, #9ccfd8)' }}
           >
             {(currentUser?.displayName?.[0] || '?').toUpperCase()}
           </div>
@@ -90,8 +91,8 @@ export default function ProfilePage() {
         <button
           onClick={handleSave}
           disabled={saving}
-          className="w-full py-2.5 rounded-xl text-sm font-semibold text-white transition-all hover:opacity-90 disabled:opacity-50"
-          style={{ background: 'linear-gradient(135deg, #6366f1, #8b5cf6)' }}
+          className="w-full py-2.5 rounded-xl text-sm font-semibold transition-all hover:opacity-90 disabled:opacity-50"
+          style={{ background: 'linear-gradient(135deg, #c4a7e7, #9ccfd8)', color: '#191724' }}
         >
           {saving ? 'Shranjujem…' : saved ? '✓ Shranjeno!' : 'Shrani spremembe'}
         </button>
@@ -106,14 +107,12 @@ export default function ProfilePage() {
           <div
             className="w-9 h-9 rounded-xl flex items-center justify-center"
             style={{
-              background:
-                'linear-gradient(135deg,rgba(99,102,241,0.3),rgba(139,92,246,0.2))',
-              border: '1px solid rgba(99,102,241,0.3)',
+              background: 'linear-gradient(135deg,rgba(196,167,231,0.2),rgba(156,207,216,0.15))',
+              border: '1px solid rgba(196,167,231,0.3)',
             }}
           >
             <svg
-              style={{ width: '1.125rem', height: '1.125rem' }}
-              className="text-indigo-400"
+              style={{ width: '1.125rem', height: '1.125rem', color: '#c4a7e7' }}
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -127,14 +126,14 @@ export default function ProfilePage() {
             </svg>
           </div>
           <div className="text-left">
-            <p className="text-sm font-semibold text-white">Prijatelji</p>
-            <p className="text-xs text-slate-500">
+            <p className="text-sm font-semibold" style={{ color: '#e0def4' }}>Prijatelji</p>
+            <p className="text-xs" style={{ color: '#6e6a86' }}>
               Upravljaj prijatelje, pošlji zahteve
             </p>
           </div>
         </div>
         <svg
-          className="w-4 h-4 text-slate-500"
+          style={{ color: '#6e6a86' }}
           fill="none"
           viewBox="0 0 24 24"
           stroke="currentColor"

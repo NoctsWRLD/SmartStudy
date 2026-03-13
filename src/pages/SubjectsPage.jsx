@@ -47,8 +47,8 @@ export default function SubjectsPage() {
     <div className="max-w-3xl mx-auto space-y-6">
       <div className="flex items-center justify-between animate-fade-in-up">
         <div>
-          <h1 className="text-2xl font-bold text-white">Predmeti</h1>
-          <p className="text-slate-400 text-sm mt-0.5">
+          <h1 className="text-2xl font-bold" style={{ color: '#e0def4' }}>Predmeti</h1>
+          <p className="text-sm mt-0.5" style={{ color: '#6e6a86' }}>
             {subjects.length} predmetov
           </p>
         </div>
@@ -58,10 +58,11 @@ export default function SubjectsPage() {
             setEditSubject(null);
             setModalOpen(true);
           }}
-          className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold text-white transition-all hover:opacity-90 hover:-translate-y-0.5"
+          className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold transition-all hover:opacity-90 hover:-translate-y-0.5"
           style={{
-            background: 'linear-gradient(135deg, #6366f1, #8b5cf6)',
-            boxShadow: '0 4px 20px rgba(99,102,241,0.3)',
+            background: 'linear-gradient(135deg, #c4a7e7, #9ccfd8)',
+            boxShadow: '0 4px 20px rgba(196,167,231,0.3)',
+            color: '#191724',
           }}
         >
           <svg
@@ -99,8 +100,8 @@ export default function SubjectsPage() {
           </p>
           <button
             onClick={() => setModalOpen(true)}
-            className="px-6 py-2.5 rounded-xl text-sm font-semibold text-white transition-all hover:opacity-90"
-            style={{ background: 'linear-gradient(135deg, #6366f1, #8b5cf6)' }}
+            className="px-6 py-2.5 rounded-xl text-sm font-semibold transition-all hover:opacity-90"
+            style={{ background: 'linear-gradient(135deg, #c4a7e7, #9ccfd8)', color: '#191724' }}
           >
             Dodaj prvi predmet
           </button>
@@ -139,7 +140,7 @@ export default function SubjectsPage() {
                     </div>
                     <div>
                       <h3 className="font-semibold text-white">{subj.name}</h3>
-                      <p className="text-xs text-slate-400">
+                      <p className="text-xs" style={{ color: '#6e6a86' }}>
                         {taskCount} nalog · {doneCount} opravljenih
                       </p>
                     </div>
@@ -150,7 +151,10 @@ export default function SubjectsPage() {
                         e.stopPropagation();
                         handleEdit(subj);
                       }}
-                      className="p-2 rounded-lg text-slate-400 hover:text-indigo-400 hover:bg-indigo-400/10 transition-all"
+                      className="p-2 rounded-lg transition-all"
+                      style={{ color: '#6e6a86' }}
+                      onMouseEnter={e => { e.currentTarget.style.color = '#c4a7e7'; e.currentTarget.style.background = 'rgba(196,167,231,0.1)'; }}
+                      onMouseLeave={e => { e.currentTarget.style.color = '#6e6a86'; e.currentTarget.style.background = 'transparent'; }}
                     >
                       <svg
                         className="w-4 h-4"
@@ -171,7 +175,10 @@ export default function SubjectsPage() {
                         e.stopPropagation();
                         handleDelete(subj);
                       }}
-                      className="p-2 rounded-lg text-slate-400 hover:text-red-400 hover:bg-red-400/10 transition-all"
+                      className="p-2 rounded-lg transition-all"
+                      style={{ color: '#6e6a86' }}
+                      onMouseEnter={e => { e.currentTarget.style.color = '#eb6f92'; e.currentTarget.style.background = 'rgba(235,111,146,0.1)'; }}
+                      onMouseLeave={e => { e.currentTarget.style.color = '#6e6a86'; e.currentTarget.style.background = 'transparent'; }}
                     >
                       <svg
                         className="w-4 h-4"
@@ -193,13 +200,13 @@ export default function SubjectsPage() {
                 {/* Progress bar */}
                 {taskCount > 0 && (
                   <div>
-                    <div className="flex justify-between text-xs text-slate-400 mb-1">
+                    <div className="flex justify-between text-xs mb-1" style={{ color: '#6e6a86' }}>
                       <span>Napredek</span>
                       <span style={{ color: color.text }}>{pct}%</span>
                     </div>
                     <div
                       className="h-1.5 rounded-full overflow-hidden"
-                      style={{ background: 'rgba(51,65,85,0.5)' }}
+                      style={{ background: 'rgba(64,61,82,0.5)' }}
                     >
                       <div
                         className="h-full rounded-full transition-all duration-500"

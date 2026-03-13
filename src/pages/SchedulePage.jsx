@@ -119,14 +119,19 @@ export default function SchedulePage() {
         <div className="flex flex-wrap items-center gap-2">
           <button
             onClick={() => setWeekOffset(0)}
-            className="px-3 py-1.5 rounded-xl text-xs font-medium text-slate-300 hover:bg-slate-700/50 transition-all"
-            style={{ border: '1px solid rgba(51,65,85,0.5)' }}
+            className="px-3 py-1.5 rounded-xl text-xs font-medium transition-all hover:opacity-80"
+            style={{ border: '1px solid rgba(64,61,82,0.5)', color: '#908caa' }}
+            onMouseEnter={e => e.currentTarget.style.background = 'rgba(64,61,82,0.35)'}
+            onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
           >
             Ta teden
           </button>
           <button
             onClick={() => setWeekOffset((w) => w - 1)}
-            className="p-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-700/50 transition-all"
+            className="p-2 rounded-xl transition-all"
+            style={{ color: '#908caa' }}
+            onMouseEnter={e => { e.currentTarget.style.color = '#e0def4'; e.currentTarget.style.background = 'rgba(64,61,82,0.35)'; }}
+            onMouseLeave={e => { e.currentTarget.style.color = '#908caa'; e.currentTarget.style.background = 'transparent'; }}
           >
             <svg
               className="w-4 h-4"
@@ -144,7 +149,10 @@ export default function SchedulePage() {
           </button>
           <button
             onClick={() => setWeekOffset((w) => w + 1)}
-            className="p-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-700/50 transition-all"
+            className="p-2 rounded-xl transition-all"
+            style={{ color: '#908caa' }}
+            onMouseEnter={e => { e.currentTarget.style.color = '#e0def4'; e.currentTarget.style.background = 'rgba(64,61,82,0.35)'; }}
+            onMouseLeave={e => { e.currentTarget.style.color = '#908caa'; e.currentTarget.style.background = 'transparent'; }}
           >
             <svg
               className="w-4 h-4"
@@ -167,8 +175,8 @@ export default function SchedulePage() {
               setPreselectedDate(todayStr);
               setModalOpen(true);
             }}
-            className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold text-white transition-all hover:opacity-90"
-            style={{ background: 'linear-gradient(135deg, #6366f1, #8b5cf6)' }}
+            className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold transition-all hover:opacity-90"
+            style={{ background: 'linear-gradient(135deg, #c4a7e7, #9ccfd8)', color: '#191724' }}
           >
             <svg
               className="w-3.5 h-3.5"
@@ -199,24 +207,21 @@ export default function SchedulePage() {
             <div key={dateStr} className="flex flex-col">
               {/* Day header */}
               <div
-                className={`text-center mb-2 pb-2 border-b ${isToday ? 'border-indigo-500/50' : 'border-slate-700/30'}`}
+                className={`text-center mb-2 pb-2 border-b ${isToday ? '' : ''}`}
+                style={{ borderColor: isToday ? 'rgba(196,167,231,0.4)' : 'rgba(64,61,82,0.3)' }}
               >
                 <p
-                  className={`text-xs font-medium ${isToday ? 'text-indigo-400' : 'text-slate-400'}`}
+                  className="text-xs font-medium"
+                  style={{ color: isToday ? '#c4a7e7' : '#6e6a86' }}
                 >
                   {DAYS_SL[i]}
                 </p>
                 <div
-                  className={`w-7 h-7 rounded-full flex items-center justify-center mx-auto mt-1 text-sm font-bold transition-all ${
-                    isToday ? 'text-white' : 'text-slate-300'
-                  }`}
+                  className={`w-7 h-7 rounded-full flex items-center justify-center mx-auto mt-1 text-sm font-bold transition-all`}
                   style={
                     isToday
-                      ? {
-                          background:
-                            'linear-gradient(135deg, #6366f1, #8b5cf6)',
-                        }
-                      : {}
+                      ? { background: 'linear-gradient(135deg, #c4a7e7, #9ccfd8)', color: '#191724' }
+                      : { color: '#908caa' }
                   }
                 >
                   {day.getDate()}
@@ -256,9 +261,9 @@ export default function SchedulePage() {
                               color: color.text,
                             }
                           : {
-                              background: 'rgba(99,102,241,0.15)',
-                              border: '1px solid rgba(99,102,241,0.3)',
-                              color: '#818cf8',
+                              background: 'rgba(196,167,231,0.15)',
+                              border: '1px solid rgba(196,167,231,0.3)',
+                              color: '#c4a7e7',
                             }
                       }
                     >
@@ -292,16 +297,18 @@ export default function SchedulePage() {
             <div key={dateStr}>
               <div className="flex items-center gap-2 mb-2">
                 <span
-                  className={`text-sm font-semibold ${isToday ? 'text-indigo-400' : 'text-slate-300'}`}
+                  className={`text-sm font-semibold`}
+                  style={{ color: isToday ? '#c4a7e7' : '#908caa' }}
                 >
                   {DAYS_FULL[i]}, {day.getDate()}. {MONTHS_SL[day.getMonth()]}
                 </span>
                 {isToday && (
                   <span
-                    className="text-xs px-2 py-0.5 rounded-full text-indigo-300"
+                    className="text-xs px-2 py-0.5 rounded-full"
                     style={{
-                      background: 'rgba(99,102,241,0.2)',
-                      border: '1px solid rgba(99,102,241,0.3)',
+                      color: '#c4a7e7',
+                      background: 'rgba(196,167,231,0.2)',
+                      border: '1px solid rgba(196,167,231,0.3)',
                     }}
                   >
                     Danes
@@ -309,7 +316,7 @@ export default function SchedulePage() {
                 )}
               </div>
               {dayTasks.length === 0 ? (
-                <p className="text-slate-500 text-xs pl-2">Ni nalog</p>
+                <p className="text-xs pl-2" style={{ color: '#524f67' }}>Ni nalog</p>
               ) : (
                 <div className="space-y-2">
                   {dayTasks.map((task) => {
@@ -329,11 +336,10 @@ export default function SchedulePage() {
                           style={
                             task.completed
                               ? {
-                                  background:
-                                    'linear-gradient(135deg,#6366f1,#8b5cf6)',
+                                  background: 'linear-gradient(135deg,#c4a7e7,#9ccfd8)',
                                   borderColor: 'transparent',
                                 }
-                              : { borderColor: '#475569' }
+                              : { borderColor: '#524f67' }
                           }
                         >
                           {task.completed && (
@@ -354,7 +360,8 @@ export default function SchedulePage() {
                         </button>
                         <div className="flex-1 min-w-0">
                           <p
-                            className={`text-sm font-medium ${task.completed ? 'line-through text-slate-500' : 'text-white'}`}
+                            className={`text-sm font-medium ${task.completed ? 'line-through' : ''}`}
+                            style={{ color: task.completed ? '#6e6a86' : '#e0def4' }}
                           >
                             {task.title}
                           </p>

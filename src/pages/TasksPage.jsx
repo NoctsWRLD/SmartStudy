@@ -72,8 +72,8 @@ export default function TasksPage() {
       {/* Header */}
       <div className="flex items-center justify-between animate-fade-in-up">
         <div>
-          <h1 className="text-2xl font-bold text-white">Naloge</h1>
-          <p className="text-slate-400 text-sm mt-0.5">
+          <h1 className="text-2xl font-bold" style={{ color: '#e0def4' }}>Naloge</h1>
+          <p className="text-sm mt-0.5" style={{ color: '#6e6a86' }}>
             {pendingCount} nedokončanih · {doneCount} opravljenih
           </p>
         </div>
@@ -83,10 +83,11 @@ export default function TasksPage() {
             setEditTask(null);
             setModalOpen(true);
           }}
-          className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold text-white transition-all hover:opacity-90 hover:-translate-y-0.5"
+          className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold transition-all hover:opacity-90 hover:-translate-y-0.5"
           style={{
-            background: 'linear-gradient(135deg, #6366f1, #8b5cf6)',
-            boxShadow: '0 4px 20px rgba(99,102,241,0.3)',
+            background: 'linear-gradient(135deg, #c4a7e7, #9ccfd8)',
+            boxShadow: '0 4px 20px rgba(196,167,231,0.3)',
+            color: '#191724',
           }}
         >
           <svg
@@ -112,8 +113,8 @@ export default function TasksPage() {
         <div
           className="flex rounded-xl p-1 gap-1"
           style={{
-            background: 'rgba(15,23,42,0.8)',
-            border: '1px solid rgba(51,65,85,0.5)',
+            background: 'rgba(38,35,58,0.85)',
+            border: '1px solid rgba(64,61,82,0.5)',
           }}
         >
           {FILTERS.map((f) => (
@@ -124,10 +125,10 @@ export default function TasksPage() {
               style={
                 statusFilter === f.key
                   ? {
-                      background: 'linear-gradient(135deg, #6366f1, #8b5cf6)',
-                      color: 'white',
+                      background: 'linear-gradient(135deg, #c4a7e7, #9ccfd8)',
+                      color: '#191724',
                     }
-                  : { color: '#94a3b8' }
+                  : { color: '#908caa' }
               }
             >
               {f.label}
@@ -139,10 +140,11 @@ export default function TasksPage() {
         <select
           value={subjectFilter}
           onChange={(e) => setSubjectFilter(e.target.value)}
-          className="px-3 py-1.5 rounded-xl text-xs text-slate-300 outline-none transition-all"
+          className="px-3 py-1.5 rounded-xl text-xs outline-none transition-all"
           style={{
-            background: 'rgba(15,23,42,0.8)',
-            border: '1px solid rgba(51,65,85,0.5)',
+            background: 'rgba(38,35,58,0.85)',
+            border: '1px solid rgba(64,61,82,0.5)',
+            color: '#908caa',
           }}
         >
           <option value="">Vsi predmeti</option>
@@ -157,10 +159,11 @@ export default function TasksPage() {
         <select
           value={sortBy}
           onChange={(e) => setSortBy(e.target.value)}
-          className="px-3 py-1.5 rounded-xl text-xs text-slate-300 outline-none transition-all"
+          className="px-3 py-1.5 rounded-xl text-xs outline-none transition-all"
           style={{
-            background: 'rgba(15,23,42,0.8)',
-            border: '1px solid rgba(51,65,85,0.5)',
+            background: 'rgba(38,35,58,0.85)',
+            border: '1px solid rgba(64,61,82,0.5)',
+            color: '#908caa',
           }}
         >
           <option value="dueDate">Razvrsti po roku</option>
@@ -179,10 +182,10 @@ export default function TasksPage() {
       ) : filtered.length === 0 ? (
         <div className="glass-card p-12 text-center animate-fade-in-up shadow-sm">
           <div className="text-6xl mb-4">✅</div>
-          <h3 className="text-lg font-semibold text-white mb-2">
+          <h3 className="text-lg font-semibold mb-2" style={{ color: '#e0def4' }}>
             {statusFilter === 'completed' ? 'Ni opravljenih nalog' : 'Ni nalog'}
           </h3>
-          <p className="text-slate-400 text-sm">
+          <p className="text-sm" style={{ color: '#6e6a86' }}>
             {statusFilter === 'pending'
               ? 'Vse naloge so opravljene! 🎉'
               : 'Dodaj novo nalogo, da začneš.'}
