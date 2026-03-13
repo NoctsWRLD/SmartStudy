@@ -4,24 +4,22 @@ import { useAuth } from '../contexts/AuthContext';
 import { useSubjects, useTasks } from '../hooks/useFirestore';
 import TaskCard from '../components/TaskCard';
 import TaskModal from '../components/TaskModal';
+import SUBJECT_COLORS from '../utils/colors';
 
-function StatCard({ label, value, color, icon }) {
+function StatCard({ label, value, colorClass, icon }) {
   return (
     <div className="glass-card p-5 animate-fade-in-up">
       <div className="flex items-start justify-between">
         <div>
-          <p className="text-xs font-medium uppercase tracking-wide" style={{ color: '#6e6a86' }}>
+          <p className="text-xs font-medium uppercase tracking-wide text-rp-muted">
             {label}
           </p>
-          <p className="text-3xl font-bold mt-1" style={{ color }}>
+          <p className={`text-3xl font-bold mt-1 ${colorClass}`}>
             {value}
           </p>
         </div>
-        <div
-          className="p-2.5 rounded-xl"
-          style={{ background: `rgba(255,255,255,0.05)` }}
-        >
-          <span style={{ color }}>{icon}</span>
+        <div className={`p-2.5 rounded-xl bg-white/5 ${colorClass}`}>
+          <span>{icon}</span>
         </div>
       </div>
     </div>
@@ -79,14 +77,14 @@ export default function DashboardPage() {
     <div className="max-w-5xl mx-auto space-y-6">
       {/* Header */}
       <div className="animate-fade-in-up">
-        <h1 className="text-2xl font-bold" style={{ color: '#e0def4' }}>
+        <h1 className="text-2xl font-bold text-rp-text">
           {greeting},{' '}
           <span className="gradient-text">
             {currentUser?.displayName || 'Učenec'}
           </span>
           ! 👋
         </h1>
-        <p className="text-sm mt-1" style={{ color: '#6e6a86' }}>
+        <p className="text-sm mt-1 text-rp-muted">
           {new Date().toLocaleDateString('sl-SI', {
             weekday: 'long',
             day: 'numeric',
@@ -101,7 +99,7 @@ export default function DashboardPage() {
         <StatCard
           label="Vse naloge"
           value={tasks.length}
-          color="#c4a7e7"
+          colorClass="text-rp-iris"
           icon={
             <svg
               className="w-5 h-5"
@@ -121,7 +119,7 @@ export default function DashboardPage() {
         <StatCard
           label="Nedokončane"
           value={pending.length}
-          color="#f6c177"
+          colorClass="text-rp-gold"
           icon={
             <svg
               className="w-5 h-5"
@@ -141,7 +139,7 @@ export default function DashboardPage() {
         <StatCard
           label="Danes"
           value={todayTasks.length}
-          color="#ebbcba"
+          colorClass="text-rp-rose"
           icon={
             <svg
               className="w-5 h-5"
@@ -161,7 +159,7 @@ export default function DashboardPage() {
         <StatCard
           label="Opravljene"
           value={done.length}
-          color="#9ccfd8"
+          colorClass="text-rp-foam"
           icon={
             <svg
               className="w-5 h-5"
@@ -184,7 +182,7 @@ export default function DashboardPage() {
         {/* Upcoming tasks */}
         <div className="lg:col-span-2 space-y-4">
           <div className="flex items-center justify-between">
-            <h2 className="text-base font-semibold" style={{ color: '#e0def4' }}>
+            <h2 className="text-base font-semibold text-rp-text">
               Prihajajoče naloge
             </h2>
             <button
@@ -193,11 +191,7 @@ export default function DashboardPage() {
                 setEditTask(null);
                 setModalOpen(true);
               }}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-medium transition-all hover:opacity-90"
-              style={{
-                background: 'linear-gradient(135deg, #c4a7e7, #9ccfd8)',
-                color: '#191724',
-              }}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-medium transition-all hover:opacity-90 bg-gradient-to-br from-rp-iris to-rp-foam text-rp-base"
             >
               <svg
                 className="w-3.5 h-3.5"
@@ -218,8 +212,8 @@ export default function DashboardPage() {
           {upcoming.length === 0 ? (
             <div className="glass-card p-8 text-center">
               <div className="text-4xl mb-3">🎉</div>
-              <p className="text-sm" style={{ color: '#6e6a86' }}>Ni priharajočih nalog!</p>
-              <p className="text-xs mt-1" style={{ color: '#524f67' }}>
+              <p className="text-sm text-rp-muted">Ni priharajočih nalog!</p>
+              <p className="text-xs mt-1 text-rp-hl-high">
                 Dodaj novo nalogo, da začneš.
               </p>
             </div>
@@ -238,8 +232,7 @@ export default function DashboardPage() {
               {pending.length > 5 && (
                 <Link
                   to="/tasks"
-                  className="block text-center text-xs py-2 hover:opacity-80"
-                  style={{ color: '#c4a7e7' }}
+                  className="block text-center text-xs py-2 hover:opacity-80 text-rp-iris"
                 >
                   Prikaži vse ({pending.length}) →
                 </Link>
@@ -251,13 +244,12 @@ export default function DashboardPage() {
         {/* Subjects quick view */}
         <div className="space-y-4">
           <div className="flex items-center justify-between">
-            <h2 className="text-base font-semibold text-white">
+            <h2 className="text-base font-semibold text-rp-text">
               Moji predmeti
             </h2>
             <Link
               to="/subjects"
-              className="text-xs hover:opacity-80"
-              style={{ color: '#c4a7e7' }}
+              className="text-xs hover:opacity-80 text-rp-iris"
             >
               Uredi →
             </Link>
@@ -265,11 +257,10 @@ export default function DashboardPage() {
           {subjects.length === 0 ? (
             <div className="glass-card p-6 text-center">
               <div className="text-3xl mb-2">📚</div>
-              <p className="text-sm" style={{ color: '#6e6a86' }}>Ni predmetov</p>
+              <p className="text-sm text-rp-muted">Ni predmetov</p>
               <Link
                 to="/subjects"
-                className="text-xs mt-1 block hover:opacity-80"
-                style={{ color: '#c4a7e7' }}
+                className="text-xs mt-1 block hover:opacity-80 text-rp-iris"
               >
                 Dodaj predmet →
               </Link>
@@ -290,15 +281,15 @@ export default function DashboardPage() {
                         <div
                           className="w-3 h-3 rounded-full flex-shrink-0"
                           style={{
-                            background: `hsl(${(subj.colorIndex ?? 0) * 36}, 70%, 60%)`,
+                            backgroundColor: (SUBJECT_COLORS[subj.colorIndex] || SUBJECT_COLORS[0]).colorCode,
                           }}
                         />
-                        <span className="text-sm font-medium" style={{ color: '#e0def4' }}>
+                        <span className="text-sm font-medium text-rp-text">
                           {subj.name}
                         </span>
                       </div>
                       {subjTasks.length > 0 && (
-                        <span className="text-xs" style={{ color: '#6e6a86' }}>
+                        <span className="text-xs text-rp-muted">
                           {subjTasks.length} nalog
                         </span>
                       )}

@@ -77,9 +77,8 @@ function SidebarContent({ onClose }) {
   return (
     <div className="flex flex-col h-full">
       {/* Brand */}
-      <div className="flex items-center gap-3 px-6 py-5 border-b" style={{ borderColor: 'rgba(64,61,82,0.6)' }}>
-        <div className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0"
-          style={{ background: 'linear-gradient(135deg, #c4a7e7, #9ccfd8)' }}>
+      <div className="flex items-center gap-3 px-6 py-5 border-b border-rp-hl-med/60">
+        <div className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0 bg-gradient-to-br from-rp-iris to-rp-foam">
           <svg className="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
               d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
@@ -99,14 +98,9 @@ function SidebarContent({ onClose }) {
             className={({ isActive }) =>
               `flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all ${
                 isActive
-                  ? 'text-white'
-                  : 'hover:text-white'
+                  ? 'text-rp-text bg-rp-iris/15 border border-rp-iris/25'
+                  : 'text-rp-subtle hover:text-rp-text border border-transparent'
               }`
-            }
-            style={({ isActive }) =>
-              isActive
-                ? { color: '#e0def4', background: 'rgba(196,167,231,0.15)', border: '1px solid rgba(196,167,231,0.25)' }
-                : { color: '#908caa' }
             }
           >
             {icon}
@@ -115,33 +109,25 @@ function SidebarContent({ onClose }) {
         ))}
       </nav>
 
-      {/* User section */}
-      <div className="px-3 pb-4 pt-4 border-t" style={{ borderColor: 'rgba(64,61,82,0.6)' }}>
+      <div className="px-3 pb-4 pt-4 border-t border-rp-hl-med/60">
         <Link
           to="/profile"
           onClick={onClose}
-          className="flex items-center gap-3 px-4 py-3 rounded-xl mb-2 transition-all"
-          style={{ background: 'rgba(25,23,36,0.6)' }}
-          onMouseEnter={e => e.currentTarget.style.background = 'rgba(64,61,82,0.35)'}
-          onMouseLeave={e => e.currentTarget.style.background = 'rgba(25,23,36,0.6)'}
+          className="flex items-center gap-3 px-4 py-3 rounded-xl mb-2 transition-all bg-rp-base/60 hover:bg-rp-hl-med/35"
         >
-          <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 overflow-hidden"
-            style={{ background: 'linear-gradient(135deg, #c4a7e7, #9ccfd8)' }}>
+          <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 overflow-hidden bg-gradient-to-br from-rp-iris to-rp-foam">
             {currentUser?.photoURL
               ? <img src={currentUser.photoURL} alt="avatar" className="w-full h-full object-cover" />
               : <span className="text-sm font-bold text-white">{currentUser?.displayName?.[0]?.toUpperCase() || '?'}</span>}
           </div>
           <div className="flex-1 min-w-0">
-            <p className="text-sm font-medium truncate" style={{ color: '#e0def4' }}>{currentUser?.displayName || 'Neznan Uporabnik'}</p>
-            <p className="text-xs truncate" style={{ color: '#c4a7e7' }}>Uredi profil →</p>
+            <p className="text-sm font-medium truncate text-rp-text">{currentUser?.displayName || 'Neznan Uporabnik'}</p>
+            <p className="text-xs truncate text-rp-iris">Uredi profil →</p>
           </div>
         </Link>
         <button
           onClick={handleLogout}
-          className="w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm transition-all"
-          style={{ color: '#6e6a86' }}
-          onMouseEnter={e => { e.currentTarget.style.color = '#eb6f92'; e.currentTarget.style.background = 'rgba(235,111,146,0.1)'; }}
-          onMouseLeave={e => { e.currentTarget.style.color = '#6e6a86'; e.currentTarget.style.background = 'transparent'; }}
+          className="w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm transition-all text-rp-muted hover:text-rp-love hover:bg-rp-love/10"
         >
           <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
@@ -160,8 +146,7 @@ export default function Layout({ children }) {
   return (
     <div className="flex h-screen overflow-hidden">
       {/* Desktop sidebar */}
-      <aside className="hidden md:flex flex-col w-64 flex-shrink-0 border-r"
-        style={{ background: 'rgba(25,23,36,0.98)', borderColor: 'rgba(64,61,82,0.5)' }}>
+      <aside className="hidden md:flex flex-col w-64 flex-shrink-0 border-r bg-rp-base/95 border-rp-hl-med/50">
         <SidebarContent />
       </aside>
 
@@ -169,8 +154,7 @@ export default function Layout({ children }) {
       {mobileOpen && (
         <div className="fixed inset-0 z-40 md:hidden">
           <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setMobileOpen(false)} />
-          <aside className="absolute left-0 top-0 bottom-0 w-72 z-50 flex flex-col border-r"
-            style={{ background: 'rgba(25,23,36,0.99)', borderColor: 'rgba(64,61,82,0.5)' }}>
+          <aside className="absolute left-0 top-0 bottom-0 w-72 z-50 flex flex-col border-r bg-rp-base/95 border-rp-hl-med/50">
             <SidebarContent onClose={() => setMobileOpen(false)} />
           </aside>
         </div>
@@ -179,14 +163,10 @@ export default function Layout({ children }) {
       {/* Main content */}
       <div className="flex-1 flex flex-col overflow-hidden">
         {/* Mobile header */}
-        <header className="md:hidden flex items-center justify-between px-4 py-3 border-b"
-          style={{ background: 'rgba(25,23,36,0.98)', borderColor: 'rgba(64,61,82,0.5)' }}>
+        <header className="md:hidden flex items-center justify-between px-4 py-3 border-b bg-rp-base/95 border-rp-hl-med/50">
           <button
             onClick={() => setMobileOpen(true)}
-            className="p-2 rounded-xl transition-all"
-            style={{ color: '#908caa' }}
-            onMouseEnter={e => { e.currentTarget.style.color = '#e0def4'; e.currentTarget.style.background = 'rgba(64,61,82,0.5)'; }}
-            onMouseLeave={e => { e.currentTarget.style.color = '#908caa'; e.currentTarget.style.background = 'transparent'; }}
+            className="p-2 rounded-xl transition-all text-rp-subtle hover:text-rp-text hover:bg-rp-hl-med/50"
           >
             <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />

@@ -24,13 +24,11 @@ function Avatar({ src, initial, size = 8 }) {
     );
   return (
     <div
-      className="rounded-full flex items-center justify-center text-white font-bold flex-shrink-0"
+      className="rounded-full flex items-center justify-center font-bold flex-shrink-0 bg-gradient-to-br from-rp-iris to-rp-foam text-rp-base"
       style={{
         width: px,
         height: px,
-        background: 'linear-gradient(135deg, #c4a7e7, #9ccfd8)',
         fontSize: px <= 32 ? '0.75rem' : '1rem',
-        color: '#191724',
       }}
     >
       {initial}
@@ -59,19 +57,11 @@ function FileBubble({ fileURL, fileName, fileType, fileSize, isOwn }) {
       href={fileURL}
       target="_blank"
       rel="noreferrer"
-      className="flex items-center gap-2.5 px-4 py-3 rounded-2xl transition-all hover:opacity-80 shadow-md"
-      style={
+      className={`flex items-center gap-2.5 px-4 py-3 rounded-2xl transition-all hover:opacity-80 shadow-md ${
         isOwn
-          ? {
-              background: 'linear-gradient(135deg, #c4a7e7, #9ccfd8)',
-              color: '#191724',
-            }
-          : {
-              background: 'rgba(38,35,58,0.9)',
-              color: '#e0def4',
-              border: '1px solid rgba(64,61,82,0.5)',
-            }
-      }
+          ? 'bg-gradient-to-br from-rp-iris to-rp-foam text-rp-base'
+          : 'bg-rp-overlay/90 text-rp-text border border-rp-hl-med/50'
+      }`}
     >
       <svg
         className="w-5 h-5 flex-shrink-0"
@@ -118,10 +108,10 @@ function MessageBubble({ msg, isOwn, onDelete }) {
         <div
           className={`flex items-center gap-2 ${isOwn ? 'flex-row-reverse' : ''}`}
         >
-          <span className="text-xs font-medium" style={{ color: '#6e6a86' }}>
+          <span className="text-xs font-medium text-rp-muted">
             {isOwn ? 'Ti' : msg.senderName}
           </span>
-          <span className="text-xs" style={{ color: '#524f67' }}>{time}</span>
+          <span className="text-xs text-rp-hl-high">{time}</span>
         </div>
 
         <div
@@ -130,19 +120,11 @@ function MessageBubble({ msg, isOwn, onDelete }) {
           <div className="min-w-0 max-w-full">
             {msg.text && (
               <div
-                className="px-3 py-2 md:px-4 md:py-2.5 rounded-2xl text-[13px] md:text-sm leading-relaxed break-words shadow-sm"
-                style={
+                className={`px-3 py-2 md:px-4 md:py-2.5 rounded-2xl text-[13px] md:text-sm leading-relaxed break-words shadow-sm ${
                   isOwn
-                    ? {
-                        background: 'linear-gradient(135deg,#c4a7e7,#9ccfd8)',
-                        color: '#191724',
-                      }
-                    : {
-                        background: 'rgba(38,35,58,0.9)',
-                        color: '#e0def4',
-                        border: '1px solid rgba(64,61,82,0.5)',
-                      }
-                }
+                    ? 'bg-gradient-to-br from-rp-iris to-rp-foam text-rp-base'
+                    : 'bg-rp-overlay/90 text-rp-text border border-rp-hl-med/50'
+                }`}
               >
                 {msg.text}
               </div>
@@ -160,17 +142,8 @@ function MessageBubble({ msg, isOwn, onDelete }) {
           {isOwn && hovered && (
             <button
               onClick={() => onDelete(msg.id)}
-              className="p-1.5 rounded-lg transition-all flex-shrink-0"
-              style={{ color: '#6e6a86' }}
+              className="p-1.5 rounded-lg transition-all flex-shrink-0 text-rp-muted hover:text-rp-love hover:bg-rp-love/10"
               title="Izbriši"
-              onMouseEnter={(e) => {
-                e.currentTarget.style.color = '#eb6f92';
-                e.currentTarget.style.background = 'rgba(235,111,146,0.1)';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.color = '#6e6a86';
-                e.currentTarget.style.background = 'transparent';
-              }}
             >
               <svg
                 className="w-3.5 h-3.5"
@@ -202,20 +175,20 @@ function MessageList({ chatId, currentUser }) {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
 
-  if (loading)
-    return (
-      <div className="flex-1 flex items-center justify-center">
-        <div className="w-7 h-7 rounded-full border-2 border-t-transparent animate-spin" style={{ borderColor: '#c4a7e7', borderTopColor: 'transparent' }} />
-      </div>
-    );
-
-  if (!messages.length)
-    return (
-      <div className="flex-1 flex flex-col items-center justify-center gap-3" style={{ color: '#6e6a86' }}>
-        <div className="text-5xl">💬</div>
-        <p className="text-sm">Začni pogovor!</p>
-      </div>
-    );
+    if (loading)
+      return (
+        <div className="flex-1 flex items-center justify-center">
+          <div className="w-7 h-7 rounded-full border-2 border-rp-iris border-t-transparent animate-spin" />
+        </div>
+      );
+  
+    if (!messages.length)
+      return (
+        <div className="flex-1 flex flex-col items-center justify-center gap-3 text-rp-muted">
+          <div className="text-5xl">💬</div>
+          <p className="text-sm">Začni pogovor!</p>
+        </div>
+      );
 
   return (
     <div className="flex-1 overflow-y-auto px-2 md:px-4 py-4 space-y-4 overflow-x-hidden">
@@ -261,13 +234,7 @@ function MessageInput({ chatId, currentUser }) {
 
   return (
     <div className="px-4 pb-4 pt-2 flex-shrink-0">
-      <div
-        className="flex items-end gap-2 rounded-2xl px-4 py-3"
-        style={{
-          background: 'rgba(38,35,58,0.85)',
-          border: '1px solid rgba(64,61,82,0.5)',
-        }}
-      >
+      <div className="flex items-end gap-2 rounded-2xl px-4 py-3 bg-rp-overlay/85 border border-rp-hl-med/50">
         <textarea
           ref={inputRef}
           value={text}
@@ -276,14 +243,12 @@ function MessageInput({ chatId, currentUser }) {
           placeholder="Napiši sporočilo…"
           rows={1}
           disabled={sending}
-          className="flex-1 bg-transparent text-sm placeholder-slate-500 resize-none outline-none leading-relaxed"
-          style={{ maxHeight: '120px', color: '#e0def4' }}
+          className="flex-1 bg-transparent text-sm placeholder-slate-500 resize-none outline-none leading-relaxed max-h-[120px] text-rp-text"
         />
         <button
           onClick={handleSend}
           disabled={!text.trim() || sending}
-          className="p-2 rounded-xl transition-all flex-shrink-0 disabled:opacity-30"
-          style={{ background: 'linear-gradient(135deg,#c4a7e7,#9ccfd8)', color: '#191724' }}
+          className="p-2 rounded-xl transition-all flex-shrink-0 disabled:opacity-30 bg-gradient-to-br from-rp-iris to-rp-foam text-rp-base"
           title="Pošlji"
         >
           {sending ? (
@@ -314,18 +279,11 @@ function RoomItem({ label, icon, active, onClick }) {
   return (
     <button
       onClick={onClick}
-      className={`w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-sm font-medium transition-all text-left group`}
-      style={
+      className={`w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-sm font-medium transition-all text-left group ${
         active
-          ? {
-              background: 'linear-gradient(135deg,rgba(196,167,231,0.25),rgba(156,207,216,0.15))',
-              border: '1px solid rgba(196,167,231,0.3)',
-              color: '#e0def4',
-            }
-          : { color: '#908caa' }
-      }
-      onMouseEnter={e => !active && (e.currentTarget.style.color = '#e0def4', e.currentTarget.style.background = 'rgba(64,61,82,0.4)')}
-      onMouseLeave={e => !active && (e.currentTarget.style.color = '#908caa', e.currentTarget.style.background = 'transparent')}
+          ? 'bg-gradient-to-br from-rp-iris/25 to-rp-foam/15 border border-rp-iris/30 text-rp-text'
+          : 'text-rp-subtle hover:text-rp-text hover:bg-rp-hl-med/40'
+      }`}
     >
       <span className="flex-shrink-0 opacity-80">{icon}</span>
       <span className="truncate">{label}</span>
@@ -352,10 +310,7 @@ function SidePanel({
     <div className="flex flex-col h-full overflow-y-auto py-3 space-y-4">
       {/* Channels */}
       <div>
-        <p
-          className="text-xs font-semibold uppercase tracking-wider px-3 mb-1"
-          style={{ color: '#524f67' }}
-        >
+        <p className="text-xs font-semibold uppercase tracking-wider px-3 mb-1 text-rp-hl-high">
           Kanali
         </p>
         <RoomItem
@@ -408,10 +363,7 @@ function SidePanel({
       {/* School channel */}
       {schoolChatId && (
         <div>
-          <p
-            className="text-xs font-semibold uppercase tracking-wider px-3 mb-1"
-            style={{ color: '#524f67' }}
-          >
+          <p className="text-xs font-semibold uppercase tracking-wider px-3 mb-1 text-rp-hl-high">
             Moja šola
           </p>
           <RoomItem
@@ -439,11 +391,11 @@ function SidePanel({
 
       {/* Direct messages */}
       <div>
-        <p className="text-xs font-semibold uppercase tracking-wider px-3 mb-1" style={{ color: '#524f67' }}>
+        <p className="text-xs font-semibold uppercase tracking-wider px-3 mb-1 text-rp-hl-high">
           Direktna sporočila
         </p>
         {friends.length === 0 ? (
-          <p className="text-xs px-3" style={{ color: '#6e6a86' }}>
+          <p className="text-xs px-3 text-rp-muted">
             Dodaj prijatelje v Prijateljih.
           </p>
         ) : (
@@ -456,12 +408,7 @@ function SidePanel({
                 active={activeChatId === dmId}
                 onClick={() => onSelect(dmId, f.displayName || 'Neznan')}
                 icon={
-                  <div
-                    className="w-5 h-5 rounded-full flex items-center justify-center text-white text-xs font-bold"
-                    style={{
-                      background: 'linear-gradient(135deg,#06b6d4,#3b82f6)',
-                    }}
-                  >
+                  <div className="w-5 h-5 rounded-full flex items-center justify-center text-white text-xs font-bold bg-gradient-to-br from-rp-foam to-rp-pine">
                     {(f.displayName?.[0] || '?').toUpperCase()}
                   </div>
                 }
@@ -472,13 +419,10 @@ function SidePanel({
       </div>
 
       {/* Add friends button */}
-      <div className="px-3 mt-auto pt-2 border-t" style={{ borderColor: 'rgba(64,61,82,0.4)' }}>
+      <div className="px-3 mt-auto pt-2 border-t border-rp-hl-med/40">
         <button
           onClick={() => navigate('/friends')}
-          className="w-full flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-semibold transition-all"
-          style={{ border: '1px solid rgba(196,167,231,0.25)', color: '#c4a7e7' }}
-          onMouseEnter={e => { e.currentTarget.style.color = '#e0def4'; e.currentTarget.style.background = 'rgba(196,167,231,0.1)'; }}
-          onMouseLeave={e => { e.currentTarget.style.color = '#c4a7e7'; e.currentTarget.style.background = 'transparent'; }}
+          className="w-full flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-semibold transition-all border border-rp-iris/25 text-rp-iris hover:text-rp-text hover:bg-rp-iris/10"
         >
           <svg
             className="w-4 h-4"
@@ -558,21 +502,11 @@ export default function ChatPage() {
   return (
     <div className="h-full flex flex-col">
       {/* Main container */}
-      <div
-        className="flex-1 flex overflow-hidden rounded-2xl"
-        style={{
-          minHeight: 0,
-          border: '1px solid rgba(64,61,82,0.5)',
-          background: 'rgba(38,35,58,0.6)',
-        }}
-      >
+      <div className="flex-1 flex overflow-hidden rounded-2xl min-h-0 border border-rp-hl-med/50 bg-rp-overlay/60">
         {/* ── Desktop sidebar ── */}
-        <aside
-          className="hidden md:flex flex-col w-56 flex-shrink-0 overflow-hidden"
-          style={{ borderRight: '1px solid rgba(64,61,82,0.4)' }}
-        >
+        <aside className="hidden md:flex flex-col w-56 flex-shrink-0 overflow-hidden border-r border-rp-hl-med/40">
           <div className="px-4 pt-4 pb-2">
-            <p className="text-xs font-semibold uppercase tracking-wider" style={{ color: '#524f67' }}>
+            <p className="text-xs font-semibold uppercase tracking-wider text-rp-hl-high">
               Chat
             </p>
           </div>
@@ -593,23 +527,14 @@ export default function ChatPage() {
               className="absolute inset-0 bg-black/50 backdrop-blur-sm"
               onClick={() => setMobileOpen(false)}
             />
-            <aside
-              className="absolute left-0 top-0 bottom-0 w-64 z-50 flex flex-col overflow-hidden"
-              style={{
-                background: 'rgba(25,23,36,0.98)',
-                borderRight: '1px solid rgba(64,61,82,0.5)',
-              }}
-            >
+            <aside className="absolute left-0 top-0 bottom-0 w-64 z-50 flex flex-col overflow-hidden bg-rp-base/98 border-r border-rp-hl-med/50">
               <div className="flex items-center justify-between px-4 pt-4 pb-2">
-                <p className="text-xs font-semibold uppercase tracking-wider" style={{ color: '#524f67' }}>
+                <p className="text-xs font-semibold uppercase tracking-wider text-rp-hl-high">
                   Chat
                 </p>
                 <button
                   onClick={() => setMobileOpen(false)}
-                  className="transition-all"
-                  style={{ color: '#6e6a86' }}
-                  onMouseEnter={e => e.currentTarget.style.color = '#e0def4'}
-                  onMouseLeave={e => e.currentTarget.style.color = '#6e6a86'}
+                  className="transition-all text-rp-muted hover:text-rp-text"
                 >
                   <svg
                     className="w-4 h-4"
@@ -639,36 +564,20 @@ export default function ChatPage() {
         )}
 
         {/* ── Main chat area ── */}
-        <div
-          className="flex-1 flex flex-col min-w-0"
-          style={{ background: 'var(--color-surface)' }}
-        >
+        <div className="flex-1 flex flex-col min-w-0 bg-rp-surface">
           {/* Header */}
-          <div
-            className="flex items-center gap-3 px-4 py-3 flex-shrink-0"
-            style={{ borderBottom: '1px solid rgba(64,61,82,0.4)' }}
-          >
+          <div className="flex items-center gap-3 px-4 py-3 flex-shrink-0 border-b border-rp-hl-med/40">
             {/* Hamburger – mobile only, inside header (properly aligned) */}
             <button
-              className="md:hidden flex items-center justify-center w-8 h-8 rounded-lg transition-all flex-shrink-0"
-              style={{ color: '#908caa' }}
+              className="md:hidden flex items-center justify-center w-8 h-8 rounded-lg transition-all flex-shrink-0 text-rp-subtle hover:text-rp-text hover:bg-rp-hl-med/50"
               onClick={() => setMobileOpen(true)}
-              onMouseEnter={e => { e.currentTarget.style.color = '#e0def4'; e.currentTarget.style.background = 'rgba(64,61,82,0.5)'; }}
-              onMouseLeave={e => { e.currentTarget.style.color = '#908caa'; e.currentTarget.style.background = 'transparent'; }}
             >
               <MenuIcon />
             </button>
 
-            <div
-              className="w-8 h-8 rounded-xl flex items-center justify-center flex-shrink-0"
-              style={{
-                background: 'linear-gradient(135deg,rgba(196,167,231,0.25),rgba(156,207,216,0.15))',
-                border: '1px solid rgba(196,167,231,0.3)',
-              }}
-            >
+            <div className="w-8 h-8 rounded-xl flex items-center justify-center flex-shrink-0 bg-gradient-to-br from-rp-iris/25 to-rp-foam/15 border border-rp-iris/30">
               <svg
-                className="w-4 h-4"
-                style={{ color: '#c4a7e7' }}
+                className="w-4 h-4 text-rp-iris"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -682,8 +591,8 @@ export default function ChatPage() {
               </svg>
             </div>
             <div>
-              <p className="text-sm font-semibold" style={{ color: '#e0def4' }}>{activeName}</p>
-              <p className="text-xs" style={{ color: '#6e6a86' }}>{isChatType}</p>
+              <p className="text-sm font-semibold text-rp-text">{activeName}</p>
+              <p className="text-xs text-rp-muted">{isChatType}</p>
             </div>
           </div>
 

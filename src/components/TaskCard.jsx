@@ -26,37 +26,31 @@ export default function TaskCard({ task, subject, onToggle, onEdit, onDelete }) 
 
   // Rosé Pine urgency colors
   const urgencyColors = {
-    overdue: '#eb6f92',  // love
-    today:   '#f6c177',  // gold
-    soon:    '#ebbcba',  // rose
-    normal:  '#6e6a86',  // muted
+    overdue: 'text-rp-love',
+    today:   'text-rp-gold',
+    soon:    'text-rp-rose',
+    normal:  'text-rp-muted',
   };
 
   return (
     <div
-      className={`relative p-4 rounded-xl transition-all group animate-fade-in-up ${
-        task.completed ? 'opacity-60' : ''
-      }`}
-      style={{
-        background: 'rgba(31,29,46,0.7)',
-        border: task.completed
-          ? '1px solid rgba(64,61,82,0.25)'
-          : '1px solid rgba(64,61,82,0.55)',
-      }}>
+      className={`relative p-4 rounded-xl transition-all group animate-fade-in-up bg-rp-surface/70 border ${
+        task.completed ? 'opacity-60 border-rp-hl-med/25' : 'border-rp-hl-med/55'
+      }`}>
       {/* Left color bar */}
       {color && (
-        <div className="absolute left-0 top-4 bottom-4 w-1 rounded-full"
-          style={{ background: color.text, opacity: task.completed ? 0.3 : 0.7 }} />
+        <div className={`absolute left-0 top-4 bottom-4 w-1 rounded-full ${task.completed ? 'opacity-30' : 'opacity-70'}`}
+          style={{ backgroundColor: color.colorCode }} />
       )}
 
       <div className="flex items-start gap-3 pl-3">
         {/* Checkbox */}
         <button
           onClick={() => onToggle(task)}
-          className="mt-0.5 flex-shrink-0 w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all hover:scale-110"
-          style={task.completed
-            ? { background: 'linear-gradient(135deg, #c4a7e7, #9ccfd8)', borderColor: 'transparent' }
-            : { borderColor: color?.text || '#524f67', background: 'transparent' }}>
+          className={`mt-0.5 flex-shrink-0 w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all hover:scale-110 ${
+            task.completed ? 'bg-gradient-to-br from-rp-iris to-rp-foam border-transparent' : 'bg-transparent'
+          }`}
+          style={!task.completed ? { borderColor: color?.colorCode || 'var(--color-rp-hl-high)' } : {}}>
           {task.completed && (
             <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
@@ -67,18 +61,14 @@ export default function TaskCard({ task, subject, onToggle, onEdit, onDelete }) 
         {/* Content */}
         <div className="flex-1 min-w-0">
           <div className="flex items-start justify-between gap-2">
-            <h3 className={`text-sm font-medium leading-snug ${task.completed ? 'line-through' : ''}`}
-              style={{ color: task.completed ? '#6e6a86' : '#e0def4' }}>
+            <h3 className={`text-sm font-medium leading-snug ${task.completed ? 'line-through text-rp-muted' : 'text-rp-text'}`}>
               {task.title}
             </h3>
             {/* Actions */}
             <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 flex-shrink-0 transition-opacity">
               <button
                 onClick={() => onEdit(task)}
-                className="p-1.5 rounded-lg transition-all"
-                style={{ color: '#6e6a86' }}
-                onMouseEnter={e => { e.currentTarget.style.color = '#c4a7e7'; e.currentTarget.style.background = 'rgba(196,167,231,0.1)'; }}
-                onMouseLeave={e => { e.currentTarget.style.color = '#6e6a86'; e.currentTarget.style.background = 'transparent'; }}
+                className="p-1.5 rounded-lg transition-all text-rp-muted hover:text-rp-iris hover:bg-rp-iris/10"
               >
                 <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
@@ -87,10 +77,7 @@ export default function TaskCard({ task, subject, onToggle, onEdit, onDelete }) 
               </button>
               <button
                 onClick={() => onDelete(task)}
-                className="p-1.5 rounded-lg transition-all"
-                style={{ color: '#6e6a86' }}
-                onMouseEnter={e => { e.currentTarget.style.color = '#eb6f92'; e.currentTarget.style.background = 'rgba(235,111,146,0.1)'; }}
-                onMouseLeave={e => { e.currentTarget.style.color = '#6e6a86'; e.currentTarget.style.background = 'transparent'; }}
+                className="p-1.5 rounded-lg transition-all text-rp-muted hover:text-rp-love hover:bg-rp-love/10"
               >
                 <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
@@ -101,7 +88,7 @@ export default function TaskCard({ task, subject, onToggle, onEdit, onDelete }) 
           </div>
 
           {task.description && (
-            <p className="text-xs mt-1 line-clamp-2" style={{ color: '#6e6a86' }}>{task.description}</p>
+            <p className="text-xs mt-1 line-clamp-2 text-rp-muted">{task.description}</p>
           )}
 
           <div className="flex items-center gap-2 mt-2 flex-wrap">
@@ -109,7 +96,7 @@ export default function TaskCard({ task, subject, onToggle, onEdit, onDelete }) 
               <Badge colorIndex={subject.colorIndex}>{subject.name}</Badge>
             )}
             {dateInfo && (
-              <span className="text-xs flex items-center gap-1" style={{ color: urgencyColors[dateInfo.urgency] }}>
+              <span className={`text-xs flex items-center gap-1 ${urgencyColors[dateInfo.urgency]}`}>
                 <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
                     d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />

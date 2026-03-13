@@ -52,9 +52,20 @@ export function useAllUsers() {
 
   useEffect(() => {
     if (!currentUser) return;
-    getDocs(collection(db, 'users')).then((snap) => {
-      setUsers(snap.docs.map((d) => ({ uid: d.id, ...d.data() })).filter((u) => u.uid !== currentUser.uid));
-    });
+    const unsub = onSnapshot(
+      collection(db, 'users'),
+      (snap) => {
+        setUsers(
+          snap.docs
+            .map((d) => ({ uid: d.id, ...d.data() }))
+            .filter((u) => u.uid !== currentUser.uid)
+        );
+      },
+      (err) => {
+        console.error("Napaka pri pridobivanju uporabnikov:", err);
+      }
+    );
+    return unsub;
   }, [currentUser]);
 
   return { users };

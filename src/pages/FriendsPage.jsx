@@ -13,18 +13,16 @@ import {
 // ─── Tiny avatar ──────────────────────────────────────────────────────────────
 function MiniAvatar({
   name,
-  gradient = 'linear-gradient(135deg, #c4a7e7, #9ccfd8)',
+  bgClass = 'bg-gradient-to-br from-rp-iris to-rp-foam',
   size = 36,
 }) {
   return (
     <div
-      className="flex items-center justify-center rounded-full text-white font-bold flex-shrink-0"
+      className={`flex items-center justify-center rounded-full text-rp-base font-bold flex-shrink-0 ${bgClass}`}
       style={{
         width: size,
         height: size,
-        background: gradient,
         fontSize: size * 0.35,
-        color: '#191724',
       }}
     >
       {(name?.[0] || '?').toUpperCase()}
@@ -37,12 +35,9 @@ function Section({ title, badge, children }) {
   return (
     <div className="glass-card p-5 space-y-3">
       <div className="flex items-center gap-2">
-        <h2 className="text-sm font-semibold" style={{ color: '#e0def4' }}>{title}</h2>
+        <h2 className="text-sm font-semibold text-rp-text">{title}</h2>
         {badge != null && (
-          <span
-            className="px-1.5 py-0.5 rounded-full text-xs font-bold"
-            style={{ background: 'rgba(196,167,231,0.2)', color: '#c4a7e7' }}
-          >
+          <span className="px-1.5 py-0.5 rounded-full text-xs font-bold bg-rp-iris/20 text-rp-iris">
             {badge}
           </span>
         )}
@@ -70,12 +65,15 @@ export default function FriendsPage() {
   const filteredUsers =
     search.trim().length >= 2
       ? users.filter(
-          (u) =>
-            !friendUids.has(u.uid) &&
-            !sentUids.has(u.uid) &&
-            !requestFromUids.has(u.uid) &&
-            (u.displayName?.toLowerCase().includes(search.toLowerCase()) ||
-              u.email?.toLowerCase().includes(search.toLowerCase())),
+          (u) => {
+            const isFriend = friendUids.has(u.uid);
+            const isSent = sentUids.has(u.uid);
+            const isReq = requestFromUids.has(u.uid);
+            const matchName = u.displayName?.toLowerCase().includes(search.toLowerCase());
+            const matchEmail = u.email?.toLowerCase().includes(search.toLowerCase());
+            
+            return !isFriend && !isSent && !isReq && (matchName || matchEmail);
+          }
         )
       : [];
 
@@ -91,16 +89,9 @@ export default function FriendsPage() {
   return (
     <div className="max-w-2xl mx-auto space-y-6 animate-fade-in-up pb-8">
       <div className="flex items-center gap-4">
-        <div
-          className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0"
-          style={{
-            background: 'linear-gradient(135deg,rgba(196,167,231,0.25),rgba(156,207,216,0.15))',
-            border: '1px solid rgba(196,167,231,0.3)',
-          }}
-        >
+        <div className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 bg-gradient-to-br from-rp-iris/25 to-rp-foam/15 border border-rp-iris/30">
           <svg
-            className="w-5 h-5"
-            style={{ color: '#c4a7e7' }}
+            className="w-5 h-5 text-rp-iris"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
@@ -114,8 +105,8 @@ export default function FriendsPage() {
           </svg>
         </div>
         <div>
-          <h1 className="text-2xl font-bold" style={{ color: '#e0def4' }}>Prijatelji</h1>
-          <p className="text-xs" style={{ color: '#6e6a86' }}>{friends.length} prijateljev</p>
+          <h1 className="text-2xl font-bold text-rp-text">Prijatelji</h1>
+          <p className="text-xs text-rp-muted">{friends.length} prijateljev</p>
         </div>
       </div>
 
@@ -130,27 +121,20 @@ export default function FriendsPage() {
               <div className="flex items-center gap-3">
                 <MiniAvatar
                   name={req.fromName}
-                  gradient="linear-gradient(135deg,#06b6d4,#3b82f6)"
+                  bgClass="bg-gradient-to-br from-rp-rose to-rp-love"
                 />
-                <span className="text-sm font-medium" style={{ color: '#e0def4' }}>{req.fromName}</span>
+                <span className="text-sm font-medium text-rp-text">{req.fromName}</span>
               </div>
               <div className="flex gap-2">
                 <button
                   onClick={() => handleRespond(req.id, 'accepted')}
-                  className="px-3 py-1.5 rounded-lg text-xs font-semibold transition-all hover:opacity-90"
-                  style={{
-                    background: 'linear-gradient(135deg, #9ccfd8, #3e8fb0)',
-                    color: '#191724',
-                  }}
+                  className="px-3 py-1.5 rounded-lg text-xs font-semibold transition-all hover:opacity-90 bg-gradient-to-br from-rp-foam to-rp-pine text-rp-base"
                 >
                   Sprejmi
                 </button>
                 <button
                   onClick={() => handleRespond(req.id, 'rejected')}
-                  className="px-3 py-1.5 rounded-lg text-xs font-semibold transition-all"
-                  style={{ border: '1px solid rgba(235,111,146,0.3)', color: '#eb6f92' }}
-                  onMouseEnter={e => e.currentTarget.style.background = 'rgba(235,111,146,0.1)'}
-                  onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
+                  className="px-3 py-1.5 rounded-lg text-xs font-semibold transition-all border border-rp-love/30 text-rp-love hover:bg-rp-love/10"
                 >
                   Zavrni
                 </button>
@@ -163,7 +147,7 @@ export default function FriendsPage() {
       {/* ─── Friends list ─── */}
       <Section title="Moji prijatelji" badge={friends.length}>
         {friends.length === 0 ? (
-          <div className="flex flex-col items-center gap-3 py-6" style={{ color: '#6e6a86' }}>
+          <div className="flex flex-col items-center gap-3 py-6 text-rp-muted">
             <div className="text-4xl">👥</div>
             <p className="text-sm">Nimaš še prijateljev. Poišči jih spodaj!</p>
           </div>
@@ -176,14 +160,11 @@ export default function FriendsPage() {
               >
                 <div className="flex items-center gap-4">
                   <MiniAvatar name={f.displayName} />
-                  <span className="text-sm font-medium" style={{ color: '#e0def4' }}>{f.displayName}</span>
+                  <span className="text-sm font-medium text-rp-text">{f.displayName}</span>
                 </div>
                 <button
                   onClick={() => navigate(`/chat?dm=${f.uid}`)}
-                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all"
-                  style={{ border: '1px solid rgba(196,167,231,0.3)', color: '#c4a7e7' }}
-                  onMouseEnter={e => e.currentTarget.style.background = 'rgba(196,167,231,0.15)'}
-                  onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all border border-rp-iris/30 text-rp-iris hover:bg-rp-iris/15"
                 >
                   <svg
                     className="w-4 h-4"
@@ -213,16 +194,11 @@ export default function FriendsPage() {
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           placeholder="Išči po imenu ali emailu… (vsaj 2 znaka)"
-          className="w-full px-4 py-2.5 rounded-xl text-sm outline-none"
-          style={{
-            background: 'rgba(38,35,58,0.85)',
-            border: '1px solid rgba(64,61,82,0.5)',
-            color: '#e0def4',
-          }}
+          className="w-full px-4 py-2.5 rounded-xl text-sm outline-none bg-rp-overlay/85 border border-rp-hl-med/50 text-rp-text transition-colors focus:border-rp-iris/50"
         />
 
         {search.trim().length >= 2 && filteredUsers.length === 0 && (
-          <p className="text-sm" style={{ color: '#6e6a86' }}>
+          <p className="text-sm text-rp-muted">
             Ni rezultatov.
           </p>
         )}
@@ -236,22 +212,18 @@ export default function FriendsPage() {
               <div className="flex items-center gap-3">
                 <MiniAvatar
                   name={u.displayName || u.email}
-                  gradient="linear-gradient(135deg,#f472b6,#a855f7)"
+                  bgClass="bg-gradient-to-br from-rp-gold to-rp-rose"
                 />
                 <div>
-                  <p className="text-sm font-medium" style={{ color: '#e0def4' }}>
+                  <p className="text-sm font-medium text-rp-text">
                     {u.displayName || 'Neznan'}
                   </p>
-                  <p className="text-xs" style={{ color: '#524f67' }}>{u.email}</p>
+                  <p className="text-xs text-rp-hl-high">{u.email}</p>
                 </div>
               </div>
               <button
                 onClick={() => handleSendRequest(u)}
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all hover:opacity-90"
-                style={{
-                  background: 'linear-gradient(135deg, #c4a7e7, #9ccfd8)',
-                  color: '#191724',
-                }}
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all hover:opacity-90 bg-gradient-to-br from-rp-iris to-rp-foam text-rp-base"
               >
                 <svg
                   className="w-4 h-4"
@@ -275,13 +247,13 @@ export default function FriendsPage() {
         {/* Pending sent */}
         {sent.length > 0 && (
           <div className="pt-2 space-y-2 border-t border-slate-700/50">
-            <p className="text-xs uppercase tracking-wider font-semibold" style={{ color: '#524f67' }}>
+            <p className="text-xs uppercase tracking-wider font-semibold text-rp-hl-high">
               Čaka na odziv
             </p>
             {sent.map((req) => (
               <div key={req.id} className="flex items-center gap-3 py-1">
-                <div className="w-2 h-2 rounded-full flex-shrink-0 animate-pulse" style={{ background: '#f6c177' }} />
-                <span className="text-sm" style={{ color: '#908caa' }}>{req.toName}</span>
+                <div className="w-2 h-2 rounded-full flex-shrink-0 animate-pulse bg-rp-gold" />
+                <span className="text-sm text-rp-subtle">{req.toName}</span>
               </div>
             ))}
           </div>

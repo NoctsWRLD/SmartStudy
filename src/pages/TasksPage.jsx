@@ -72,8 +72,8 @@ export default function TasksPage() {
       {/* Header */}
       <div className="flex items-center justify-between animate-fade-in-up">
         <div>
-          <h1 className="text-2xl font-bold" style={{ color: '#e0def4' }}>Naloge</h1>
-          <p className="text-sm mt-0.5" style={{ color: '#6e6a86' }}>
+          <h1 className="text-2xl font-bold text-rp-text">Naloge</h1>
+          <p className="text-sm mt-0.5 text-rp-muted">
             {pendingCount} nedokončanih · {doneCount} opravljenih
           </p>
         </div>
@@ -83,12 +83,7 @@ export default function TasksPage() {
             setEditTask(null);
             setModalOpen(true);
           }}
-          className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold transition-all hover:opacity-90 hover:-translate-y-0.5"
-          style={{
-            background: 'linear-gradient(135deg, #c4a7e7, #9ccfd8)',
-            boxShadow: '0 4px 20px rgba(196,167,231,0.3)',
-            color: '#191724',
-          }}
+          className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold transition-all hover:opacity-90 hover:-translate-y-0.5 bg-gradient-to-br from-rp-iris to-rp-foam shadow-[0_4px_20px_rgba(196,167,231,0.3)] text-rp-base"
         >
           <svg
             className="w-4 h-4"
@@ -110,26 +105,16 @@ export default function TasksPage() {
       {/* Filters */}
       <div className="flex flex-wrap gap-4 animate-fade-in-up">
         {/* Status tabs */}
-        <div
-          className="flex rounded-xl p-1 gap-1"
-          style={{
-            background: 'rgba(38,35,58,0.85)',
-            border: '1px solid rgba(64,61,82,0.5)',
-          }}
-        >
+        <div className="flex rounded-xl p-1 gap-1 bg-rp-overlay/85 border border-rp-hl-med/50">
           {FILTERS.map((f) => (
             <button
               key={f.key}
               onClick={() => setStatusFilter(f.key)}
-              className="px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all"
-              style={
+              className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all ${
                 statusFilter === f.key
-                  ? {
-                      background: 'linear-gradient(135deg, #c4a7e7, #9ccfd8)',
-                      color: '#191724',
-                    }
-                  : { color: '#908caa' }
-              }
+                  ? 'bg-gradient-to-br from-rp-iris to-rp-foam text-rp-base'
+                  : 'text-rp-subtle hover:text-rp-text hover:bg-rp-hl-med/20'
+              }`}
             >
               {f.label}
             </button>
@@ -140,12 +125,7 @@ export default function TasksPage() {
         <select
           value={subjectFilter}
           onChange={(e) => setSubjectFilter(e.target.value)}
-          className="px-3 py-1.5 rounded-xl text-xs outline-none transition-all"
-          style={{
-            background: 'rgba(38,35,58,0.85)',
-            border: '1px solid rgba(64,61,82,0.5)',
-            color: '#908caa',
-          }}
+          className="px-3 py-1.5 rounded-xl text-xs outline-none transition-all bg-rp-overlay/85 border border-rp-hl-med/50 text-rp-subtle hover:bg-rp-overlay/100"
         >
           <option value="">Vsi predmeti</option>
           {subjects.map((s) => (
@@ -159,12 +139,7 @@ export default function TasksPage() {
         <select
           value={sortBy}
           onChange={(e) => setSortBy(e.target.value)}
-          className="px-3 py-1.5 rounded-xl text-xs outline-none transition-all"
-          style={{
-            background: 'rgba(38,35,58,0.85)',
-            border: '1px solid rgba(64,61,82,0.5)',
-            color: '#908caa',
-          }}
+          className="px-3 py-1.5 rounded-xl text-xs outline-none transition-all bg-rp-overlay/85 border border-rp-hl-med/50 text-rp-subtle hover:bg-rp-overlay/100"
         >
           <option value="dueDate">Razvrsti po roku</option>
           <option value="createdAt">Razvrsti po datumu dodajanja</option>
@@ -174,18 +149,15 @@ export default function TasksPage() {
       {/* Task list */}
       {loading ? (
         <div className="flex justify-center py-16">
-          <div
-            className="w-8 h-8 rounded-full border-2 border-t-transparent animate-spin"
-            style={{ borderColor: '#c4a7e7', borderTopColor: 'transparent' }}
-          />
+          <div className="w-8 h-8 rounded-full border-2 animate-spin border-rp-iris border-t-transparent" />
         </div>
       ) : filtered.length === 0 ? (
         <div className="glass-card p-12 text-center animate-fade-in-up shadow-sm">
           <div className="text-6xl mb-4">✅</div>
-          <h3 className="text-lg font-semibold mb-2" style={{ color: '#e0def4' }}>
+          <h3 className="text-lg font-semibold mb-2 text-rp-text">
             {statusFilter === 'completed' ? 'Ni opravljenih nalog' : 'Ni nalog'}
           </h3>
-          <p className="text-sm" style={{ color: '#6e6a86' }}>
+          <p className="text-sm text-rp-muted">
             {statusFilter === 'pending'
               ? 'Vse naloge so opravljene! 🎉'
               : 'Dodaj novo nalogo, da začneš.'}

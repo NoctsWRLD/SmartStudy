@@ -109,29 +109,23 @@ export default function SchedulePage() {
       {/* Header */}
       <div className="flex flex-wrap items-center justify-between gap-3 animate-fade-in-up">
         <div>
-          <h1 className="text-2xl font-bold" style={{ color: '#e0def4' }}>
+          <h1 className="text-2xl font-bold text-rp-text">
             Urnik
           </h1>
-          <p className="text-sm mt-0.5" style={{ color: '#6e6a86' }}>
+          <p className="text-sm mt-0.5 text-rp-muted">
             {weekLabel}
           </p>
         </div>
         <div className="flex flex-wrap items-center gap-2">
           <button
             onClick={() => setWeekOffset(0)}
-            className="px-3 py-1.5 rounded-xl text-xs font-medium transition-all hover:opacity-80"
-            style={{ border: '1px solid rgba(64,61,82,0.5)', color: '#908caa' }}
-            onMouseEnter={e => e.currentTarget.style.background = 'rgba(64,61,82,0.35)'}
-            onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
+            className="px-3 py-1.5 rounded-xl text-xs font-medium transition-all hover:opacity-80 border border-rp-hl-med/50 text-rp-subtle hover:bg-rp-hl-med/35 hover:text-rp-text"
           >
             Ta teden
           </button>
           <button
             onClick={() => setWeekOffset((w) => w - 1)}
-            className="p-2 rounded-xl transition-all"
-            style={{ color: '#908caa' }}
-            onMouseEnter={e => { e.currentTarget.style.color = '#e0def4'; e.currentTarget.style.background = 'rgba(64,61,82,0.35)'; }}
-            onMouseLeave={e => { e.currentTarget.style.color = '#908caa'; e.currentTarget.style.background = 'transparent'; }}
+            className="p-2 rounded-xl transition-all text-rp-subtle hover:text-rp-text hover:bg-rp-hl-med/35"
           >
             <svg
               className="w-4 h-4"
@@ -149,10 +143,7 @@ export default function SchedulePage() {
           </button>
           <button
             onClick={() => setWeekOffset((w) => w + 1)}
-            className="p-2 rounded-xl transition-all"
-            style={{ color: '#908caa' }}
-            onMouseEnter={e => { e.currentTarget.style.color = '#e0def4'; e.currentTarget.style.background = 'rgba(64,61,82,0.35)'; }}
-            onMouseLeave={e => { e.currentTarget.style.color = '#908caa'; e.currentTarget.style.background = 'transparent'; }}
+            className="p-2 rounded-xl transition-all text-rp-subtle hover:text-rp-text hover:bg-rp-hl-med/35"
           >
             <svg
               className="w-4 h-4"
@@ -175,8 +166,7 @@ export default function SchedulePage() {
               setPreselectedDate(todayStr);
               setModalOpen(true);
             }}
-            className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold transition-all hover:opacity-90"
-            style={{ background: 'linear-gradient(135deg, #c4a7e7, #9ccfd8)', color: '#191724' }}
+            className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold transition-all hover:opacity-90 bg-gradient-to-br from-rp-iris to-rp-foam text-rp-base"
           >
             <svg
               className="w-3.5 h-3.5"
@@ -207,22 +197,17 @@ export default function SchedulePage() {
             <div key={dateStr} className="flex flex-col">
               {/* Day header */}
               <div
-                className={`text-center mb-2 pb-2 border-b ${isToday ? '' : ''}`}
-                style={{ borderColor: isToday ? 'rgba(196,167,231,0.4)' : 'rgba(64,61,82,0.3)' }}
+                className={`text-center mb-2 pb-2 border-b ${isToday ? 'border-rp-iris/40' : 'border-rp-hl-med/30'}`}
               >
                 <p
-                  className="text-xs font-medium"
-                  style={{ color: isToday ? '#c4a7e7' : '#6e6a86' }}
+                  className={`text-xs font-medium ${isToday ? 'text-rp-iris' : 'text-rp-muted'}`}
                 >
                   {DAYS_SL[i]}
                 </p>
                 <div
-                  className={`w-7 h-7 rounded-full flex items-center justify-center mx-auto mt-1 text-sm font-bold transition-all`}
-                  style={
-                    isToday
-                      ? { background: 'linear-gradient(135deg, #c4a7e7, #9ccfd8)', color: '#191724' }
-                      : { color: '#908caa' }
-                  }
+                  className={`w-7 h-7 rounded-full flex items-center justify-center mx-auto mt-1 text-sm font-bold transition-all ${
+                    isToday ? 'bg-gradient-to-br from-rp-iris to-rp-foam text-rp-base' : 'text-rp-subtle'
+                  }`}
                 >
                   {day.getDate()}
                 </div>
@@ -230,15 +215,9 @@ export default function SchedulePage() {
 
               {/* Tasks column */}
               <div
-                className="flex-1 min-h-28 rounded-xl p-1.5 space-y-1.5 cursor-pointer hover:bg-slate-700/20 transition-all"
+                className="flex-1 min-h-[7rem] rounded-xl p-1.5 space-y-1.5 cursor-pointer hover:bg-rp-hl-med/20 transition-all"
                 onClick={() => handleDayClick(dateStr)}
                 title={`Dodaj nalogo – ${DAYS_FULL[i]}`}
-                onMouseEnter={(e) =>
-                  (e.currentTarget.style.background = 'rgba(64,61,82,0.2)')
-                }
-                onMouseLeave={(e) =>
-                  (e.currentTarget.style.background = 'transparent')
-                }
               >
                 {dayTasks.map((task) => {
                   const subj = getSubject(task);
@@ -252,20 +231,9 @@ export default function SchedulePage() {
                         e.stopPropagation();
                         handleEdit(task);
                       }}
-                      className={`px-2.5 py-2 rounded-lg text-xs leading-tight cursor-pointer hover:opacity-90 transition-all shadow-sm ${task.completed ? 'opacity-40 line-through' : ''}`}
-                      style={
-                        color
-                          ? {
-                              background: color.bg,
-                              border: `1px solid ${color.border}`,
-                              color: color.text,
-                            }
-                          : {
-                              background: 'rgba(196,167,231,0.15)',
-                              border: '1px solid rgba(196,167,231,0.3)',
-                              color: '#c4a7e7',
-                            }
-                      }
+                      className={`px-2.5 py-2 rounded-lg text-xs leading-tight cursor-pointer hover:opacity-90 transition-all shadow-sm ${task.completed ? 'opacity-40 line-through' : ''} ${
+                        color ? `${color.bg} border ${color.border} ${color.text}` : 'bg-rp-iris/15 border border-rp-iris/30 text-rp-iris'
+                      }`}
                     >
                       <p className="font-medium truncate">{task.title}</p>
                       {subj && (
@@ -284,7 +252,7 @@ export default function SchedulePage() {
 
       {/* Mobile: day list */}
       <div className="block lg:hidden space-y-4 mt-4">
-        <h2 className="text-base font-semibold text-white">
+        <h2 className="text-base font-semibold text-rp-text">
           Ta teden po dnevih
         </h2>
         {weekDays.map((day, i) => {
@@ -296,27 +264,17 @@ export default function SchedulePage() {
           return (
             <div key={dateStr}>
               <div className="flex items-center gap-2 mb-2">
-                <span
-                  className={`text-sm font-semibold`}
-                  style={{ color: isToday ? '#c4a7e7' : '#908caa' }}
-                >
+                <span className={`text-sm font-semibold ${isToday ? 'text-rp-iris' : 'text-rp-subtle'}`}>
                   {DAYS_FULL[i]}, {day.getDate()}. {MONTHS_SL[day.getMonth()]}
                 </span>
                 {isToday && (
-                  <span
-                    className="text-xs px-2 py-0.5 rounded-full"
-                    style={{
-                      color: '#c4a7e7',
-                      background: 'rgba(196,167,231,0.2)',
-                      border: '1px solid rgba(196,167,231,0.3)',
-                    }}
-                  >
+                  <span className="text-xs px-2 py-0.5 rounded-full text-rp-iris bg-rp-iris/20 border border-rp-iris/30">
                     Danes
                   </span>
                 )}
               </div>
               {dayTasks.length === 0 ? (
-                <p className="text-xs pl-2" style={{ color: '#524f67' }}>Ni nalog</p>
+                <p className="text-xs pl-2 text-rp-hl-high">Ni nalog</p>
               ) : (
                 <div className="space-y-2">
                   {dayTasks.map((task) => {
@@ -332,19 +290,13 @@ export default function SchedulePage() {
                             e.stopPropagation();
                             toggleTask(task);
                           }}
-                          className="mt-0.5 w-5 h-5 rounded-full border-2 flex-shrink-0 flex items-center justify-center transition-all"
-                          style={
-                            task.completed
-                              ? {
-                                  background: 'linear-gradient(135deg,#c4a7e7,#9ccfd8)',
-                                  borderColor: 'transparent',
-                                }
-                              : { borderColor: '#524f67' }
-                          }
+                          className={`mt-0.5 w-5 h-5 rounded-full border-2 flex-shrink-0 flex items-center justify-center transition-all ${
+                            task.completed ? 'bg-gradient-to-br from-rp-iris to-rp-foam border-transparent' : 'border-rp-hl-high'
+                          }`}
                         >
                           {task.completed && (
                             <svg
-                              className="w-3 h-3 text-[#191724]"
+                              className="w-3 h-3 text-rp-base"
                               fill="none"
                               viewBox="0 0 24 24"
                               stroke="currentColor"
@@ -359,10 +311,7 @@ export default function SchedulePage() {
                           )}
                         </button>
                         <div className="flex-1 min-w-0">
-                          <p
-                            className={`text-sm font-medium ${task.completed ? 'line-through' : ''}`}
-                            style={{ color: task.completed ? '#6e6a86' : '#e0def4' }}
-                          >
+                          <p className={`text-sm font-medium ${task.completed ? 'line-through text-rp-muted' : 'text-rp-text'}`}>
                             {task.title}
                           </p>
                           {subj && (

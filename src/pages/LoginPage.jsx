@@ -30,34 +30,16 @@ export default function LoginPage() {
     setLoading(false);
   }
 
-  const inputStyle = {
-    background: 'rgba(38,35,58,0.9)',
-    border: '1px solid rgba(64,61,82,0.7)',
-    color: '#e0def4',
-  };
-
   return (
-    <div
-      className="min-h-screen flex items-center justify-center p-4 relative overflow-hidden"
-      style={{ background: 'linear-gradient(135deg, #191724 0%, #1f1d2e 50%, #191724 100%)' }}
-    >
+    <div className="min-h-screen flex items-center justify-center p-4 relative overflow-hidden bg-gradient-to-br from-rp-base via-rp-surface to-rp-base">
       {/* Decorative blobs */}
-      <div
-        className="absolute top-1/4 left-1/4 w-96 h-96 rounded-full opacity-20 blur-3xl pointer-events-none"
-        style={{ background: 'radial-gradient(circle, #c4a7e7, transparent)' }}
-      />
-      <div
-        className="absolute bottom-1/4 right-1/4 w-64 h-64 rounded-full opacity-15 blur-3xl pointer-events-none"
-        style={{ background: 'radial-gradient(circle, #9ccfd8, transparent)' }}
-      />
+      <div className="absolute top-1/4 left-1/4 w-96 h-96 rounded-full opacity-20 blur-3xl pointer-events-none bg-rp-iris" />
+      <div className="absolute bottom-1/4 right-1/4 w-64 h-64 rounded-full opacity-15 blur-3xl pointer-events-none bg-rp-foam" />
 
       <div className="glass-card p-8 w-full max-w-md animate-fade-in-up shadow-lg">
         {/* Logo */}
         <div className="text-center mb-8">
-          <div
-            className="inline-flex items-center justify-center w-16 h-16 rounded-2xl mb-4 animate-pulse-glow"
-            style={{ background: 'linear-gradient(135deg, #c4a7e7, #9ccfd8)' }}
-          >
+          <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl mb-4 animate-pulse-glow bg-gradient-to-br from-rp-iris to-rp-foam">
             <svg
               className="w-8 h-8 text-white"
               fill="none"
@@ -73,21 +55,18 @@ export default function LoginPage() {
             </svg>
           </div>
           <h1 className="text-3xl font-bold gradient-text">SmartStudy</h1>
-          <p className="mt-1 text-sm" style={{ color: '#908caa' }}>Prijava v vaš račun</p>
+          <p className="mt-1 text-sm text-rp-subtle">Prijava v vaš račun</p>
         </div>
 
         {error && (
-          <div
-            className="mb-4 p-3 rounded-xl text-sm border"
-            style={{ color: '#eb6f92', background: 'rgba(235,111,146,0.1)', borderColor: 'rgba(235,111,146,0.3)' }}
-          >
+          <div className="mb-4 p-3 rounded-xl text-sm border text-rp-love bg-rp-love/10 border-rp-love/30">
             {error}
           </div>
         )}
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium mb-1" style={{ color: '#908caa' }}>
+            <label className="block text-sm font-medium mb-1 text-rp-subtle">
               E-poštni naslov
             </label>
             <input
@@ -97,16 +76,11 @@ export default function LoginPage() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="vas@email.com"
-              className="w-full px-4 py-3 rounded-xl outline-none transition-all"
-              style={{
-                background: 'rgba(38,35,58,0.9)',
-                border: '1px solid rgba(64,61,82,0.7)',
-                color: '#e0def4',
-              }}
+              className="w-full px-4 py-3 rounded-xl outline-none transition-all bg-rp-overlay/90 border border-rp-hl-med/70 text-rp-text placeholder:text-rp-muted"
             />
           </div>
           <div>
-            <label className="block text-sm font-medium mb-1" style={{ color: '#908caa' }}>
+            <label className="block text-sm font-medium mb-1 text-rp-subtle">
               Geslo
             </label>
             <input
@@ -116,12 +90,7 @@ export default function LoginPage() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="••••••••"
-              className="w-full px-4 py-3 rounded-xl outline-none transition-all"
-              style={{
-                background: 'rgba(38,35,58,0.9)',
-                border: '1px solid rgba(64,61,82,0.7)',
-                color: '#e0def4',
-              }}
+              className="w-full px-4 py-3 rounded-xl outline-none transition-all bg-rp-overlay/90 border border-rp-hl-med/70 text-rp-text placeholder:text-rp-muted"
             />
           </div>
 
@@ -129,11 +98,7 @@ export default function LoginPage() {
             id="login-submit"
             type="submit"
             disabled={loading}
-            className="w-full py-3 px-4 rounded-xl font-semibold text-white transition-all hover:opacity-90 hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-50 disabled:cursor-not-allowed"
-            style={{
-              background: 'linear-gradient(135deg, #c4a7e7, #9ccfd8)',
-              boxShadow: '0 4px 20px rgba(196,167,231,0.35)',
-            }}
+            className="w-full py-3 px-4 rounded-xl font-semibold text-white transition-all hover:opacity-90 hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-50 disabled:cursor-not-allowed bg-gradient-to-br from-rp-iris to-rp-foam shadow-[0_4px_20px_rgba(196,167,231,0.35)]"
           >
             {loading ? (
               <span className="flex items-center justify-center gap-2">
@@ -147,9 +112,9 @@ export default function LoginPage() {
           </button>
         </form>
 
-        <p className="text-center text-sm mt-6" style={{ color: '#908caa' }}>
+        <p className="text-center text-sm mt-6 text-rp-subtle">
           Nimate računa?{' '}
-          <Link to="/register" style={{ color: '#c4a7e7' }} className="font-medium hover:opacity-80">
+          <Link to="/register" className="text-rp-iris font-medium hover:opacity-80">
             Registracija
           </Link>
         </p>

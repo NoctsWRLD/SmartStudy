@@ -47,8 +47,8 @@ export default function SubjectsPage() {
     <div className="max-w-3xl mx-auto space-y-6">
       <div className="flex items-center justify-between animate-fade-in-up">
         <div>
-          <h1 className="text-2xl font-bold" style={{ color: '#e0def4' }}>Predmeti</h1>
-          <p className="text-sm mt-0.5" style={{ color: '#6e6a86' }}>
+          <h1 className="text-2xl font-bold text-rp-text">Predmeti</h1>
+          <p className="text-sm mt-0.5 text-rp-muted">
             {subjects.length} predmetov
           </p>
         </div>
@@ -58,12 +58,7 @@ export default function SubjectsPage() {
             setEditSubject(null);
             setModalOpen(true);
           }}
-          className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold transition-all hover:opacity-90 hover:-translate-y-0.5"
-          style={{
-            background: 'linear-gradient(135deg, #c4a7e7, #9ccfd8)',
-            boxShadow: '0 4px 20px rgba(196,167,231,0.3)',
-            color: '#191724',
-          }}
+          className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold transition-all hover:opacity-90 hover:-translate-y-0.5 bg-gradient-to-br from-rp-iris to-rp-foam shadow-[0_4px_20px_rgba(196,167,231,0.3)] text-rp-base"
         >
           <svg
             className="w-4 h-4"
@@ -84,24 +79,20 @@ export default function SubjectsPage() {
 
       {loading ? (
         <div className="flex justify-center py-16">
-          <div
-            className="w-8 h-8 rounded-full border-2 border-t-transparent animate-spin"
-            style={{ borderColor: '#c4a7e7', borderTopColor: 'transparent' }}
-          />
+          <div className="w-8 h-8 rounded-full border-2 animate-spin border-rp-iris border-t-transparent" />
         </div>
       ) : subjects.length === 0 ? (
         <div className="glass-card p-12 text-center animate-fade-in-up shadow-sm">
           <div className="text-6xl mb-4">📚</div>
-          <h3 className="text-lg font-semibold text-white mb-2">
+          <h3 className="text-lg font-semibold text-rp-text mb-2">
             Ni predmetov
           </h3>
-          <p className="text-slate-400 text-sm mb-6">
+          <p className="text-rp-subtle text-sm mb-6">
             Dodaj predmete, da lažje organiziraš naloge.
           </p>
           <button
             onClick={() => setModalOpen(true)}
-            className="px-6 py-2.5 rounded-xl text-sm font-semibold transition-all hover:opacity-90"
-            style={{ background: 'linear-gradient(135deg, #c4a7e7, #9ccfd8)', color: '#191724' }}
+            className="px-6 py-2.5 rounded-xl text-sm font-semibold transition-all hover:opacity-90 bg-gradient-to-br from-rp-iris to-rp-foam text-rp-base"
           >
             Dodaj prvi predmet
           </button>
@@ -123,24 +114,19 @@ export default function SubjectsPage() {
               <div
                 key={subj.id}
                 onClick={() => handleSubjectClick(subj)}
-                className="glass-card p-5 animate-fade-in-up group hover:border-slate-600/70 transition-all cursor-pointer"
-                style={{ borderLeft: `3px solid ${color.text}` }}
+                className="glass-card p-5 animate-fade-in-up group hover:border-rp-hl-med transition-all cursor-pointer border-l-[3px]"
+                style={{ borderLeftColor: color.colorCode }}
               >
                 <div className="flex items-start justify-between mb-3">
                   <div className="flex items-center gap-3">
                     <div
-                      className="w-10 h-10 rounded-xl flex items-center justify-center text-xl font-bold"
-                      style={{
-                        background: color.bg,
-                        color: color.text,
-                        border: `1px solid ${color.border}`,
-                      }}
+                      className={`w-10 h-10 rounded-xl flex items-center justify-center text-xl font-bold ${color.bg} ${color.text} border ${color.border}`}
                     >
                       {subj.name[0]?.toUpperCase()}
                     </div>
                     <div>
-                      <h3 className="font-semibold text-white">{subj.name}</h3>
-                      <p className="text-xs" style={{ color: '#6e6a86' }}>
+                      <h3 className="font-semibold text-rp-text">{subj.name}</h3>
+                      <p className="text-xs text-rp-muted">
                         {taskCount} nalog · {doneCount} opravljenih
                       </p>
                     </div>
@@ -151,10 +137,7 @@ export default function SubjectsPage() {
                         e.stopPropagation();
                         handleEdit(subj);
                       }}
-                      className="p-2 rounded-lg transition-all"
-                      style={{ color: '#6e6a86' }}
-                      onMouseEnter={e => { e.currentTarget.style.color = '#c4a7e7'; e.currentTarget.style.background = 'rgba(196,167,231,0.1)'; }}
-                      onMouseLeave={e => { e.currentTarget.style.color = '#6e6a86'; e.currentTarget.style.background = 'transparent'; }}
+                      className="p-2 rounded-lg transition-all text-rp-muted hover:text-rp-iris hover:bg-rp-iris/10"
                     >
                       <svg
                         className="w-4 h-4"
@@ -175,10 +158,7 @@ export default function SubjectsPage() {
                         e.stopPropagation();
                         handleDelete(subj);
                       }}
-                      className="p-2 rounded-lg transition-all"
-                      style={{ color: '#6e6a86' }}
-                      onMouseEnter={e => { e.currentTarget.style.color = '#eb6f92'; e.currentTarget.style.background = 'rgba(235,111,146,0.1)'; }}
-                      onMouseLeave={e => { e.currentTarget.style.color = '#6e6a86'; e.currentTarget.style.background = 'transparent'; }}
+                      className="p-2 rounded-lg transition-all text-rp-muted hover:text-rp-love hover:bg-rp-love/10"
                     >
                       <svg
                         className="w-4 h-4"
@@ -200,17 +180,14 @@ export default function SubjectsPage() {
                 {/* Progress bar */}
                 {taskCount > 0 && (
                   <div>
-                    <div className="flex justify-between text-xs mb-1" style={{ color: '#6e6a86' }}>
+                    <div className="flex justify-between text-xs mb-1 text-rp-muted">
                       <span>Napredek</span>
-                      <span style={{ color: color.text }}>{pct}%</span>
+                      <span className={color.text}>{pct}%</span>
                     </div>
-                    <div
-                      className="h-1.5 rounded-full overflow-hidden"
-                      style={{ background: 'rgba(64,61,82,0.5)' }}
-                    >
+                    <div className="h-1.5 rounded-full overflow-hidden bg-rp-hl-med/50">
                       <div
                         className="h-full rounded-full transition-all duration-500"
-                        style={{ width: `${pct}%`, background: color.text }}
+                        style={{ width: `${pct}%`, backgroundColor: color.colorCode }}
                       />
                     </div>
                   </div>
