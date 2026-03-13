@@ -30,19 +30,28 @@ export default function TaskModal({ isOpen, onClose, onSave, subjects, task }) {
 
   if (!isOpen) return null;
 
-  const inputClass = "w-full px-4 py-3 rounded-xl text-white placeholder-slate-500 outline-none focus:ring-2 focus:ring-indigo-500/50 transition-all text-sm";
-  const inputStyle = { background: 'rgba(15,23,42,0.8)', border: '1px solid rgba(51,65,85,0.7)' };
+  const inputStyle = {
+    background: 'rgba(38,35,58,0.9)',
+    border: '1px solid rgba(64,61,82,0.7)',
+    color: '#e0def4',
+  };
+
+  const inputClass = "w-full px-4 py-3 rounded-xl outline-none text-sm transition-all";
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
       <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={onClose} />
       <div className="relative glass-card p-6 w-full max-w-md animate-fade-in-up">
         <div className="flex items-center justify-between mb-6">
-          <h2 className="text-lg font-semibold text-white">
+          <h2 className="text-lg font-semibold" style={{ color: '#e0def4' }}>
             {task ? 'Uredi nalogo' : 'Nova naloga'}
           </h2>
           <button onClick={onClose}
-            className="p-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-700/50 transition-all">
+            className="p-2 rounded-xl transition-all"
+            style={{ color: '#6e6a86' }}
+            onMouseEnter={e => { e.currentTarget.style.color = '#e0def4'; e.currentTarget.style.background = 'rgba(64,61,82,0.5)'; }}
+            onMouseLeave={e => { e.currentTarget.style.color = '#6e6a86'; e.currentTarget.style.background = 'transparent'; }}
+          >
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
             </svg>
@@ -51,7 +60,7 @@ export default function TaskModal({ isOpen, onClose, onSave, subjects, task }) {
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-xs font-medium text-slate-400 mb-1">Naslov naloge *</label>
+            <label className="block text-xs font-medium mb-1" style={{ color: '#6e6a86' }}>Naslov naloge *</label>
             <input
               id="task-title"
               type="text"
@@ -60,12 +69,12 @@ export default function TaskModal({ isOpen, onClose, onSave, subjects, task }) {
               onChange={e => setTitle(e.target.value)}
               placeholder="npr. Domača naloga iz matematike"
               className={inputClass}
-              style={inputStyle}
+              style={{ ...inputStyle, '::placeholder': { color: '#6e6a86' } }}
               autoFocus
             />
           </div>
           <div>
-            <label className="block text-xs font-medium text-slate-400 mb-1">Opis (neobvezno)</label>
+            <label className="block text-xs font-medium mb-1" style={{ color: '#6e6a86' }}>Opis (neobvezno)</label>
             <textarea
               id="task-description"
               value={description}
@@ -77,7 +86,7 @@ export default function TaskModal({ isOpen, onClose, onSave, subjects, task }) {
             />
           </div>
           <div>
-            <label className="block text-xs font-medium text-slate-400 mb-1">Predmet</label>
+            <label className="block text-xs font-medium mb-1" style={{ color: '#6e6a86' }}>Predmet</label>
             <select
               id="task-subject"
               value={subjectId}
@@ -91,7 +100,7 @@ export default function TaskModal({ isOpen, onClose, onSave, subjects, task }) {
             </select>
           </div>
           <div>
-            <label className="block text-xs font-medium text-slate-400 mb-1">Rok oddaje</label>
+            <label className="block text-xs font-medium mb-1" style={{ color: '#6e6a86' }}>Rok oddaje</label>
             <input
               id="task-due"
               type="date"
@@ -104,13 +113,16 @@ export default function TaskModal({ isOpen, onClose, onSave, subjects, task }) {
 
           <div className="flex gap-3 pt-2">
             <button type="button" onClick={onClose}
-              className="flex-1 py-2.5 rounded-xl text-sm font-medium text-slate-400 hover:bg-slate-700/50 transition-all"
-              style={{ border: '1px solid rgba(51,65,85,0.5)' }}>
+              className="flex-1 py-2.5 rounded-xl text-sm font-medium transition-all"
+              style={{ color: '#908caa', border: '1px solid rgba(64,61,82,0.5)' }}
+              onMouseEnter={e => e.currentTarget.style.background = 'rgba(64,61,82,0.35)'}
+              onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
+            >
               Prekliči
             </button>
             <button type="submit"
               className="flex-1 py-2.5 rounded-xl text-sm font-semibold text-white transition-all hover:opacity-90"
-              style={{ background: 'linear-gradient(135deg, #6366f1, #8b5cf6)' }}>
+              style={{ background: 'linear-gradient(135deg, #c4a7e7, #9ccfd8)' }}>
               {task ? 'Shrani' : 'Dodaj nalogo'}
             </button>
           </div>
