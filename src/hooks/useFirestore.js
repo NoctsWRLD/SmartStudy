@@ -35,11 +35,16 @@ export function useSubjects() {
   }, [currentUser]);
 
   async function addSubject(data) {
-    await addDoc(collection(db, 'subjects'), {
-      ...data,
-      uid: currentUser.uid,
-      createdAt: serverTimestamp(),
-    });
+    try {
+      await addDoc(collection(db, 'subjects'), {
+        ...data,
+        uid: currentUser.uid,
+        createdAt: serverTimestamp(),
+      });
+    } catch (err) {
+      console.error('Error adding subject:', err);
+      alert('Napaka pri shranjevanju predmeta: ' + err.message);
+    }
   }
 
   async function updateSubject(id, data) {
@@ -82,12 +87,17 @@ export function useTasks() {
   }, [currentUser]);
 
   async function addTask(data) {
-    await addDoc(collection(db, 'tasks'), {
-      ...data,
-      completed: false,
-      uid: currentUser.uid,
-      createdAt: serverTimestamp(),
-    });
+    try {
+      await addDoc(collection(db, 'tasks'), {
+        ...data,
+        completed: false,
+        uid: currentUser.uid,
+        createdAt: serverTimestamp(),
+      });
+    } catch (err) {
+      console.error('Error adding task:', err);
+      alert('Napaka pri shranjevanju naloge: ' + err.message);
+    }
   }
 
   async function updateTask(id, data) {
