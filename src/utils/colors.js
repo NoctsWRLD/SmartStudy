@@ -1,14 +1,14 @@
 const SUBJECT_COLORS = [
-  { label: 'Indigo', bg: 'rgba(99,102,241,0.2)', border: 'rgba(99,102,241,0.5)', text: '#818cf8' },
-  { label: 'Vijolična', bg: 'rgba(139,92,246,0.2)', border: 'rgba(139,92,246,0.5)', text: '#a78bfa' },
-  { label: 'Roza', bg: 'rgba(236,72,153,0.2)', border: 'rgba(236,72,153,0.5)', text: '#f472b6' },
-  { label: 'Rdeča', bg: 'rgba(239,68,68,0.2)', border: 'rgba(239,68,68,0.5)', text: '#f87171' },
-  { label: 'Oranžna', bg: 'rgba(249,115,22,0.2)', border: 'rgba(249,115,22,0.5)', text: '#fb923c' },
-  { label: 'Rumena', bg: 'rgba(234,179,8,0.2)', border: 'rgba(234,179,8,0.5)', text: '#facc15' },
-  { label: 'Zelena', bg: 'rgba(34,197,94,0.2)', border: 'rgba(34,197,94,0.5)', text: '#4ade80' },
-  { label: 'Teal', bg: 'rgba(20,184,166,0.2)', border: 'rgba(20,184,166,0.5)', text: '#2dd4bf' },
-  { label: 'Modra', bg: 'rgba(59,130,246,0.2)', border: 'rgba(59,130,246,0.5)', text: '#60a5fa' },
-  { label: 'Siva', bg: 'rgba(100,116,139,0.2)', border: 'rgba(100,116,139,0.5)', text: '#94a3b8' },
+  { label: 'Iris', bg: 'rgba(196,167,231,0.2)', border: 'rgba(196,167,231,0.5)', text: '#c4a7e7' },
+  { label: 'Roza', bg: 'rgba(235,188,186,0.2)', border: 'rgba(235,188,186,0.5)', text: '#ebbcba' },
+  { label: 'Rdeča', bg: 'rgba(235,111,146,0.2)', border: 'rgba(235,111,146,0.5)', text: '#eb6f92' },
+  { label: 'Zlata', bg: 'rgba(246,193,119,0.2)', border: 'rgba(246,193,119,0.5)', text: '#f6c177' },
+  { label: 'Borova', bg: 'rgba(49,116,143,0.2)', border: 'rgba(49,116,143,0.5)', text: '#31748f' },
+  { label: 'Pena', bg: 'rgba(156,207,216,0.2)', border: 'rgba(156,207,216,0.5)', text: '#9ccfd8' },
+  { label: 'Bela', bg: 'rgba(224,222,244,0.2)', border: 'rgba(224,222,244,0.5)', text: '#e0def4' },
+  { label: 'Siva Z.', bg: 'rgba(144,140,170,0.2)', border: 'rgba(144,140,170,0.5)', text: '#908caa' },
+  { label: 'Siva', bg: 'rgba(110,106,134,0.2)', border: 'rgba(110,106,134,0.5)', text: '#6e6a86' },
+  { label: 'Temna', bg: 'rgba(82,79,103,0.2)', border: 'rgba(82,79,103,0.5)', text: '#524f67' },
 ];
 
 export default SUBJECT_COLORS;

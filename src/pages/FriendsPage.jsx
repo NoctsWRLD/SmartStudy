@@ -13,7 +13,7 @@ import {
 // ─── Tiny avatar ──────────────────────────────────────────────────────────────
 function MiniAvatar({
   name,
-  gradient = 'linear-gradient(135deg,#6366f1,#8b5cf6)',
+  gradient = 'linear-gradient(135deg, #c4a7e7, #9ccfd8)',
   size = 36,
 }) {
   return (
@@ -24,6 +24,7 @@ function MiniAvatar({
         height: size,
         background: gradient,
         fontSize: size * 0.35,
+        color: '#191724',
       }}
     >
       {(name?.[0] || '?').toUpperCase()}
@@ -36,11 +37,11 @@ function Section({ title, badge, children }) {
   return (
     <div className="glass-card p-5 space-y-3">
       <div className="flex items-center gap-2">
-        <h2 className="text-sm font-semibold text-white">{title}</h2>
+        <h2 className="text-sm font-semibold" style={{ color: '#e0def4' }}>{title}</h2>
         {badge != null && (
           <span
             className="px-1.5 py-0.5 rounded-full text-xs font-bold"
-            style={{ background: 'rgba(99,102,241,0.3)', color: '#818cf8' }}
+            style={{ background: 'rgba(196,167,231,0.2)', color: '#c4a7e7' }}
           >
             {badge}
           </span>
@@ -93,13 +94,13 @@ export default function FriendsPage() {
         <div
           className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0"
           style={{
-            background:
-              'linear-gradient(135deg,rgba(99,102,241,0.3),rgba(139,92,246,0.2))',
-            border: '1px solid rgba(99,102,241,0.3)',
+            background: 'linear-gradient(135deg,rgba(196,167,231,0.25),rgba(156,207,216,0.15))',
+            border: '1px solid rgba(196,167,231,0.3)',
           }}
         >
           <svg
-            className="w-5 h-5 text-indigo-400"
+            className="w-5 h-5"
+            style={{ color: '#c4a7e7' }}
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
@@ -113,8 +114,8 @@ export default function FriendsPage() {
           </svg>
         </div>
         <div>
-          <h1 className="text-2xl font-bold text-white">Prijatelji</h1>
-          <p className="text-xs text-slate-500">{friends.length} prijateljev</p>
+          <h1 className="text-2xl font-bold" style={{ color: '#e0def4' }}>Prijatelji</h1>
+          <p className="text-xs" style={{ color: '#6e6a86' }}>{friends.length} prijateljev</p>
         </div>
       </div>
 
@@ -131,22 +132,25 @@ export default function FriendsPage() {
                   name={req.fromName}
                   gradient="linear-gradient(135deg,#06b6d4,#3b82f6)"
                 />
-                <span className="text-sm text-white">{req.fromName}</span>
+                <span className="text-sm font-medium" style={{ color: '#e0def4' }}>{req.fromName}</span>
               </div>
               <div className="flex gap-2">
                 <button
                   onClick={() => handleRespond(req.id, 'accepted')}
-                  className="px-3 py-1.5 rounded-lg text-xs font-semibold text-white transition-all hover:opacity-90"
+                  className="px-3 py-1.5 rounded-lg text-xs font-semibold transition-all hover:opacity-90"
                   style={{
-                    background: 'linear-gradient(135deg,#22c55e,#16a34a)',
+                    background: 'linear-gradient(135deg, #9ccfd8, #3e8fb0)',
+                    color: '#191724',
                   }}
                 >
                   Sprejmi
                 </button>
                 <button
                   onClick={() => handleRespond(req.id, 'rejected')}
-                  className="px-3 py-1.5 rounded-lg text-xs font-semibold text-red-400 hover:bg-red-400/10 transition-all"
-                  style={{ border: '1px solid rgba(248,113,113,0.3)' }}
+                  className="px-3 py-1.5 rounded-lg text-xs font-semibold transition-all"
+                  style={{ border: '1px solid rgba(235,111,146,0.3)', color: '#eb6f92' }}
+                  onMouseEnter={e => e.currentTarget.style.background = 'rgba(235,111,146,0.1)'}
+                  onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
                 >
                   Zavrni
                 </button>
@@ -159,7 +163,7 @@ export default function FriendsPage() {
       {/* ─── Friends list ─── */}
       <Section title="Moji prijatelji" badge={friends.length}>
         {friends.length === 0 ? (
-          <div className="flex flex-col items-center gap-3 py-6 text-slate-500">
+          <div className="flex flex-col items-center gap-3 py-6" style={{ color: '#6e6a86' }}>
             <div className="text-4xl">👥</div>
             <p className="text-sm">Nimaš še prijateljev. Poišči jih spodaj!</p>
           </div>
@@ -172,12 +176,14 @@ export default function FriendsPage() {
               >
                 <div className="flex items-center gap-4">
                   <MiniAvatar name={f.displayName} />
-                  <span className="text-sm text-white">{f.displayName}</span>
+                  <span className="text-sm font-medium" style={{ color: '#e0def4' }}>{f.displayName}</span>
                 </div>
                 <button
                   onClick={() => navigate(`/chat?dm=${f.uid}`)}
-                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium text-indigo-400 hover:bg-indigo-400/10 transition-all"
-                  style={{ border: '1px solid rgba(99,102,241,0.3)' }}
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all"
+                  style={{ border: '1px solid rgba(196,167,231,0.3)', color: '#c4a7e7' }}
+                  onMouseEnter={e => e.currentTarget.style.background = 'rgba(196,167,231,0.15)'}
+                  onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
                 >
                   <svg
                     className="w-4 h-4"
@@ -207,10 +213,11 @@ export default function FriendsPage() {
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           placeholder="Išči po imenu ali emailu… (vsaj 2 znaka)"
-          className="w-full px-4 py-2.5 rounded-xl text-sm text-white placeholder-slate-500 outline-none"
+          className="w-full px-4 py-2.5 rounded-xl text-sm outline-none"
           style={{
-            background: 'rgba(30,41,59,0.8)',
-            border: '1px solid rgba(51,65,85,0.5)',
+            background: 'rgba(38,35,58,0.85)',
+            border: '1px solid rgba(64,61,82,0.5)',
+            color: '#e0def4',
           }}
         />
 
@@ -232,17 +239,18 @@ export default function FriendsPage() {
                   gradient="linear-gradient(135deg,#f472b6,#a855f7)"
                 />
                 <div>
-                  <p className="text-sm text-white">
+                  <p className="text-sm font-medium" style={{ color: '#e0def4' }}>
                     {u.displayName || 'Neznan'}
                   </p>
-                  <p className="text-xs text-slate-500">{u.email}</p>
+                  <p className="text-xs" style={{ color: '#524f67' }}>{u.email}</p>
                 </div>
               </div>
               <button
                 onClick={() => handleSendRequest(u)}
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold text-white transition-all hover:opacity-90"
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all hover:opacity-90"
                 style={{
-                  background: 'linear-gradient(135deg,#6366f1,#8b5cf6)',
+                  background: 'linear-gradient(135deg, #c4a7e7, #9ccfd8)',
+                  color: '#191724',
                 }}
               >
                 <svg
@@ -267,13 +275,13 @@ export default function FriendsPage() {
         {/* Pending sent */}
         {sent.length > 0 && (
           <div className="pt-2 space-y-2 border-t border-slate-700/50">
-            <p className="text-xs text-slate-500 uppercase tracking-wider font-semibold">
+            <p className="text-xs uppercase tracking-wider font-semibold" style={{ color: '#524f67' }}>
               Čaka na odziv
             </p>
             {sent.map((req) => (
               <div key={req.id} className="flex items-center gap-3 py-1">
-                <div className="w-2 h-2 rounded-full bg-yellow-400 flex-shrink-0 animate-pulse" />
-                <span className="text-sm text-slate-400">{req.toName}</span>
+                <div className="w-2 h-2 rounded-full flex-shrink-0 animate-pulse" style={{ background: '#f6c177' }} />
+                <span className="text-sm" style={{ color: '#908caa' }}>{req.toName}</span>
               </div>
             ))}
           </div>

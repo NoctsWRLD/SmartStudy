@@ -28,8 +28,9 @@ function Avatar({ src, initial, size = 8 }) {
       style={{
         width: px,
         height: px,
-        background: 'linear-gradient(135deg, #6366f1, #8b5cf6)',
+        background: 'linear-gradient(135deg, #c4a7e7, #9ccfd8)',
         fontSize: px <= 32 ? '0.75rem' : '1rem',
+        color: '#191724',
       }}
     >
       {initial}
@@ -62,13 +63,13 @@ function FileBubble({ fileURL, fileName, fileType, fileSize, isOwn }) {
       style={
         isOwn
           ? {
-              background: 'linear-gradient(135deg,#5254cc,#7c3aed)',
-              color: '#fff',
+              background: 'linear-gradient(135deg, #c4a7e7, #9ccfd8)',
+              color: '#191724',
             }
           : {
-              background: 'rgba(30,41,59,0.9)',
-              color: '#e2e8f0',
-              border: '1px solid rgba(51,65,85,0.5)',
+              background: 'rgba(38,35,58,0.9)',
+              color: '#e0def4',
+              border: '1px solid rgba(64,61,82,0.5)',
             }
       }
     >
@@ -117,10 +118,10 @@ function MessageBubble({ msg, isOwn, onDelete }) {
         <div
           className={`flex items-center gap-2 ${isOwn ? 'flex-row-reverse' : ''}`}
         >
-          <span className="text-xs text-slate-400 font-medium">
+          <span className="text-xs font-medium" style={{ color: '#6e6a86' }}>
             {isOwn ? 'Ti' : msg.senderName}
           </span>
-          <span className="text-xs text-slate-600">{time}</span>
+          <span className="text-xs" style={{ color: '#524f67' }}>{time}</span>
         </div>
 
         <div
@@ -133,13 +134,13 @@ function MessageBubble({ msg, isOwn, onDelete }) {
                 style={
                   isOwn
                     ? {
-                        background: 'linear-gradient(135deg,#6366f1,#8b5cf6)',
-                        color: '#fff',
+                        background: 'linear-gradient(135deg,#c4a7e7,#9ccfd8)',
+                        color: '#191724',
                       }
                     : {
-                        background: 'rgba(30,41,59,0.9)',
-                        color: '#e2e8f0',
-                        border: '1px solid rgba(51,65,85,0.5)',
+                        background: 'rgba(38,35,58,0.9)',
+                        color: '#e0def4',
+                        border: '1px solid rgba(64,61,82,0.5)',
                       }
                 }
               >
@@ -204,13 +205,13 @@ function MessageList({ chatId, currentUser }) {
   if (loading)
     return (
       <div className="flex-1 flex items-center justify-center">
-        <div className="w-7 h-7 rounded-full border-2 border-indigo-500 border-t-transparent animate-spin" />
+        <div className="w-7 h-7 rounded-full border-2 border-t-transparent animate-spin" style={{ borderColor: '#c4a7e7', borderTopColor: 'transparent' }} />
       </div>
     );
 
   if (!messages.length)
     return (
-      <div className="flex-1 flex flex-col items-center justify-center gap-3 text-slate-500">
+      <div className="flex-1 flex flex-col items-center justify-center gap-3" style={{ color: '#6e6a86' }}>
         <div className="text-5xl">💬</div>
         <p className="text-sm">Začni pogovor!</p>
       </div>
@@ -263,8 +264,8 @@ function MessageInput({ chatId, currentUser }) {
       <div
         className="flex items-end gap-2 rounded-2xl px-4 py-3"
         style={{
-          background: 'rgba(30,41,59,0.8)',
-          border: '1px solid rgba(51,65,85,0.5)',
+          background: 'rgba(38,35,58,0.85)',
+          border: '1px solid rgba(64,61,82,0.5)',
         }}
       >
         <textarea
@@ -275,21 +276,21 @@ function MessageInput({ chatId, currentUser }) {
           placeholder="Napiši sporočilo…"
           rows={1}
           disabled={sending}
-          className="flex-1 bg-transparent text-sm text-white placeholder-slate-500 resize-none outline-none leading-relaxed"
-          style={{ maxHeight: '120px' }}
+          className="flex-1 bg-transparent text-sm placeholder-slate-500 resize-none outline-none leading-relaxed"
+          style={{ maxHeight: '120px', color: '#e0def4' }}
         />
         <button
           onClick={handleSend}
           disabled={!text.trim() || sending}
           className="p-2 rounded-xl transition-all flex-shrink-0 disabled:opacity-30"
-          style={{ background: 'linear-gradient(135deg,#6366f1,#8b5cf6)' }}
+          style={{ background: 'linear-gradient(135deg,#c4a7e7,#9ccfd8)', color: '#191724' }}
           title="Pošlji"
         >
           {sending ? (
             <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
           ) : (
             <svg
-              className="w-4 h-4 text-white"
+              className="w-4 h-4"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -313,20 +314,18 @@ function RoomItem({ label, icon, active, onClick }) {
   return (
     <button
       onClick={onClick}
-      className={`w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-sm font-medium transition-all text-left ${
-        active
-          ? 'text-white'
-          : 'text-slate-400 hover:text-white hover:bg-slate-700/40'
-      }`}
+      className={`w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-sm font-medium transition-all text-left group`}
       style={
         active
           ? {
-              background:
-                'linear-gradient(135deg,rgba(99,102,241,0.25),rgba(139,92,246,0.15))',
-              border: '1px solid rgba(99,102,241,0.3)',
+              background: 'linear-gradient(135deg,rgba(196,167,231,0.25),rgba(156,207,216,0.15))',
+              border: '1px solid rgba(196,167,231,0.3)',
+              color: '#e0def4',
             }
-          : {}
+          : { color: '#908caa' }
       }
+      onMouseEnter={e => !active && (e.currentTarget.style.color = '#e0def4', e.currentTarget.style.background = 'rgba(64,61,82,0.4)')}
+      onMouseLeave={e => !active && (e.currentTarget.style.color = '#908caa', e.currentTarget.style.background = 'transparent')}
     >
       <span className="flex-shrink-0 opacity-80">{icon}</span>
       <span className="truncate">{label}</span>
@@ -379,12 +378,14 @@ function SidePanel({
             </svg>
           }
         />
-        {subjects.map((subj) => (
+        {subjects.map((subj) => {
+          const subjChatId = `subject_${subj.name.toLowerCase().replace(/\s+/g, '_')}`;
+          return (
           <RoomItem
             key={subj.id}
             label={subj.name}
-            active={activeChatId === `subject_${subj.id}`}
-            onClick={() => onSelect(`subject_${subj.id}`, subj.name)}
+            active={activeChatId === subjChatId}
+            onClick={() => onSelect(subjChatId, subj.name)}
             icon={
               <svg
                 className="w-4 h-4"
@@ -401,7 +402,7 @@ function SidePanel({
               </svg>
             }
           />
-        ))}
+        )})}
       </div>
 
       {/* School channel */}
@@ -438,11 +439,11 @@ function SidePanel({
 
       {/* Direct messages */}
       <div>
-        <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider px-3 mb-1">
+        <p className="text-xs font-semibold uppercase tracking-wider px-3 mb-1" style={{ color: '#524f67' }}>
           Direktna sporočila
         </p>
         {friends.length === 0 ? (
-          <p className="text-xs text-slate-600 px-3">
+          <p className="text-xs px-3" style={{ color: '#6e6a86' }}>
             Dodaj prijatelje v Prijateljih.
           </p>
         ) : (
@@ -471,11 +472,13 @@ function SidePanel({
       </div>
 
       {/* Add friends button */}
-      <div className="px-3 mt-auto pt-2 border-t border-slate-700/40">
+      <div className="px-3 mt-auto pt-2 border-t" style={{ borderColor: 'rgba(64,61,82,0.4)' }}>
         <button
           onClick={() => navigate('/friends')}
-          className="w-full flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-semibold text-indigo-400 hover:text-white hover:bg-indigo-500/20 transition-all"
-          style={{ border: '1px solid rgba(99,102,241,0.25)' }}
+          className="w-full flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-semibold transition-all"
+          style={{ border: '1px solid rgba(196,167,231,0.25)', color: '#c4a7e7' }}
+          onMouseEnter={e => { e.currentTarget.style.color = '#e0def4'; e.currentTarget.style.background = 'rgba(196,167,231,0.1)'; }}
+          onMouseLeave={e => { e.currentTarget.style.color = '#c4a7e7'; e.currentTarget.style.background = 'transparent'; }}
         >
           <svg
             className="w-4 h-4"
@@ -559,17 +562,17 @@ export default function ChatPage() {
         className="flex-1 flex overflow-hidden rounded-2xl"
         style={{
           minHeight: 0,
-          border: '1px solid rgba(51,65,85,0.5)',
-          background: 'rgba(15,23,42,0.6)',
+          border: '1px solid rgba(64,61,82,0.5)',
+          background: 'rgba(38,35,58,0.6)',
         }}
       >
         {/* ── Desktop sidebar ── */}
         <aside
           className="hidden md:flex flex-col w-56 flex-shrink-0 overflow-hidden"
-          style={{ borderRight: '1px solid rgba(51,65,85,0.4)' }}
+          style={{ borderRight: '1px solid rgba(64,61,82,0.4)' }}
         >
           <div className="px-4 pt-4 pb-2">
-            <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
+            <p className="text-xs font-semibold uppercase tracking-wider" style={{ color: '#524f67' }}>
               Chat
             </p>
           </div>
@@ -593,17 +596,20 @@ export default function ChatPage() {
             <aside
               className="absolute left-0 top-0 bottom-0 w-64 z-50 flex flex-col overflow-hidden"
               style={{
-                background: 'rgba(10,15,30,0.98)',
-                borderRight: '1px solid rgba(51,65,85,0.5)',
+                background: 'rgba(25,23,36,0.98)',
+                borderRight: '1px solid rgba(64,61,82,0.5)',
               }}
             >
               <div className="flex items-center justify-between px-4 pt-4 pb-2">
-                <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
+                <p className="text-xs font-semibold uppercase tracking-wider" style={{ color: '#524f67' }}>
                   Chat
                 </p>
                 <button
                   onClick={() => setMobileOpen(false)}
-                  className="text-slate-400 hover:text-white transition-all"
+                  className="transition-all"
+                  style={{ color: '#6e6a86' }}
+                  onMouseEnter={e => e.currentTarget.style.color = '#e0def4'}
+                  onMouseLeave={e => e.currentTarget.style.color = '#6e6a86'}
                 >
                   <svg
                     className="w-4 h-4"
@@ -640,12 +646,15 @@ export default function ChatPage() {
           {/* Header */}
           <div
             className="flex items-center gap-3 px-4 py-3 flex-shrink-0"
-            style={{ borderBottom: '1px solid rgba(51,65,85,0.4)' }}
+            style={{ borderBottom: '1px solid rgba(64,61,82,0.4)' }}
           >
             {/* Hamburger – mobile only, inside header (properly aligned) */}
             <button
-              className="md:hidden flex items-center justify-center w-8 h-8 rounded-lg text-slate-400 hover:text-white hover:bg-slate-700/50 transition-all flex-shrink-0"
+              className="md:hidden flex items-center justify-center w-8 h-8 rounded-lg transition-all flex-shrink-0"
+              style={{ color: '#908caa' }}
               onClick={() => setMobileOpen(true)}
+              onMouseEnter={e => { e.currentTarget.style.color = '#e0def4'; e.currentTarget.style.background = 'rgba(64,61,82,0.5)'; }}
+              onMouseLeave={e => { e.currentTarget.style.color = '#908caa'; e.currentTarget.style.background = 'transparent'; }}
             >
               <MenuIcon />
             </button>
@@ -653,13 +662,13 @@ export default function ChatPage() {
             <div
               className="w-8 h-8 rounded-xl flex items-center justify-center flex-shrink-0"
               style={{
-                background:
-                  'linear-gradient(135deg,rgba(99,102,241,0.3),rgba(139,92,246,0.2))',
-                border: '1px solid rgba(99,102,241,0.3)',
+                background: 'linear-gradient(135deg,rgba(196,167,231,0.25),rgba(156,207,216,0.15))',
+                border: '1px solid rgba(196,167,231,0.3)',
               }}
             >
               <svg
-                className="w-4 h-4 text-indigo-400"
+                className="w-4 h-4"
+                style={{ color: '#c4a7e7' }}
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -673,8 +682,8 @@ export default function ChatPage() {
               </svg>
             </div>
             <div>
-              <p className="text-sm font-semibold text-white">{activeName}</p>
-              <p className="text-xs text-slate-500">{isChatType}</p>
+              <p className="text-sm font-semibold" style={{ color: '#e0def4' }}>{activeName}</p>
+              <p className="text-xs" style={{ color: '#6e6a86' }}>{isChatType}</p>
             </div>
           </div>
 
