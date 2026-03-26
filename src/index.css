@@ -1,5 +1,23 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
-@import "tailwindcss";
+@import 'tailwindcss';
+
+/* ─── Rosé Pine Dark Palette ─────────────────────────────────────────────────
+   base:       #191724   darkest background
+   surface:    #1f1d2e   card/panel backgrounds
+   overlay:    #26233a   modal/input backgrounds
+   muted:      #6e6a86   subtle text, disabled
+   subtle:     #908caa   secondary text, placeholders
+   text:       #e0def4   primary text
+   love:       #eb6f92   danger / red
+   gold:       #f6c177   warning / orange
+   rose:       #ebbcba   accent pink
+   pine:       #31748f   success / green-teal
+   foam:       #9ccfd8   secondary accent / cyan
+   iris:       #c4a7e7   primary accent / purple
+   hl-low:     #21202e   very subtle highlight
+   hl-med:     #403d52   borders, dividers
+   hl-high:    #524f67   stronger borders, hover
+──────────────────────────────────────────────────────────────────────────── */
 
 @theme {
   /* Rosé Pine Palette */
@@ -56,6 +74,21 @@
 
 :root {
   --sidebar-width: 260px;
+  --rp-base: #191724;
+  --rp-surface: #1f1d2e;
+  --rp-overlay: #26233a;
+  --rp-muted: #6e6a86;
+  --rp-subtle: #908caa;
+  --rp-text: #e0def4;
+  --rp-love: #eb6f92;
+  --rp-gold: #f6c177;
+  --rp-rose: #ebbcba;
+  --rp-pine: #31748f;
+  --rp-foam: #9ccfd8;
+  --rp-iris: #c4a7e7;
+  --rp-hl-low: #21202e;
+  --rp-hl-med: #403d52;
+  --rp-hl-high: #524f67;
 }
 
 * {
@@ -70,8 +103,8 @@ html {
 
 body {
   margin: 0;
-  background-color: var(--color-base);
-  color: var(--color-text);
+  background-color: var(--rp-base);
+  color: var(--rp-text);
   min-height: 100vh;
 }
 
@@ -86,22 +119,24 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--color-surface);
+  background: var(--rp-hl-med);
   border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--color-highlight-med);
+  background: var(--rp-hl-high);
 }
 
 /* Smooth transitions */
 * {
-  transition-property: background-color, border-color, color, fill, stroke, opacity, box-shadow, transform;
+  transition-property:
+    background-color, border-color, color, fill, stroke, opacity, box-shadow,
+    transform;
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
   transition-duration: 150ms;
 }
 
-/* Card glass effect */
+/* Card glass effect – Rosé Pine surface */
 .glass-card {
   background: rgba(38, 35, 58, 0.8);
   /* Overlay with opacity */
@@ -111,9 +146,9 @@ body {
   border-radius: 16px;
 }
 
-/* Gradient text */
+/* Gradient text – iris → foam */
 .gradient-text {
-  background: linear-gradient(135deg, var(--color-iris) 0%, var(--color-rose) 100%);
+  background: linear-gradient(135deg, #c4a7e7 0%, #9ccfd8 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;

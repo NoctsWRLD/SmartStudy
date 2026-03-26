@@ -1,14 +1,14 @@
 const SUBJECT_COLORS = [
-  { label: 'Indigo', bg: 'rgba(99,102,241,0.2)', border: 'rgba(99,102,241,0.5)', text: '#818cf8' },
-  { label: 'Vijolična', bg: 'rgba(139,92,246,0.2)', border: 'rgba(139,92,246,0.5)', text: '#a78bfa' },
-  { label: 'Roza', bg: 'rgba(236,72,153,0.2)', border: 'rgba(236,72,153,0.5)', text: '#f472b6' },
-  { label: 'Rdeča', bg: 'rgba(239,68,68,0.2)', border: 'rgba(239,68,68,0.5)', text: '#f87171' },
-  { label: 'Oranžna', bg: 'rgba(249,115,22,0.2)', border: 'rgba(249,115,22,0.5)', text: '#fb923c' },
-  { label: 'Rumena', bg: 'rgba(234,179,8,0.2)', border: 'rgba(234,179,8,0.5)', text: '#facc15' },
-  { label: 'Zelena', bg: 'rgba(34,197,94,0.2)', border: 'rgba(34,197,94,0.5)', text: '#4ade80' },
-  { label: 'Teal', bg: 'rgba(20,184,166,0.2)', border: 'rgba(20,184,166,0.5)', text: '#2dd4bf' },
-  { label: 'Modra', bg: 'rgba(59,130,246,0.2)', border: 'rgba(59,130,246,0.5)', text: '#60a5fa' },
-  { label: 'Siva', bg: 'rgba(100,116,139,0.2)', border: 'rgba(100,116,139,0.5)', text: '#94a3b8' },
+  { label: 'Iris', bg: 'bg-rp-iris/20', border: 'border-rp-iris/50', text: 'text-rp-iris', colorCode: '#c4a7e7' },
+  { label: 'Roza', bg: 'bg-rp-rose/20', border: 'border-rp-rose/50', text: 'text-rp-rose', colorCode: '#ebbcba' },
+  { label: 'Rdeča', bg: 'bg-rp-love/20', border: 'border-rp-love/50', text: 'text-rp-love', colorCode: '#eb6f92' },
+  { label: 'Zlata', bg: 'bg-rp-gold/20', border: 'border-rp-gold/50', text: 'text-rp-gold', colorCode: '#f6c177' },
+  { label: 'Borova', bg: 'bg-rp-pine/20', border: 'border-rp-pine/50', text: 'text-rp-pine', colorCode: '#31748f' },
+  { label: 'Pena', bg: 'bg-rp-foam/20', border: 'border-rp-foam/50', text: 'text-rp-foam', colorCode: '#9ccfd8' },
+  { label: 'Bela', bg: 'bg-rp-text/20', border: 'border-rp-text/50', text: 'text-rp-text', colorCode: '#e0def4' },
+  { label: 'Siva Z.', bg: 'bg-rp-subtle/20', border: 'border-rp-subtle/50', text: 'text-rp-subtle', colorCode: '#908caa' },
+  { label: 'Siva', bg: 'bg-rp-muted/20', border: 'border-rp-muted/50', text: 'text-rp-muted', colorCode: '#6e6a86' },
+  { label: 'Temna', bg: 'bg-rp-hl-high/20', border: 'border-rp-hl-high/50', text: 'text-rp-hl-high', colorCode: '#524f67' },
 ];
 
 export default SUBJECT_COLORS;
