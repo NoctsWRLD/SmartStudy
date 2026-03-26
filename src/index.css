@@ -23,7 +23,8 @@
   --color-primary-50: #f4ecf9;
   --color-primary-100: #e8d9f4;
   --color-primary-200: #d6bdf0;
-  --color-primary-300: #c4a7e7; /* Iris */
+  --color-primary-300: #c4a7e7;
+  /* Iris */
   --color-primary-400: #b18fde;
   --color-primary-500: #9e77d6;
   --color-primary-600: #8c5ccd;
@@ -31,15 +32,22 @@
   --color-primary-800: #6a3da8;
   --color-primary-900: #552f8a;
 
-  --color-surface-50: #6e6a86; /* Muted */
-  --color-surface-100: #524f67; /* High */
-  --color-surface-200: #403d52; /* Med */
-  --color-surface-300: #26233a; /* Overlay */
+  --color-surface-50: #6e6a86;
+  /* Muted */
+  --color-surface-100: #524f67;
+  /* High */
+  --color-surface-200: #403d52;
+  /* Med */
+  --color-surface-300: #26233a;
+  /* Overlay */
   --color-surface-400: #26233a;
-  --color-surface-500: #21202e; /* Low */
+  --color-surface-500: #21202e;
+  /* Low */
   --color-surface-600: #21202e;
-  --color-surface-700: #1f1d2e; /* Surface */
-  --color-surface-800: #191724; /* Base */
+  --color-surface-700: #1f1d2e;
+  /* Surface */
+  --color-surface-800: #191724;
+  /* Base */
   --color-surface-900: #191724;
   --color-surface-950: #13121b;
 
@@ -72,13 +80,16 @@ body {
   width: 6px;
   height: 6px;
 }
+
 ::-webkit-scrollbar-track {
   background: transparent;
 }
+
 ::-webkit-scrollbar-thumb {
   background: var(--color-surface);
   border-radius: 3px;
 }
+
 ::-webkit-scrollbar-thumb:hover {
   background: var(--color-highlight-med);
 }
@@ -92,9 +103,11 @@ body {
 
 /* Card glass effect */
 .glass-card {
-  background: rgba(38, 35, 58, 0.8); /* Overlay with opacity */
+  background: rgba(38, 35, 58, 0.8);
+  /* Overlay with opacity */
   backdrop-filter: blur(12px);
-  border: 1px solid rgba(144, 140, 170, 0.2); /* Subtle with opacity */
+  border: 1px solid rgba(144, 140, 170, 0.2);
+  /* Subtle with opacity */
   border-radius: 16px;
 }
 
@@ -112,6 +125,7 @@ body {
     opacity: 0;
     transform: translateY(16px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -119,8 +133,16 @@ body {
 }
 
 @keyframes pulse-glow {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(196, 167, 231, 0.3); } /* Iris */
-  50% { box-shadow: 0 0 0 8px rgba(196, 167, 231, 0); }
+
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(196, 167, 231, 0.3);
+  }
+
+  /* Iris */
+  50% {
+    box-shadow: 0 0 0 8px rgba(196, 167, 231, 0);
+  }
 }
 
 .animate-fade-in-up {
@@ -132,9 +154,26 @@ body {
 }
 
 /* Stagger children */
-.stagger-children > *:nth-child(1) { animation-delay: 0ms; }
-.stagger-children > *:nth-child(2) { animation-delay: 60ms; }
-.stagger-children > *:nth-child(3) { animation-delay: 120ms; }
-.stagger-children > *:nth-child(4) { animation-delay: 180ms; }
-.stagger-children > *:nth-child(5) { animation-delay: 240ms; }
-.stagger-children > *:nth-child(6) { animation-delay: 300ms; }
+.stagger-children>*:nth-child(1) {
+  animation-delay: 0ms;
+}
+
+.stagger-children>*:nth-child(2) {
+  animation-delay: 60ms;
+}
+
+.stagger-children>*:nth-child(3) {
+  animation-delay: 120ms;
+}
+
+.stagger-children>*:nth-child(4) {
+  animation-delay: 180ms;
+}
+
+.stagger-children>*:nth-child(5) {
+  animation-delay: 240ms;
+}
+
+.stagger-children>*:nth-child(6) {
+  animation-delay: 300ms;
+}
