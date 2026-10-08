@@ -3,7 +3,7 @@ import { useAuth } from '../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
 
 // ─── Editable field ───────────────────────────────────────────────────────────
-function EditField({ label, value, onChange, placeholder }) {
+function EditField({ label, value, onChange, placeholder, maxLength }) {
   return (
     <div>
       <label className="block text-xs font-semibold uppercase tracking-wider mb-1.5 text-rp-muted">
@@ -11,6 +11,7 @@ function EditField({ label, value, onChange, placeholder }) {
       </label>
       <input
         type="text"
+        maxLength={maxLength}
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
@@ -71,12 +72,14 @@ export default function ProfilePage() {
             value={displayName}
             onChange={setDisplayName}
             placeholder="Tvoje ime..."
+            maxLength={60}
           />
           <EditField
             label="Šola"
             value={school}
             onChange={setSchool}
             placeholder="Ime šole..."
+            maxLength={120}
           />
         </div>
 

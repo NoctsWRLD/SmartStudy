@@ -1,0 +1,196 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function owns(uid) {
+      return signedIn() && request.auth.uid == uid;
+    }
+
+    function safeImageUrl(value) {
+      return value == '' || value.matches('https://.*');
+    }
+
+    function isOwnSubject(subjectId) {
+      return subjectId == '' || (
+        exists(/databases/$(database)/documents/subjects/$(subjectId)) &&
+        get(/databases/$(database)/documents/subjects/$(subjectId)).data.uid == request.auth.uid
+      );
+    }
+
+    function canAccessChat(chatId) {
+      return signedIn() && (
+        chatId == 'general' ||
+        chatId.matches('^(subject|school)_.+$') ||
+        request.auth.uid in chatId.split('_')
+      );
+    }
+
+    // Private account fields, including email and school, are visible only to their owner.
+    match /users/{uid} {
+      allow read: if owns(uid);
+      allow create: if owns(uid)
+        && request.resource.data.keys().hasOnly(['displayName', 'email', 'school', 'photoURL', 'createdAt'])
+        && request.resource.data.keys().hasAll(['displayName', 'email', 'school', 'photoURL', 'createdAt'])
+        && request.resource.data.displayName is string
+        && request.resource.data.displayName.size() <= 60
+        && request.resource.data.email is string
+        && request.resource.data.email.size() <= 254
+        && request.resource.data.school is string
+        && request.resource.data.school.size() <= 120
+        && safeImageUrl(request.resource.data.photoURL)
+        && request.resource.data.createdAt == request.time;
+      allow update: if owns(uid)
+        && request.resource.data.keys().hasOnly(['displayName', 'email', 'school', 'photoURL', 'createdAt'])
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['displayName', 'school'])
+        && request.resource.data.displayName is string
+        && request.resource.data.displayName.size() <= 60
+        && request.resource.data.school is string
+        && request.resource.data.school.size() <= 120;
+      allow delete: if owns(uid);
+    }
+
+    // Searchable profile data is deliberately separate from private account data.
+    match /publicProfiles/{uid} {
+      allow read: if signedIn();
+      allow create: if owns(uid)
+        && request.resource.data.keys().hasOnly(['displayName', 'searchName', 'photoURL', 'createdAt'])
+        && request.resource.data.keys().hasAll(['displayName', 'searchName', 'photoURL', 'createdAt'])
+        && request.resource.data.displayName is string
+        && request.resource.data.displayName.size() <= 60
+        && request.resource.data.searchName == request.resource.data.displayName.lower()
+        && safeImageUrl(request.resource.data.photoURL)
+        && request.resource.data.createdAt == request.time;
+      allow update: if owns(uid)
+        && request.resource.data.keys().hasOnly(['displayName', 'searchName', 'photoURL', 'createdAt'])
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['displayName', 'searchName', 'photoURL'])
+        && request.resource.data.displayName is string
+        && request.resource.data.displayName.size() <= 60
+        && request.resource.data.searchName == request.resource.data.displayName.lower()
+        && safeImageUrl(request.resource.data.photoURL);
+      allow delete: if owns(uid);
+    }
+
+    match /subjects/{subjectId} {
+      allow read: if signedIn() && resource.data.uid == request.auth.uid;
+      allow create: if signedIn()
+        && request.resource.data.keys().hasOnly(['name', 'colorIndex', 'uid', 'createdAt'])
+        && request.resource.data.keys().hasAll(['name', 'colorIndex', 'uid', 'createdAt'])
+        && request.resource.data.uid == request.auth.uid
+        && request.resource.data.name is string
+        && request.resource.data.name.size() > 0
+        && request.resource.data.name.size() <= 80
+        && request.resource.data.colorIndex is int
+        && request.resource.data.colorIndex >= 0
+        && request.resource.data.colorIndex <= 9
+        && request.resource.data.createdAt == request.time;
+      allow update: if signedIn()
+        && resource.data.uid == request.auth.uid
+        && request.resource.data.uid == request.auth.uid
+        && request.resource.data.keys().hasOnly(['name', 'colorIndex', 'uid', 'createdAt'])
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['name', 'colorIndex'])
+        && request.resource.data.name is string
+        && request.resource.data.name.size() > 0
+        && request.resource.data.name.size() <= 80
+        && request.resource.data.colorIndex is int
+        && request.resource.data.colorIndex >= 0
+        && request.resource.data.colorIndex <= 9;
+      allow delete: if signedIn() && resource.data.uid == request.auth.uid;
+    }
+
+    match /tasks/{taskId} {
+      allow read: if signedIn() && resource.data.uid == request.auth.uid;
+      allow create: if signedIn()
+        && request.resource.data.keys().hasOnly(['title', 'description', 'subjectId', 'dueDate', 'completed', 'uid', 'createdAt'])
+        && request.resource.data.keys().hasAll(['title', 'description', 'subjectId', 'dueDate', 'completed', 'uid', 'createdAt'])
+        && request.resource.data.uid == request.auth.uid
+        && request.resource.data.title is string
+        && request.resource.data.title.size() > 0
+        && request.resource.data.title.size() <= 120
+        && request.resource.data.description is string
+        && request.resource.data.description.size() <= 1200
+        && request.resource.data.subjectId is string
+        && isOwnSubject(request.resource.data.subjectId)
+        && request.resource.data.dueDate is string
+        && request.resource.data.dueDate.matches('^$|^[0-9]{4}-[0-9]{2}-[0-9]{2}$')
+        && request.resource.data.completed == false
+        && request.resource.data.createdAt == request.time;
+      allow update: if signedIn()
+        && resource.data.uid == request.auth.uid
+        && request.resource.data.uid == request.auth.uid
+        && request.resource.data.keys().hasOnly(['title', 'description', 'subjectId', 'dueDate', 'completed', 'uid', 'createdAt'])
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['title', 'description', 'subjectId', 'dueDate', 'completed'])
+        && request.resource.data.title is string
+        && request.resource.data.title.size() > 0
+        && request.resource.data.title.size() <= 120
+        && request.resource.data.description is string
+        && request.resource.data.description.size() <= 1200
+        && request.resource.data.subjectId is string
+        && isOwnSubject(request.resource.data.subjectId)
+        && request.resource.data.dueDate is string
+        && request.resource.data.dueDate.matches('^$|^[0-9]{4}-[0-9]{2}-[0-9]{2}$')
+        && request.resource.data.completed is bool;
+      allow delete: if signedIn() && resource.data.uid == request.auth.uid;
+    }
+
+    match /friendRequests/{requestId} {
+      allow read: if signedIn()
+        && (resource.data.fromUid == request.auth.uid || resource.data.toUid == request.auth.uid);
+      allow create: if signedIn()
+        && request.resource.data.keys().hasOnly(['fromUid', 'fromName', 'toUid', 'toName', 'status', 'createdAt'])
+        && request.resource.data.keys().hasAll(['fromUid', 'fromName', 'toUid', 'toName', 'status', 'createdAt'])
+        && request.resource.data.fromUid == request.auth.uid
+        && request.resource.data.toUid is string
+        && request.resource.data.toUid != request.auth.uid
+        && request.resource.data.fromName == get(/databases/$(database)/documents/publicProfiles/$(request.auth.uid)).data.displayName
+        && request.resource.data.toName == get(/databases/$(database)/documents/publicProfiles/$(request.resource.data.toUid)).data.displayName
+        && request.resource.data.status == 'pending'
+        && request.resource.data.createdAt == request.time;
+      allow update: if signedIn()
+        && resource.data.toUid == request.auth.uid
+        && resource.data.status == 'pending'
+        && request.resource.data.status in ['accepted', 'rejected']
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status']);
+      allow delete: if signedIn() && resource.data.fromUid == request.auth.uid && resource.data.status == 'pending';
+    }
+
+    match /chats/{chatId}/messages/{messageId} {
+      allow read: if canAccessChat(chatId);
+      allow create: if canAccessChat(chatId)
+        && request.resource.data.keys().hasOnly(['text', 'senderId', 'senderName', 'senderInitial', 'timestamp', 'fileURL', 'fileName', 'fileType', 'fileSize'])
+        && request.resource.data.keys().hasAll(['text', 'senderId', 'senderName', 'senderInitial', 'timestamp'])
+        && request.resource.data.senderId == request.auth.uid
+        && request.resource.data.senderName is string
+        && request.resource.data.senderName.size() <= 60
+        && request.resource.data.senderName == get(/databases/$(database)/documents/publicProfiles/$(request.auth.uid)).data.displayName
+        && request.resource.data.senderInitial is string
+        && request.resource.data.senderInitial.size() <= 2
+        && request.resource.data.text is string
+        && request.resource.data.text.size() <= 2000
+        && (request.resource.data.text.size() > 0 || 'fileURL' in request.resource.data)
+        && request.resource.data.timestamp == request.time
+        && (!request.resource.data.keys().hasAny(['fileURL', 'fileName', 'fileType', 'fileSize']) ||
+          request.resource.data.keys().hasAll(['fileURL', 'fileName', 'fileType', 'fileSize']))
+        && (!('fileURL' in request.resource.data) || (
+          request.resource.data.fileURL is string
+          && request.resource.data.fileURL.matches('https://.*')
+          && request.resource.data.fileName is string
+          && request.resource.data.fileName.size() <= 180
+          && request.resource.data.fileType is string
+          && request.resource.data.fileType.size() <= 120
+          && request.resource.data.fileSize is int
+          && request.resource.data.fileSize > 0
+          && request.resource.data.fileSize <= 8388608
+        ));
+      allow delete: if canAccessChat(chatId) && resource.data.senderId == request.auth.uid;
+    }
+
+    // Unlisted collections stay private until explicit rules are added.
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

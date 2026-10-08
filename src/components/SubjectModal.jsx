@@ -51,6 +51,7 @@ export default function SubjectModal({ isOpen, onClose, onSave, subject }) {
               id="subject-name"
               type="text"
               required
+              maxLength={80}
               value={name}
               onChange={e => setName(e.target.value)}
               placeholder="npr. Matematika"

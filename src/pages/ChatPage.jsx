@@ -92,7 +92,7 @@ function MessageBubble({ msg, isOwn, onDelete }) {
   const time = msg.timestamp?.toDate
     ? msg.timestamp
         .toDate()
-        .toLocaleTimeString('sl-SI', { hour: '2-digit', minute: '2-digit' })
+        .toLocaleTimeString('sl-SI', { timeZone: 'Europe/Ljubljana', hour: '2-digit', minute: '2-digit' })
     : '';
 
   return (
@@ -466,27 +466,22 @@ export default function ChatPage() {
   const { currentUser, userProfile } = useAuth();
   const { subjects } = useSubjects();
   const { friends } = useFriends();
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
 
-  const [activeChatId, setActiveChatId] = useState('general');
-  const [activeName, setActiveName] = useState('Splošni');
+  const [selectedChatId, setSelectedChatId] = useState('general');
+  const [selectedName, setSelectedName] = useState('Splošni');
   const [mobileOpen, setMobileOpen] = useState(false);
-
-  useEffect(() => {
-    const dmUid = searchParams.get('dm');
-    if (dmUid && currentUser) {
-      const friend = friends.find((f) => f.uid === dmUid);
-      if (friend) {
-        const id = getDmChatId(currentUser.uid, dmUid);
-        setActiveChatId(id);
-        setActiveName(friend.displayName || 'Neznan');
-      }
-    }
-  }, [searchParams, friends, currentUser]);
+  const dmUid = searchParams.get('dm');
+  const dmFriend = friends.find((friend) => friend.uid === dmUid);
+  const activeChatId = dmFriend && currentUser
+    ? getDmChatId(currentUser.uid, dmFriend.uid)
+    : selectedChatId;
+  const activeName = dmFriend?.displayName || selectedName;
 
   function selectRoom(id, name) {
-    setActiveChatId(id);
-    setActiveName(name);
+    setSelectedChatId(id);
+    setSelectedName(name);
+    if (dmUid) setSearchParams({});
     setMobileOpen(false);
   }
 

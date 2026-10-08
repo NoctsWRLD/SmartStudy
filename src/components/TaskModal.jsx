@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/set-state-in-effect */
 import { useEffect, useState } from 'react';
 
-export default function TaskModal({ isOpen, onClose, onSave, subjects, task }) {
+export default function TaskModal({ isOpen, onClose, onSave, subjects, task, defaultSubjectId = '' }) {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [subjectId, setSubjectId] = useState('');
@@ -16,14 +16,14 @@ export default function TaskModal({ isOpen, onClose, onSave, subjects, task }) {
     } else {
       setTitle('');
       setDescription('');
-      setSubjectId('');
+      setSubjectId(defaultSubjectId);
       setDueDate('');
     }
-  }, [task, isOpen]);
+  }, [task, isOpen, defaultSubjectId]);
 
   function handleSubmit(e) {
     e.preventDefault();
-    if (!title.trim()) return;
+    if (!title.trim() || !subjectId) return;
     onSave({ title: title.trim(), description: description.trim(), subjectId, dueDate });
     onClose();
   }
@@ -56,6 +56,7 @@ export default function TaskModal({ isOpen, onClose, onSave, subjects, task }) {
               id="task-title"
               type="text"
               required
+              maxLength={120}
               value={title}
               onChange={e => setTitle(e.target.value)}
               placeholder="npr. Domača naloga iz matematike"
@@ -67,6 +68,7 @@ export default function TaskModal({ isOpen, onClose, onSave, subjects, task }) {
             <label className="block text-xs font-medium mb-1 text-rp-muted">Opis (neobvezno)</label>
             <textarea
               id="task-description"
+              maxLength={1200}
               value={description}
               onChange={e => setDescription(e.target.value)}
               placeholder="Dodaj podrobnosti..."
@@ -75,13 +77,14 @@ export default function TaskModal({ isOpen, onClose, onSave, subjects, task }) {
             />
           </div>
           <div>
-            <label className="block text-xs font-medium mb-1 text-rp-muted">Predmet</label>
+            <label className="block text-xs font-medium mb-1 text-rp-muted">Predmet *</label>
             <select
               id="task-subject"
+              required
               value={subjectId}
               onChange={e => setSubjectId(e.target.value)}
               className={inputClass}>
-              <option value="">— Brez predmeta —</option>
+              <option value="" disabled>Izberi predmet</option>
               {subjects.map(s => (
                 <option key={s.id} value={s.id}>{s.name}</option>
               ))}

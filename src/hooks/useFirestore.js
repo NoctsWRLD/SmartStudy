@@ -6,6 +6,11 @@ import {
 import { db } from '../firebase';
 import { useAuth } from '../contexts/AuthContext';
 
+function reportWriteError(action, error) {
+  console.error(`${action} failed:`, error);
+  window.alert('Shranjevanje ni uspelo. Preveri povezavo in dostop do Firebase ter poskusi znova.');
+}
+
 export function useSubjects() {
   const { currentUser } = useAuth();
   const [subjects, setSubjects] = useState([]);
@@ -36,23 +41,32 @@ export function useSubjects() {
 
   async function addSubject(data) {
     try {
-      await addDoc(collection(db, 'subjects'), {
+      const created = await addDoc(collection(db, 'subjects'), {
         ...data,
         uid: currentUser.uid,
         createdAt: serverTimestamp(),
       });
+      return created.id;
     } catch (err) {
-      console.error('Error adding subject:', err);
-      alert('Napaka pri shranjevanju predmeta: ' + err.message);
+      reportWriteError('Adding subject', err);
+      return null;
     }
   }
 
   async function updateSubject(id, data) {
-    await updateDoc(doc(db, 'subjects', id), data);
+    try {
+      await updateDoc(doc(db, 'subjects', id), data);
+    } catch (err) {
+      reportWriteError('Updating subject', err);
+    }
   }
 
   async function deleteSubject(id) {
-    await deleteDoc(doc(db, 'subjects', id));
+    try {
+      await deleteDoc(doc(db, 'subjects', id));
+    } catch (err) {
+      reportWriteError('Deleting subject', err);
+    }
   }
 
   return { subjects, loading, addSubject, updateSubject, deleteSubject };
@@ -95,21 +109,32 @@ export function useTasks() {
         createdAt: serverTimestamp(),
       });
     } catch (err) {
-      console.error('Error adding task:', err);
-      alert('Napaka pri shranjevanju naloge: ' + err.message);
+      reportWriteError('Adding task', err);
     }
   }
 
   async function updateTask(id, data) {
-    await updateDoc(doc(db, 'tasks', id), data);
+    try {
+      await updateDoc(doc(db, 'tasks', id), data);
+    } catch (err) {
+      reportWriteError('Updating task', err);
+    }
   }
 
   async function toggleTask(task) {
-    await updateDoc(doc(db, 'tasks', task.id), { completed: !task.completed });
+    try {
+      await updateDoc(doc(db, 'tasks', task.id), { completed: !task.completed });
+    } catch (err) {
+      reportWriteError('Toggling task', err);
+    }
   }
 
   async function deleteTask(id) {
-    await deleteDoc(doc(db, 'tasks', id));
+    try {
+      await deleteDoc(doc(db, 'tasks', id));
+    } catch (err) {
+      reportWriteError('Deleting task', err);
+    }
   }
 
   return { tasks, loading, addTask, updateTask, toggleTask, deleteTask };

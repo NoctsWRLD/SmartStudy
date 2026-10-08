@@ -1,16 +1,13 @@
 import Badge from './Badge';
 import SUBJECT_COLORS from '../utils/colors';
+import { daysBetweenDateKeys, formatSlovenianDate, getSlovenianDateKey } from '../utils/dates';
 
 function formatDate(dateStr) {
   if (!dateStr) return null;
-  const d = new Date(dateStr);
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
-  const target = new Date(dateStr);
-  target.setHours(0, 0, 0, 0);
-  const diff = Math.floor((target - today) / (1000 * 60 * 60 * 24));
+  const today = getSlovenianDateKey();
+  const diff = daysBetweenDateKeys(dateStr, today);
 
-  let label = d.toLocaleDateString('sl-SI', { day: 'numeric', month: 'short' });
+  let label = formatSlovenianDate(dateStr, { day: 'numeric', month: 'short' });
   let urgency = 'normal';
   if (diff < 0) { label = `Zamudilo (${label})`; urgency = 'overdue'; }
   else if (diff === 0) { label = 'Danes'; urgency = 'today'; }
@@ -24,7 +21,7 @@ export default function TaskCard({ task, subject, onToggle, onEdit, onDelete }) 
   const dateInfo = formatDate(task.dueDate);
   const color = subject ? (SUBJECT_COLORS[subject.colorIndex] ?? SUBJECT_COLORS[0]) : null;
 
-  // Rosé Pine urgency colors
+  // Deadline urgency colors
   const urgencyColors = {
     overdue: 'text-rp-love',
     today:   'text-rp-gold',
@@ -65,7 +62,7 @@ export default function TaskCard({ task, subject, onToggle, onEdit, onDelete }) 
               {task.title}
             </h3>
             {/* Actions */}
-            <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 flex-shrink-0 transition-opacity">
+            <div className="flex items-center gap-1 opacity-100 md:opacity-0 md:group-hover:opacity-100 flex-shrink-0 transition-opacity">
               <button
                 onClick={() => onEdit(task)}
                 className="p-1.5 rounded-lg transition-all text-rp-muted hover:text-rp-iris hover:bg-rp-iris/10"

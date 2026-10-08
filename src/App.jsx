@@ -11,10 +11,37 @@ import SchedulePage from './pages/SchedulePage';
 import ChatPage from './pages/ChatPage';
 import ProfilePage from './pages/ProfilePage';
 import FriendsPage from './pages/FriendsPage';
+import SettingsPage from './pages/SettingsPage';
+import { SettingsProvider } from './contexts/SettingsContext';
+import { isFirebaseConfigured } from './firebase';
+
+function FirebaseSetupNotice() {
+  return (
+    <main className="relative grid min-h-screen place-items-center overflow-hidden px-4 py-10">
+      <div className="pointer-events-none absolute left-1/2 top-0 h-80 w-80 -translate-x-1/2 rounded-full bg-rp-iris/10 blur-3xl" />
+      <section className="glass-card relative w-full max-w-xl p-6 sm:p-8" aria-labelledby="setup-title">
+        <div className="grid h-12 w-12 place-items-center rounded-2xl bg-rp-iris/10 text-2xl text-rp-iris" aria-hidden="true">✦</div>
+        <p className="mt-5 text-xs font-semibold uppercase tracking-[.18em] text-rp-iris">Še en korak</p>
+        <h1 id="setup-title" className="mt-2 text-2xl font-semibold tracking-tight text-rp-text">Poveži Firebase, da zaženeš SmartStudy</h1>
+        <p className="mt-3 text-sm leading-6 text-rp-subtle">Aplikacija se je uspešno naložila, vendar še nima Firebase nastavitev. Zato prijava in shranjevanje podatkov še nista na voljo.</p>
+        <ol className="mt-6 space-y-3 text-sm leading-6 text-rp-subtle">
+          <li><span className="mr-2 font-semibold text-rp-iris">1.</span>V terminalu, znotraj mape <code className="rounded bg-rp-overlay px-1.5 py-0.5 text-rp-text">Aplikacija</code>, zaženi <code className="rounded bg-rp-overlay px-1.5 py-0.5 text-rp-text">cp .env.example .env.local</code>.</li>
+          <li><span className="mr-2 font-semibold text-rp-iris">2.</span>V `.env.local` vnesi konfiguracijo Web app iz Firebase Console → Project settings → Your apps.</li>
+          <li><span className="mr-2 font-semibold text-rp-iris">3.</span>Omogoči prijavo z e-pošto in geslom ter objavi Firestore pravila z ukazom <code className="rounded bg-rp-overlay px-1.5 py-0.5 text-rp-text">firebase deploy --only firestore:rules</code>.</li>
+          <li><span className="mr-2 font-semibold text-rp-iris">4.</span>Ustavi in znova zaženi razvojni strežnik.</li>
+        </ol>
+        <p className="mt-6 rounded-xl border border-rp-gold/15 bg-rp-gold/[.05] p-3 text-xs leading-5 text-rp-gold">Vrednosti iz Firebase so nastavitve brskalniške aplikacije. V `.env.local` nikoli ne dodajaj Admin SDK zasebnega ključa.</p>
+      </section>
+    </main>
+  );
+}
 
 export default function App() {
+  if (!isFirebaseConfigured) return <FirebaseSetupNotice />;
+
   return (
     <BrowserRouter>
+      <SettingsProvider>
       <AuthProvider>
         <Routes>
           {/* Public routes */}
@@ -83,6 +110,16 @@ export default function App() {
             }
           />
           <Route
+            path="/settings"
+            element={
+              <ProtectedRoute>
+                <Layout>
+                  <SettingsPage />
+                </Layout>
+              </ProtectedRoute>
+            }
+          />
+          <Route
             path="/friends"
             element={
               <ProtectedRoute>
@@ -97,6 +134,7 @@ export default function App() {
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </AuthProvider>
+      </SettingsProvider>
     </BrowserRouter>
   );
 }

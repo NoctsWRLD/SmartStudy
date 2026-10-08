@@ -3,6 +3,14 @@ import { useSubjects, useTasks } from '../hooks/useFirestore';
 import TaskModal from '../components/TaskModal';
 import Badge from '../components/Badge';
 import SUBJECT_COLORS from '../utils/colors';
+import {
+  addDaysToDateKey,
+  formatSlovenianDate,
+  getDateKeyDayOfWeek,
+  getDayOfMonth,
+  getSlovenianDateKey,
+  getYearFromDateKey,
+} from '../utils/dates';
 
 const DAYS_SL = ['Pon', 'Tor', 'Sre', 'Čet', 'Pet', 'Sob', 'Ned'];
 const DAYS_FULL = [
@@ -14,32 +22,9 @@ const DAYS_FULL = [
   'Sobota',
   'Nedelja',
 ];
-const MONTHS_SL = [
-  'jan',
-  'feb',
-  'mar',
-  'apr',
-  'maj',
-  'jun',
-  'jul',
-  'avg',
-  'sep',
-  'okt',
-  'nov',
-  'dec',
-];
-
-function getWeekStart(date) {
-  const d = new Date(date);
-  const day = d.getDay();
-  const diff = day === 0 ? -6 : 1 - day;
-  d.setDate(d.getDate() + diff);
-  d.setHours(0, 0, 0, 0);
-  return d;
-}
-
-function toDateStr(d) {
-  return d.toISOString().split('T')[0];
+function getWeekStart(dateKey) {
+  const day = getDateKeyDayOfWeek(dateKey);
+  return addDaysToDateKey(dateKey, day === 0 ? -6 : 1 - day);
 }
 
 export default function SchedulePage() {
@@ -50,21 +35,16 @@ export default function SchedulePage() {
   const [editTask, setEditTask] = useState(null);
   const [preselectedDate, setPreselectedDate] = useState('');
 
-  const weekStart = useMemo(() => {
-    const base = getWeekStart(new Date());
-    base.setDate(base.getDate() + weekOffset * 7);
-    return base;
-  }, [weekOffset]);
+  const weekStart = useMemo(
+    () => addDaysToDateKey(getWeekStart(getSlovenianDateKey()), weekOffset * 7),
+    [weekOffset],
+  );
 
   const weekDays = useMemo(() => {
-    return Array.from({ length: 7 }, (_, i) => {
-      const d = new Date(weekStart);
-      d.setDate(d.getDate() + i);
-      return d;
-    });
+    return Array.from({ length: 7 }, (_, i) => addDaysToDateKey(weekStart, i));
   }, [weekStart]);
 
-  const todayStr = toDateStr(new Date());
+  const todayStr = getSlovenianDateKey();
 
   function getSubject(task) {
     return subjects.find((s) => s.id === task.subjectId) || null;
@@ -97,12 +77,7 @@ export default function SchedulePage() {
     setModalOpen(true);
   }
 
-  const weekLabel = `${weekDays[0].getDate()}. ${MONTHS_SL[weekDays[0].getMonth()]} – ${weekDays[6].getDate()}. ${MONTHS_SL[weekDays[6].getMonth()]} ${weekDays[6].getFullYear()}`;
-
-  const btnStyle = {
-    color: '#908caa',
-    border: '1px solid rgba(64,61,82,0.5)',
-  };
+  const weekLabel = `${formatSlovenianDate(weekDays[0], { day: 'numeric', month: 'short' })} – ${formatSlovenianDate(weekDays[6], { day: 'numeric', month: 'short' })} ${getYearFromDateKey(weekDays[6])}`;
 
   return (
     <div className="space-y-5">
@@ -189,7 +164,7 @@ export default function SchedulePage() {
       {/* Weekly grid */}
       <div className="grid grid-cols-7 gap-2 animate-fade-in-up">
         {weekDays.map((day, i) => {
-          const dateStr = toDateStr(day);
+          const dateStr = day;
           const dayTasks = getTasksForDay(dateStr);
           const isToday = dateStr === todayStr;
 
@@ -209,7 +184,7 @@ export default function SchedulePage() {
                     isToday ? 'bg-gradient-to-br from-rp-iris to-rp-foam text-rp-base' : 'text-rp-subtle'
                   }`}
                 >
-                  {day.getDate()}
+                  {getDayOfMonth(day)}
                 </div>
               </div>
 
@@ -256,7 +231,7 @@ export default function SchedulePage() {
           Ta teden po dnevih
         </h2>
         {weekDays.map((day, i) => {
-          const dateStr = toDateStr(day);
+          const dateStr = day;
           const dayTasks = getTasksForDay(dateStr);
           const isToday = dateStr === todayStr;
           if (dayTasks.length === 0 && !isToday) return null;
@@ -265,7 +240,7 @@ export default function SchedulePage() {
             <div key={dateStr}>
               <div className="flex items-center gap-2 mb-2">
                 <span className={`text-sm font-semibold ${isToday ? 'text-rp-iris' : 'text-rp-subtle'}`}>
-                  {DAYS_FULL[i]}, {day.getDate()}. {MONTHS_SL[day.getMonth()]}
+              {DAYS_FULL[i]}, {formatSlovenianDate(day, { day: 'numeric', month: 'long' })}
                 </span>
                 {isToday && (
                   <span className="text-xs px-2 py-0.5 rounded-full text-rp-iris bg-rp-iris/20 border border-rp-iris/30">

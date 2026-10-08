@@ -1,14 +1,15 @@
 import { useState, useMemo } from 'react';
 import Badge from './Badge';
+import { getSlovenianDateKey } from '../utils/dates';
 
-export default function SubjectTaskModal({ isOpen, onClose, subject, tasks, onToggleTask, onDeleteTask }) {
-  if (!isOpen || !subject) return null;
-
+export default function SubjectTaskModal({ isOpen, onClose, subject, tasks, onToggleTask, onDeleteTask, onAddTask }) {
   const [filter, setFilter] = useState('all');
+  const subjectId = subject?.id;
 
   const subjectTasks = useMemo(() => {
-    return tasks.filter(t => t.subjectId === subject.id);
-  }, [tasks, subject]);
+    if (!subjectId) return [];
+    return tasks.filter(t => t.subjectId === subjectId);
+  }, [tasks, subjectId]);
 
   const filteredTasks = useMemo(() => {
     let list = [...subjectTasks];
@@ -27,26 +28,27 @@ export default function SubjectTaskModal({ isOpen, onClose, subject, tasks, onTo
 
   const doneCount = subjectTasks.filter(t => t.completed).length;
 
+  if (!isOpen || !subject) return null;
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
       <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={onClose} />
       
       <div className="relative glass-card p-6 w-full max-w-lg max-h-[85vh] flex flex-col animate-fade-in-up">
         {/* Header */}
-        <div className="flex items-start justify-between mb-4">
+        <div className="flex items-start justify-between gap-3 mb-4">
           <div>
             <h2 className="text-xl font-bold tracking-tight text-rp-text">{subject.name} - Naloge</h2>
             <p className="text-sm mt-0.5 text-rp-muted">
                {subjectTasks.length} nalog skupaj · {doneCount} opravljenih
             </p>
           </div>
-          <button onClick={onClose}
-            className="p-2 rounded-xl transition-all focus:outline-none text-rp-muted hover:text-rp-text hover:bg-rp-hl-med/50"
-          >
-            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-            </svg>
-          </button>
+          <div className="flex shrink-0 items-center gap-1">
+            {onAddTask && <button type="button" onClick={onAddTask} className="rounded-lg bg-rp-iris px-3 py-2 text-xs font-semibold text-white transition hover:bg-[#5847bd]">＋ Naloga</button>}
+            <button type="button" onClick={onClose} aria-label="Zapri predmet" className="rounded-xl p-2 text-rp-muted transition hover:bg-rp-hl-med/50 hover:text-rp-text focus:outline-none">
+              <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
+            </button>
+          </div>
         </div>
 
         {/* Filters */}
@@ -100,7 +102,7 @@ export default function SubjectTaskModal({ isOpen, onClose, subject, tasks, onTo
                     {task.dueDate && (
                        <p className={`text-xs mt-1 ${
                          task.completed ? 'text-rp-muted' :
-                         new Date(task.dueDate) < new Date(new Date().setHours(0,0,0,0)) ? 'text-rp-love' : 'text-rp-iris'
+                         task.dueDate < getSlovenianDateKey() ? 'text-rp-love' : 'text-rp-iris'
                        }`}>
                          Rok: {task.dueDate.split('-').reverse().join('.')}
                        </p>

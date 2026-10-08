@@ -41,7 +41,7 @@ export default function RegisterPage() {
           'Prijava z e-pošto in geslom ni omogočena v Firebase konzoli.',
         );
       } else {
-        setError(`Napaka: ${err.message}`);
+        setError('Registracija ni uspela. Preveri podatke in nastavitve storitve, nato poskusi znova.');
       }
     }
     setLoading(false);
@@ -88,6 +88,7 @@ export default function RegisterPage() {
               id="register-name"
               type="text"
               required
+              maxLength={60}
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder="Janez Novak"

@@ -50,13 +50,13 @@ function Section({ title, badge, children }) {
 // ─── Main FriendsPage ─────────────────────────────────────────────────────────
 export default function FriendsPage() {
   const { currentUser } = useAuth();
-  const { users } = useAllUsers();
   const { friends } = useFriends();
   const { requests } = useFriendRequests();
   const { sent } = useSentRequests();
   const navigate = useNavigate();
 
   const [search, setSearch] = useState('');
+  const { users } = useAllUsers(search);
 
   const friendUids = new Set(friends.map((f) => f.uid));
   const sentUids = new Set(sent.map((s) => s.toUid));
@@ -70,15 +70,14 @@ export default function FriendsPage() {
             const isSent = sentUids.has(u.uid);
             const isReq = requestFromUids.has(u.uid);
             const matchName = u.displayName?.toLowerCase().includes(search.toLowerCase());
-            const matchEmail = u.email?.toLowerCase().includes(search.toLowerCase());
-            
-            return !isFriend && !isSent && !isReq && (matchName || matchEmail);
+
+            return !isFriend && !isSent && !isReq && matchName;
           }
         )
       : [];
 
   async function handleSendRequest(u) {
-    await sendFriendRequest(currentUser, u.uid, u.displayName || u.email);
+    await sendFriendRequest(currentUser, u.uid, u.displayName || 'Učenec');
     setSearch('');
   }
 
@@ -156,7 +155,7 @@ export default function FriendsPage() {
             {friends.map((f) => (
               <div
                 key={f.uid}
-                className="flex items-center justify-between gap-3 py-2 px-3 rounded-xl hover:bg-white/5 transition-colors border border-transparent hover:border-[color:rgba(144,140,170,0.1)]"
+                className="flex items-center justify-between gap-3 py-2 px-3 rounded-xl hover:bg-rp-overlay/70 transition-colors border border-transparent hover:border-rp-hl-med"
               >
                 <div className="flex items-center gap-4">
                   <MiniAvatar name={f.displayName} />
@@ -193,7 +192,7 @@ export default function FriendsPage() {
           type="text"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          placeholder="Išči po imenu ali emailu… (vsaj 2 znaka)"
+          placeholder="Išči po imenu … (vsaj 2 znaka)"
           className="w-full px-4 py-2.5 rounded-xl text-sm outline-none bg-rp-overlay/85 border border-rp-hl-med/50 text-rp-text transition-colors focus:border-rp-iris/50"
         />
 
@@ -211,14 +210,13 @@ export default function FriendsPage() {
             >
               <div className="flex items-center gap-3">
                 <MiniAvatar
-                  name={u.displayName || u.email}
+                  name={u.displayName}
                   bgClass="bg-gradient-to-br from-rp-gold to-rp-rose"
                 />
                 <div>
                   <p className="text-sm font-medium text-rp-text">
-                    {u.displayName || 'Neznan'}
+                    {u.displayName || 'Učenec'}
                   </p>
-                  <p className="text-xs text-rp-hl-high">{u.email}</p>
                 </div>
               </div>
               <button

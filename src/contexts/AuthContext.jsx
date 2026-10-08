@@ -6,7 +6,7 @@ import {
   onAuthStateChanged,
   updateProfile,
 } from 'firebase/auth';
-import { doc, setDoc, updateDoc, serverTimestamp, onSnapshot } from 'firebase/firestore';
+import { doc, getDoc, setDoc, updateDoc, serverTimestamp, onSnapshot } from 'firebase/firestore';
 import { auth, db } from '../firebase';
 
 const AuthContext = createContext(null);
@@ -31,6 +31,12 @@ export function AuthProvider({ children }) {
       photoURL: '',
       createdAt: serverTimestamp(),
     });
+    await setDoc(doc(db, 'publicProfiles', result.user.uid), {
+      displayName,
+      searchName: displayName.toLocaleLowerCase('sl-SI'),
+      photoURL: '',
+      createdAt: serverTimestamp(),
+    });
     return result;
   }
 
@@ -50,25 +56,53 @@ export function AuthProvider({ children }) {
       ...(displayName ? { displayName } : {}),
       ...(school !== undefined ? { school } : {}),
     });
+    if (displayName) {
+      await setDoc(doc(db, 'publicProfiles', user.uid), {
+        displayName,
+        searchName: displayName.toLocaleLowerCase('sl-SI'),
+      }, { merge: true });
+    }
     setCurrentUser({ ...user, displayName: displayName || user.displayName });
   }
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
+    if (!auth) {
+      return undefined;
+    }
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
       setCurrentUser(user);
+      setUserProfile(null);
       setLoading(false);
+      if (!user) return;
+
+      // Backfill a minimal public profile for accounts created before profile privacy was added.
+      try {
+        const publicProfileRef = doc(db, 'publicProfiles', user.uid);
+        const publicProfile = await getDoc(publicProfileRef);
+        if (!publicProfile.exists()) {
+          await setDoc(publicProfileRef, {
+            displayName: user.displayName || 'Učenec',
+            searchName: (user.displayName || 'Učenec').toLocaleLowerCase('sl-SI'),
+            photoURL: user.photoURL || '',
+            createdAt: serverTimestamp(),
+          });
+        }
+      } catch (error) {
+        console.error('Public profile initialization failed:', error);
+      }
     });
     return unsubscribe;
   }, []);
 
   // Real-time Firestore profile listener
+  const currentUid = currentUser?.uid;
   useEffect(() => {
-    if (!currentUser) { setUserProfile(null); return; }
-    const unsub = onSnapshot(doc(db, 'users', currentUser.uid), (snap) => {
+    if (!currentUid || !db) return undefined;
+    const unsub = onSnapshot(doc(db, 'users', currentUid), (snap) => {
       if (snap.exists()) setUserProfile({ uid: snap.id, ...snap.data() });
     });
     return unsub;
-  }, [currentUser?.uid]);
+  }, [currentUid]);
 
   const value = { currentUser, userProfile, register, login, logout, updateUserProfile };
 

@@ -1,6 +1,7 @@
 import { useState } from 'react';
-import { NavLink, Link, useNavigate } from 'react-router-dom';
+import { NavLink, useLocation } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
+import AccountMenu from './AccountMenu';
 
 const NAV_ITEMS = [
   {
@@ -66,29 +67,23 @@ const NAV_ITEMS = [
 ];
 
 function SidebarContent({ onClose }) {
-  const { currentUser, logout } = useAuth();
-  const navigate = useNavigate();
-
-  async function handleLogout() {
-    await logout();
-    navigate('/login');
-  }
+  const { currentUser } = useAuth();
 
   return (
-    <div className="flex flex-col h-full">
+    <div className="flex h-full flex-col overflow-y-auto">
       {/* Brand */}
-      <div className="flex items-center gap-3 px-6 py-5 border-b border-rp-hl-med/60">
-        <div className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0 bg-gradient-to-br from-rp-iris to-rp-foam">
+      <div className="flex items-center gap-3 border-b border-rp-hl-med/60 px-5 py-5">
+        <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-rp-iris to-rp-foam shadow-[0_6px_22px_rgba(185,161,255,.2)]">
           <svg className="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
               d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
           </svg>
         </div>
-        <span className="text-xl font-bold gradient-text">SmartStudy</span>
+        <span className="text-lg font-bold tracking-tight gradient-text">SmartStudy</span>
       </div>
 
       {/* Nav items */}
-      <nav className="flex-1 px-3 py-4 space-y-1">
+      <nav aria-label="Glavna navigacija" className="flex-1 space-y-1 px-3 py-4">
         {NAV_ITEMS.map(({ to, label, icon }) => (
           <NavLink
             key={to}
@@ -98,8 +93,8 @@ function SidebarContent({ onClose }) {
             className={({ isActive }) =>
               `flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all ${
                 isActive
-                  ? 'text-rp-text bg-rp-iris/15 border border-rp-iris/25'
-                  : 'text-rp-subtle hover:text-rp-text border border-transparent'
+                  ? 'text-rp-iris bg-rp-iris/[.08] border border-rp-iris/15 shadow-[inset_3px_0_0_0_#6d5bd0]'
+                  : 'text-rp-subtle hover:text-rp-text hover:bg-rp-overlay/70 border border-transparent'
               }`
             }
           >
@@ -109,32 +104,8 @@ function SidebarContent({ onClose }) {
         ))}
       </nav>
 
-      <div className="px-3 pb-4 pt-4 border-t border-rp-hl-med/60">
-        <Link
-          to="/profile"
-          onClick={onClose}
-          className="flex items-center gap-3 px-4 py-3 rounded-xl mb-2 transition-all bg-rp-base/60 hover:bg-rp-hl-med/35"
-        >
-          <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 overflow-hidden bg-gradient-to-br from-rp-iris to-rp-foam">
-            {currentUser?.photoURL
-              ? <img src={currentUser.photoURL} alt="avatar" className="w-full h-full object-cover" />
-              : <span className="text-sm font-bold text-white">{currentUser?.displayName?.[0]?.toUpperCase() || '?'}</span>}
-          </div>
-          <div className="flex-1 min-w-0">
-            <p className="text-sm font-medium truncate text-rp-text">{currentUser?.displayName || 'Neznan Uporabnik'}</p>
-            <p className="text-xs truncate text-rp-iris">Uredi profil →</p>
-          </div>
-        </Link>
-        <button
-          onClick={handleLogout}
-          className="w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm transition-all text-rp-muted hover:text-rp-love hover:bg-rp-love/10"
-        >
-          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-              d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-          </svg>
-          Odjava
-        </button>
+      <div className="border-t border-rp-hl-med/60 px-3 pb-4 pt-4">
+        <AccountMenu user={currentUser} placement="top" variant="sidebar" onNavigate={onClose} />
       </div>
     </div>
   );
@@ -142,19 +113,24 @@ function SidebarContent({ onClose }) {
 
 export default function Layout({ children }) {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const location = useLocation();
+  const pageTitle = NAV_ITEMS.find((item) => item.to === location.pathname)?.label
+    || (location.pathname === '/settings' ? 'Nastavitve' : 'Moj profil');
+  const { currentUser } = useAuth();
 
   return (
-    <div className="flex h-screen overflow-hidden">
+    <div className="flex h-dvh min-h-[32rem] overflow-hidden">
+      <a href="#main-content" className="sr-only z-[100] rounded-lg bg-rp-iris px-4 py-2 font-semibold text-rp-base focus:not-sr-only focus:fixed focus:left-4 focus:top-4">Preskoči na vsebino</a>
       {/* Desktop sidebar */}
-      <aside className="hidden md:flex flex-col w-64 flex-shrink-0 border-r bg-rp-base/95 border-rp-hl-med/50">
+      <aside className="hidden w-64 flex-shrink-0 flex-col border-r border-rp-hl-med/75 bg-rp-surface/90 backdrop-blur-xl md:flex">
         <SidebarContent />
       </aside>
 
       {/* Mobile overlay */}
       {mobileOpen && (
         <div className="fixed inset-0 z-40 md:hidden">
-          <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setMobileOpen(false)} />
-          <aside className="absolute left-0 top-0 bottom-0 w-72 z-50 flex flex-col border-r bg-rp-base/95 border-rp-hl-med/50">
+          <div className="absolute inset-0 bg-slate-900/25 backdrop-blur-sm" onClick={() => setMobileOpen(false)} />
+          <aside className="absolute bottom-0 left-0 top-0 z-50 flex w-72 flex-col border-r border-rp-hl-med bg-rp-surface">
             <SidebarContent onClose={() => setMobileOpen(false)} />
           </aside>
         </div>
@@ -162,11 +138,26 @@ export default function Layout({ children }) {
 
       {/* Main content */}
       <div className="flex-1 flex flex-col overflow-hidden">
+        <header className="hidden h-[4.25rem] shrink-0 items-center justify-between border-b border-rp-hl-med/70 bg-rp-surface/80 px-6 backdrop-blur-xl md:flex xl:px-8">
+          <div className="flex items-center gap-3 text-sm">
+            <span className="text-rp-muted">SmartStudy</span>
+            <span className="text-rp-hl-high" aria-hidden="true">/</span>
+            <h1 className="font-semibold text-rp-text">{pageTitle}</h1>
+          </div>
+          <div className="flex items-center gap-3">
+            <span className="hidden text-xs text-rp-muted lg:block">Lep napredek se začne z majhnim korakom.</span>
+            <AccountMenu user={currentUser} placement="bottom" variant="avatar" />
+          </div>
+        </header>
+
         {/* Mobile header */}
-        <header className="md:hidden flex items-center justify-between px-4 py-3 border-b bg-rp-base/95 border-rp-hl-med/50">
+        <header className="flex items-center justify-between border-b border-rp-hl-med/70 bg-rp-surface/90 px-4 py-3 backdrop-blur-xl md:hidden">
           <button
+            type="button"
+            aria-label="Odpri navigacijo"
+            aria-expanded={mobileOpen}
             onClick={() => setMobileOpen(true)}
-            className="p-2 rounded-xl transition-all text-rp-subtle hover:text-rp-text hover:bg-rp-hl-med/50"
+            className="rounded-xl p-2 text-rp-subtle transition-all hover:bg-rp-overlay hover:text-rp-text"
           >
             <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
@@ -176,7 +167,7 @@ export default function Layout({ children }) {
           <div className="w-9" />
         </header>
 
-        <main className="flex-1 overflow-y-auto p-4 md:p-6">
+        <main id="main-content" className="flex-1 overflow-y-auto p-4 md:p-6 xl:p-8">
           {children}
         </main>
       </div>

@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import {
-  collection, query, orderBy, limit, where,
+  collection, query, orderBy, limit, where, startAt, endAt,
   onSnapshot, addDoc, deleteDoc, doc, updateDoc,
-  getDocs, serverTimestamp, getDoc,
+  serverTimestamp,
 } from 'firebase/firestore';
 import { db } from '../firebase';
 import { useAuth } from '../contexts/AuthContext';
@@ -24,36 +24,42 @@ export function useUserProfile(uid) {
 
 // ─── Messages ─────────────────────────────────────────────────────────────────
 export function useMessages(chatId) {
-  const [messages, setMessages] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [messageState, setMessageState] = useState({ chatId: null, messages: [], loading: true });
 
   useEffect(() => {
-    if (!chatId) { setMessages([]); setLoading(false); return; }
-    setLoading(true);
+    if (!chatId) return undefined;
     const q = query(
       collection(db, 'chats', chatId, 'messages'),
       orderBy('timestamp', 'asc'),
       limit(200)
     );
     const unsub = onSnapshot(q,
-      (snap) => { setMessages(snap.docs.map((d) => ({ id: d.id, ...d.data() }))); setLoading(false); },
-      (err) => { console.error('useMessages:', err); setLoading(false); }
+      (snap) => setMessageState({ chatId, messages: snap.docs.map((d) => ({ id: d.id, ...d.data() })), loading: false }),
+      (err) => { console.error('useMessages:', err); setMessageState({ chatId, messages: [], loading: false }); }
     );
     return unsub;
   }, [chatId]);
 
-  return { messages, loading };
+  if (messageState.chatId !== chatId) return { messages: [], loading: Boolean(chatId) };
+  return { messages: messageState.messages, loading: messageState.loading };
 }
 
 // ─── All users (for search in Profile) ───────────────────────────────────────
-export function useAllUsers() {
+export function useAllUsers(searchTerm = '') {
   const { currentUser } = useAuth();
   const [users, setUsers] = useState([]);
+  const normalizedSearch = searchTerm.trim().toLocaleLowerCase('sl-SI');
 
   useEffect(() => {
-    if (!currentUser) return;
+    if (!currentUser || normalizedSearch.length < 2) return undefined;
     const unsub = onSnapshot(
-      collection(db, 'users'),
+      query(
+        collection(db, 'publicProfiles'),
+        orderBy('searchName'),
+        startAt(normalizedSearch),
+        endAt(`${normalizedSearch}\uf8ff`),
+        limit(20),
+      ),
       (snap) => {
         setUsers(
           snap.docs
@@ -66,7 +72,7 @@ export function useAllUsers() {
       }
     );
     return unsub;
-  }, [currentUser]);
+  }, [currentUser, normalizedSearch]);
 
   return { users };
 }
@@ -169,7 +175,7 @@ export function useSentRequests() {
 export async function sendFriendRequest(fromUser, toUid, toName) {
   await addDoc(collection(db, 'friendRequests'), {
     fromUid: fromUser.uid,
-    fromName: fromUser.displayName || fromUser.email,
+    fromName: fromUser.displayName || 'Učenec',
     toUid,
     toName,
     status: 'pending',
@@ -186,12 +192,13 @@ export async function respondToRequest(reqId, status) {
 export async function sendMessage(chatId, user, text, fileData = null) {
   const clean = text.trim().slice(0, 2000);
   if (!clean && !fileData) return;
+  const senderName = user.displayName || 'Učenec';
 
   await addDoc(collection(db, 'chats', chatId, 'messages'), {
     text: clean,
     senderId: user.uid,
-    senderName: user.displayName || 'Neznan',
-    senderInitial: (user.displayName?.[0] || '?').toUpperCase(),
+    senderName,
+    senderInitial: (senderName[0] || '?').toUpperCase(),
     timestamp: serverTimestamp(),
     ...(fileData || {}),
   });
