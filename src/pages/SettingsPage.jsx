@@ -23,7 +23,7 @@ function SettingToggle({ title, description, checked, onChange }) {
     <div className="flex items-center justify-between gap-4 border-b border-rp-hl-med/70 py-4 last:border-0 last:pb-0">
       <div><h3 className="text-sm font-semibold text-rp-text">{title}</h3><p className="mt-1 text-xs leading-5 text-rp-muted">{description}</p></div>
       <button type="button" role="switch" aria-label={title} aria-checked={checked} onClick={() => onChange(!checked)} className={`relative h-6 w-11 shrink-0 rounded-full transition-colors ${checked ? 'bg-rp-iris' : 'bg-rp-hl-high'}`}>
-        <span className={`absolute top-1 h-4 w-4 rounded-full bg-white shadow transition-transform ${checked ? 'translate-x-6' : 'translate-x-1'}`} />
+        <span className={`absolute left-1 top-1 h-4 w-4 rounded-full bg-white shadow transition-transform ${checked ? 'translate-x-5' : 'translate-x-0'}`} />
       </button>
     </div>
   );
