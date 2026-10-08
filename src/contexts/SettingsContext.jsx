@@ -30,17 +30,8 @@ export function SettingsProvider({ children }) {
   const { currentUser, userProfile } = useAuth();
   const currentUid = currentUser?.uid;
   const [settings, setSettings] = useState(readSettings);
-  const [theme, setThemeState] = useState(DEFAULT_THEME);
-
-  // A signed-out visitor (including the login page) always sees the basic theme.
-  // Once a user's profile arrives, apply that account's saved theme.
-  useLayoutEffect(() => {
-    if (!currentUid) {
-      setThemeState(DEFAULT_THEME);
-      return;
-    }
-    setThemeState(THEMES.includes(userProfile?.theme) ? userProfile.theme : DEFAULT_THEME);
-  }, [currentUid, userProfile?.theme]);
+  // Signed-out visitors use the base theme; signed-in users use their Firestore profile.
+  const theme = currentUid && THEMES.includes(userProfile?.theme) ? userProfile.theme : DEFAULT_THEME;
 
   useLayoutEffect(() => {
     const root = document.documentElement;
@@ -56,16 +47,15 @@ export function SettingsProvider({ children }) {
 
   const setTheme = useCallback(async (nextTheme) => {
     if (!THEMES.includes(nextTheme)) return;
-    setThemeState(nextTheme);
-    if (!currentUser?.uid || !db) return;
+    if (!currentUid || !db) return;
 
     try {
-      await updateDoc(doc(db, 'users', currentUser.uid), { theme: nextTheme });
+      await updateDoc(doc(db, 'users', currentUid), { theme: nextTheme });
     } catch (error) {
       console.error('Saving theme failed:', error);
       window.alert('Shranjevanje teme ni uspelo. Preveri povezavo in poskusi znova.');
     }
-  }, [currentUser?.uid]);
+  }, [currentUid]);
 
   const value = useMemo(() => ({
     ...settings,

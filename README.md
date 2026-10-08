@@ -99,3 +99,14 @@ V datoteki `package.json` so na voljo naslednji ukazi za upravljanje s projektom
 * E-poštni naslovi ostanejo v zasebni zbirki `users`; iskanje prijateljev bere samo `publicProfiles`.
 * Firebase Web API ključ je v brskalniku viden. Omeji ga na Firebase API-je in pravilno domeno v Google Cloud Console; dostop do podatkov uveljavljajo Firestore pravila.
 * Sporočila v kanalih `general`, `subject_*` in `school_*` so vidna vsem prijavljenim uporabnikom. Zasebni klepeti so omejeni na UID-ja, zapisana v ID-ju klepeta.
+
+### Pregled varnosti · 8. 10. 2026
+
+Opravljen je bil statični pregled prijave, odjemalske kode, pravil Firestore, konfiguracije Vercel in odvisnosti.
+
+* Pravila Firestore omejujejo zasebne profile, predmete in naloge na njihovega lastnika. Zbirka `publicProfiles` je dostopna prijavljenim uporabnikom in vsebuje samo prikazne podatke.
+* Kanali `general`, `subject_*` in `school_*` so po trenutnih pravilih skupni vsem prijavljenim uporabnikom. V njih ne shranjuj zasebnih šolskih ali osebnih podatkov. Če mora biti `school_*` omejen na uporabnike iste šole, je treba preverjanje dodati v Firestore pravila.
+* Sporočila in prošnje za prijateljstvo nimajo strežniške omejitve pogostosti; prijavljen uporabnik jih lahko pošilja večkrat. Za produkcijsko uporabo je treba razmisliti o Firebase App Check in strežniški omejitvi zlorab.
+* Pravila za priponke sprejmejo poljubne povezave HTTPS. Z njimi ravnaj kot z zunanjimi, nezaupanja vrednimi povezavami.
+* `vercel.json` trenutno ne nastavlja varnostnih HTTP-glav, kot sta Content Security Policy in zaščita pred vdelavo strani.
+* `npm run lint` in `npm run build` sta uspela. `npm audit --offline` ni vrnil znanih ranljivosti v lokalno dostopnih podatkih; najnovejše zbirke zaradi nedosegljivega omrežja ni bilo mogoče preveriti. Firebase Emulator ni bil na voljo, zato pravila niso bila dinamično preizkušena z ločenimi računi.
