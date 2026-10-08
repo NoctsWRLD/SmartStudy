@@ -74,7 +74,7 @@ export default function SettingsPage() {
       </section>
 
       <section className="space-y-4" aria-labelledby="theme-heading">
-        <div><h2 id="theme-heading" className="text-lg font-semibold text-rp-text">Videz aplikacije</h2><p className="mt-1 text-sm text-rp-muted">Tema se shrani v tem brskalniku in velja za vse strani.</p></div>
+        <div><h2 id="theme-heading" className="text-lg font-semibold text-rp-text">Videz aplikacije</h2><p className="mt-1 text-sm text-rp-muted">Izbrana tema se shrani v tvoj račun in se uporabi tudi ob naslednji prijavi.</p></div>
         <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
           {THEMES.map((option) => (
             <button key={option.id} type="button" aria-pressed={theme === option.id} onClick={() => setTheme(option.id)} className={`glass-card group p-4 text-left transition-all hover:-translate-y-0.5 ${theme === option.id ? 'border-rp-iris/50 ring-2 ring-rp-iris/20' : 'hover:border-rp-hl-high'}`}>
@@ -116,7 +116,7 @@ export default function SettingsPage() {
         <div className="mt-5 flex flex-col justify-between gap-4 border-t border-rp-hl-med/70 pt-5 sm:flex-row sm:items-center"><div><h3 className="text-sm font-semibold text-rp-text">Prenesi svoje podatke</h3><p className="mt-1 max-w-xl text-xs leading-5 text-rp-muted">Shrani profil, predmete in naloge v datoteko JSON. Datoteka se ustvari v tvoji napravi.</p></div><button type="button" onClick={exportStudyData} disabled={subjectsLoading || tasksLoading} className="shrink-0 rounded-xl border border-rp-iris/25 bg-rp-iris/[.07] px-4 py-2.5 text-xs font-semibold text-rp-iris transition hover:bg-rp-iris/15 disabled:cursor-wait disabled:opacity-50">{exported ? '✓ Datoteka prenesena' : subjectsLoading || tasksLoading ? 'Nalagam podatke…' : 'Izvozi podatke'}</button></div>
       </section>
 
-      <p className="px-1 text-xs leading-5 text-rp-muted">Nastavitve videza so shranjene lokalno v brskalniku. Predmeti in naloge se shranjujejo v tvojem Firebase računu.</p>
+      <p className="px-1 text-xs leading-5 text-rp-muted">Tema se shrani v tvoj Firebase profil. Nastavitve dostopnosti se shranijo lokalno v tem brskalniku.</p>
     </div>
   );
 }

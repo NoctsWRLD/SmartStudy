@@ -14,6 +14,10 @@ service cloud.firestore {
       return value == '' || value.matches('https://.*');
     }
 
+    function validTheme(value) {
+      return value in ['cloud', 'lavender', 'mint', 'sunset', 'midnight', 'graphite', 'forest', 'plum', 'ocean', 'ember'];
+    }
+
     function isOwnSubject(subjectId) {
       return subjectId == '' || (
         exists(/databases/$(database)/documents/subjects/$(subjectId)) &&
@@ -33,7 +37,7 @@ service cloud.firestore {
     match /users/{uid} {
       allow read: if owns(uid);
       allow create: if owns(uid)
-        && request.resource.data.keys().hasOnly(['displayName', 'email', 'school', 'photoURL', 'createdAt'])
+        && request.resource.data.keys().hasOnly(['displayName', 'email', 'school', 'photoURL', 'createdAt', 'theme'])
         && request.resource.data.keys().hasAll(['displayName', 'email', 'school', 'photoURL', 'createdAt'])
         && request.resource.data.displayName is string
         && request.resource.data.displayName.size() <= 60
@@ -42,14 +46,16 @@ service cloud.firestore {
         && request.resource.data.school is string
         && request.resource.data.school.size() <= 120
         && safeImageUrl(request.resource.data.photoURL)
-        && request.resource.data.createdAt == request.time;
+        && request.resource.data.createdAt == request.time
+        && (!('theme' in request.resource.data) || validTheme(request.resource.data.theme));
       allow update: if owns(uid)
-        && request.resource.data.keys().hasOnly(['displayName', 'email', 'school', 'photoURL', 'createdAt'])
-        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['displayName', 'school'])
+        && request.resource.data.keys().hasOnly(['displayName', 'email', 'school', 'photoURL', 'createdAt', 'theme'])
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['displayName', 'school', 'theme'])
         && request.resource.data.displayName is string
         && request.resource.data.displayName.size() <= 60
         && request.resource.data.school is string
-        && request.resource.data.school.size() <= 120;
+        && request.resource.data.school.size() <= 120
+        && (!request.resource.data.diff(resource.data).affectedKeys().hasAny(['theme']) || validTheme(request.resource.data.theme));
       allow delete: if owns(uid);
     }
 

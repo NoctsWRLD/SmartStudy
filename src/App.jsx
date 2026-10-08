@@ -41,9 +41,9 @@ export default function App() {
 
   return (
     <BrowserRouter>
-      <SettingsProvider>
       <AuthProvider>
-        <Routes>
+        <SettingsProvider>
+          <Routes>
           {/* Public routes */}
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
@@ -132,9 +132,9 @@ export default function App() {
 
           {/* Fallback */}
           <Route path="*" element={<Navigate to="/" replace />} />
-        </Routes>
+          </Routes>
+        </SettingsProvider>
       </AuthProvider>
-      </SettingsProvider>
     </BrowserRouter>
   );
 }
