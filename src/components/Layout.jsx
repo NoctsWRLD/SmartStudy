@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
-import { NavLink, useLocation, Link } from 'react-router-dom';
+import { NavLink, useLocation, Link, useNavigate } from 'react-router-dom';
 import { useTasks } from '../hooks/useFirestore';
+import { useAuth } from '../contexts/AuthContext';
 import { useSettings } from '../contexts/SettingsContext';
 import Logo from './Logo';
 import { getSlovenianDateKey } from '../utils/dates';
@@ -139,9 +140,105 @@ function NavDropdown({ group, pathname }) {
   );
 }
 
+function SettingsMenu({ active }) {
+  const [open, setOpen] = useState(false);
+  const buttonRef = useRef(null);
+  const navigate = useNavigate();
+  const { logout } = useAuth();
+
+  useEffect(() => {
+    if (!open) return undefined;
+    function onKey(e) {
+      if (e.key === 'Escape') {
+        setOpen(false);
+        buttonRef.current?.focus();
+      }
+    }
+    document.addEventListener('keydown', onKey);
+    return () => document.removeEventListener('keydown', onKey);
+  }, [open ]);
+
+  async function handleLogout() {
+    try {
+      await logout();
+      setOpen(false);
+      navigate('/login');
+    } catch (error) {
+      console.error('Logout failed:', error);
+    }
+  }
+
+  return (
+    <div
+      className="relative hidden sm:block"
+      onMouseEnter={() => setOpen(true)}
+      onMouseLeave={() => setOpen(false)}
+    >
+      <button
+        ref={buttonRef}
+        type="button"
+        title="Nastavitve in račun"
+        aria-label="Nastavitve in račun"
+        aria-haspopup="menu"
+        aria-expanded={open}
+        onClick={() => setOpen((v) => !v)}
+        className={`grid h-10 w-10 place-items-center rounded-xl text-[15px] transition-colors ${
+          active || open ? 'bg-rp-iris/[.12] text-rp-iris' : 'text-rp-muted hover:bg-rp-overlay hover:text-rp-text'
+        }`}
+      >
+        <span aria-hidden="true">⚙</span>
+      </button>
+
+      {open && (
+        <>
+          <div className="fixed inset-0 z-40 cursor-default" onClick={() => setOpen(false)} aria-hidden="true" />
+          <div
+            role="menu"
+            aria-label="Nastavitve in račun"
+            className="rise absolute right-0 top-full z-50 mt-2 w-52 overflow-hidden rounded-2xl border border-rp-hl-med bg-rp-surface p-1.5"
+          >
+            <NavLink
+              to="/settings"
+              role="menuitem"
+              onClick={() => setOpen(false)}
+              className="flex items-center gap-3 rounded-xl px-3.5 py-2.5 text-[14.5px] font-semibold text-rp-text transition-colors hover:bg-rp-overlay"
+            >
+              <span aria-hidden="true">⚙</span>
+              Nastavitve
+            </NavLink>
+            <button
+              type="button"
+              role="menuitem"
+              onClick={handleLogout}
+              className="flex w-full items-center gap-3 rounded-xl px-3.5 py-2.5 text-left text-[14.5px] font-semibold text-rp-love transition-colors hover:bg-rp-love/10"
+            >
+              <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+              </svg>
+              Odjava
+            </button>
+          </div>
+        </>
+      )}
+    </div>
+  );
+}
+
 export default function Layout({ children }) {
   const location = useLocation();
+  const navigate = useNavigate();
+  const { logout } = useAuth();
   const [mobileMenu, setMobileMenu] = useState(false);
+
+  async function handleMobileLogout() {
+    try {
+      await logout();
+      setMobileMenu(false);
+      navigate('/login');
+    } catch (error) {
+      console.error('Logout failed:', error);
+    }
+  }
 
   return (
     <div className="flex min-h-dvh flex-col">
@@ -180,18 +277,7 @@ export default function Layout({ children }) {
           <div className="ml-auto flex items-center gap-1.5">
             <TodayPill />
             <NavLink to="/tasks" className="btn-primary hidden !py-2.5 min-[480px]:inline-flex">Nova naloga</NavLink>
-            <NavLink
-              to="/settings"
-              title="Nastavitve"
-              aria-label="Nastavitve"
-              className={({ isActive }) =>
-                `hidden h-10 w-10 place-items-center rounded-xl text-[15px] transition-colors sm:grid ${
-                  isActive ? 'bg-rp-iris/[.12] text-rp-iris' : 'text-rp-muted hover:bg-rp-overlay hover:text-rp-text'
-                }`
-              }
-            >
-              <span aria-hidden="true">⚙</span>
-            </NavLink>
+            <SettingsMenu active={location.pathname === '/settings' || location.pathname === '/profile'} />
             <ThemeToggle />
           </div>
         </div>
@@ -225,6 +311,7 @@ export default function Layout({ children }) {
               <div className="grid gap-1 border-t border-rp-hl-med pt-4">
                 <NavLink to="/profile" onClick={() => setMobileMenu(false)} className="rounded-xl px-4 py-2.5 text-[15px] font-medium text-rp-muted transition-colors hover:bg-rp-overlay hover:text-rp-text">Moj profil</NavLink>
                 <NavLink to="/settings" onClick={() => setMobileMenu(false)} className="rounded-xl px-4 py-2.5 text-[15px] font-medium text-rp-muted transition-colors hover:bg-rp-overlay hover:text-rp-text">Nastavitve</NavLink>
+                <button type="button" onClick={handleMobileLogout} className="rounded-xl px-4 py-2.5 text-left text-[15px] font-semibold text-rp-love transition-colors hover:bg-rp-love/10">Odjava</button>
               </div>
             </div>
           </nav>
