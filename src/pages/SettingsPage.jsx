@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { useSettings } from '../contexts/SettingsContext';
 import { useSubjects, useTasks } from '../hooks/useFirestore';
+import { useExams, useFlashcards, useFocusSessions } from '../hooks/useStudy';
 import { getSlovenianDateKey } from '../utils/dates';
 
 const THEMES = [
@@ -38,6 +39,9 @@ export default function SettingsPage() {
   const { theme, setTheme, highContrast, setHighContrast, reduceMotion, setReduceMotion } = useSettings();
   const { subjects, loading: subjectsLoading } = useSubjects();
   const { tasks, loading: tasksLoading } = useTasks();
+  const { exams } = useExams();
+  const { cards } = useFlashcards();
+  const { sessions } = useFocusSessions();
   const [exported, setExported] = useState(false);
   const completed = tasks.filter((task) => task.completed).length;
   const pending = tasks.length - completed;
@@ -51,9 +55,12 @@ export default function SettingsPage() {
         email: currentUser?.email || userProfile?.email || '',
         school: userProfile?.school || '',
       },
-      summary: { subjectCount: subjects.length, taskCount: tasks.length, completedTaskCount: completed },
+      summary: { subjectCount: subjects.length, taskCount: tasks.length, completedTaskCount: completed, examCount: exams.length, cardCount: cards.length },
       subjects: subjects.map(({ id, name, colorIndex }) => ({ id, name, colorIndex })),
       tasks: tasks.map(({ id, title, description, subjectId, dueDate, completed: isCompleted }) => ({ id, title, description, subjectId, dueDate, completed: isCompleted })),
+      exams: exams.map(({ id, title, subjectId, date }) => ({ id, title, subjectId, date })),
+      flashcards: cards.map(({ id, subjectId, front, back, known }) => ({ id, subjectId, front, back, known })),
+      focusSessions: sessions.map(({ id, minutes, mode, day }) => ({ id, minutes, mode, day })),
     };
     const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
     const url = URL.createObjectURL(blob);

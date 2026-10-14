@@ -9,7 +9,7 @@ export function AuthShell({ title, subtitle, error, children, footer }) {
         <span className="grid h-10 w-10 place-items-center rounded-xl bg-[var(--rp-base)] font-display text-lg font-bold text-rp-text" aria-hidden="true">S</span>
         <div>
           <p className="font-display text-4xl font-bold leading-[1.05] tracking-tight">Mirna glava.<br />Narejene naloge.</p>
-          <p className="mt-4 max-w-sm text-[15px] leading-6 opacity-70">SmartStudy zbere predmete, naloge in urnik na enem mestu — za osnovnošolce, dijake in študente.</p>
+          <p className="mt-4 max-w-sm text-[15px] leading-6 opacity-70">Predmeti, naloge, preverjanja in kartice na enem mestu — za osnovnošolce, dijake in študente.</p>
         </div>
         <p className="text-sm opacity-60">25 minut fokusa naenkrat.</p>
       </div>

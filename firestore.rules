@@ -142,8 +142,89 @@ service cloud.firestore {
       allow delete: if signedIn() && resource.data.uid == request.auth.uid;
     }
 
-    match /friendRequests/{requestId} {
-      allow read: if signedIn()
+    match /exams/{examId} {
+      allow read: if signedIn() && resource.data.uid == request.auth.uid;
+      allow create: if signedIn()
+        && request.resource.data.keys().hasOnly(['title', 'subjectId', 'date', 'uid', 'createdAt'])
+        && request.resource.data.keys().hasAll(['title', 'subjectId', 'date', 'uid', 'createdAt'])
+        && request.resource.data.uid == request.auth.uid
+        && request.resource.data.title is string
+        && request.resource.data.title.size() > 0
+        && request.resource.data.title.size() <= 120
+        && request.resource.data.subjectId is string
+        && request.resource.data.subjectId.size() > 0
+        && isOwnSubject(request.resource.data.subjectId)
+        && request.resource.data.date is string
+        && request.resource.data.date.matches('^[0-9]{4}-[0-9]{2}-[0-9]{2}$')
+        && request.resource.data.createdAt == request.time;
+      allow update: if signedIn()
+        && resource.data.uid == request.auth.uid
+        && request.resource.data.uid == request.auth.uid
+        && request.resource.data.keys().hasOnly(['title', 'subjectId', 'date', 'uid', 'createdAt'])
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['title', 'subjectId', 'date'])
+        && request.resource.data.title is string
+        && request.resource.data.title.size() > 0
+        && request.resource.data.title.size() <= 120
+        && request.resource.data.subjectId is string
+        && request.resource.data.subjectId.size() > 0
+        && isOwnSubject(request.resource.data.subjectId)
+        && request.resource.data.date is string
+        && request.resource.data.date.matches('^[0-9]{4}-[0-9]{2}-[0-9]{2}$');
+      allow delete: if signedIn() && resource.data.uid == request.auth.uid;
+    }
+
+    match /flashcards/{cardId} {
+      allow read: if signedIn() && resource.data.uid == request.auth.uid;
+      allow create: if signedIn()
+        && request.resource.data.keys().hasOnly(['subjectId', 'front', 'back', 'known', 'uid', 'createdAt'])
+        && request.resource.data.keys().hasAll(['subjectId', 'front', 'back', 'known', 'uid', 'createdAt'])
+        && request.resource.data.uid == request.auth.uid
+        && request.resource.data.subjectId is string
+        && request.resource.data.subjectId.size() > 0
+        && isOwnSubject(request.resource.data.subjectId)
+        && request.resource.data.front is string
+        && request.resource.data.front.size() > 0
+        && request.resource.data.front.size() <= 500
+        && request.resource.data.back is string
+        && request.resource.data.back.size() > 0
+        && request.resource.data.back.size() <= 1000
+        && request.resource.data.known == false
+        && request.resource.data.createdAt == request.time;
+      allow update: if signedIn()
+        && resource.data.uid == request.auth.uid
+        && request.resource.data.uid == request.auth.uid
+        && request.resource.data.keys().hasOnly(['subjectId', 'front', 'back', 'known', 'uid', 'createdAt'])
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['subjectId', 'front', 'back', 'known'])
+        && request.resource.data.subjectId is string
+        && request.resource.data.subjectId.size() > 0
+        && isOwnSubject(request.resource.data.subjectId)
+        && request.resource.data.front is string
+        && request.resource.data.front.size() > 0
+        && request.resource.data.front.size() <= 500
+        && request.resource.data.back is string
+        && request.resource.data.back.size() > 0
+        && request.resource.data.back.size() <= 1000
+        && request.resource.data.known is bool;
+      allow delete: if signedIn() && resource.data.uid == request.auth.uid;
+    }
+
+    match /focusSessions/{sessionId} {
+      allow read: if signedIn() && resource.data.uid == request.auth.uid;
+      allow create: if signedIn()
+        && request.resource.data.keys().hasOnly(['minutes', 'mode', 'day', 'uid', 'createdAt'])
+        && request.resource.data.keys().hasAll(['minutes', 'mode', 'day', 'uid', 'createdAt'])
+        && request.resource.data.uid == request.auth.uid
+        && request.resource.data.minutes is int
+        && request.resource.data.minutes >= 1
+        && request.resource.data.minutes <= 180
+        && request.resource.data.mode in ['focus', 'break']
+        && request.resource.data.day is string
+        && request.resource.data.day.matches('^[0-9]{4}-[0-9]{2}-[0-9]{2}$')
+        && request.resource.data.createdAt == request.time;
+      allow delete: if signedIn() && resource.data.uid == request.auth.uid;
+    }
+
+    match /friendRequests/{requestId} {     allow read: if signedIn()
         && (resource.data.fromUid == request.auth.uid || resource.data.toUid == request.auth.uid);
       allow create: if signedIn()
         && request.resource.data.keys().hasOnly(['fromUid', 'fromName', 'toUid', 'toName', 'status', 'createdAt'])

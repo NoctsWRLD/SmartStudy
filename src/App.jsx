@@ -7,6 +7,8 @@ import RegisterPage from './pages/RegisterPage';
 import DashboardPage from './pages/DashboardPage';
 import SubjectsPage from './pages/SubjectsPage';
 import TasksPage from './pages/TasksPage';
+import ExamsPage from './pages/ExamsPage';
+import FlashcardsPage from './pages/FlashcardsPage';
 import SchedulePage from './pages/SchedulePage';
 import ChatPage from './pages/ChatPage';
 import ProfilePage from './pages/ProfilePage';
@@ -85,6 +87,26 @@ export default function App() {
               <ProtectedRoute>
                 <Layout>
                   <SchedulePage />
+                </Layout>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/exams"
+            element={
+              <ProtectedRoute>
+                <Layout>
+                  <ExamsPage />
+                </Layout>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/flashcards"
+            element={
+              <ProtectedRoute>
+                <Layout>
+                  <FlashcardsPage />
                 </Layout>
               </ProtectedRoute>
             }

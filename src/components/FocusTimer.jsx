@@ -1,4 +1,6 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { useFocusSessions } from '../hooks/useStudy';
+import { getSlovenianDateKey } from '../utils/dates';
 
 const FOCUS_MINUTES = 25;
 const BREAK_MINUTES = 5;
@@ -12,6 +14,15 @@ export default function FocusTimer() {
   const [secondsLeft, setSecondsLeft] = useState(FOCUS_MINUTES * 60);
   const [running, setRunning] = useState(false);
   const [finished, setFinished] = useState(false);
+  const { logSession } = useFocusSessions();
+  const loggedRef = useRef(false);
+
+  useEffect(() => {
+    if (finished && !isBreak && !loggedRef.current) {
+      loggedRef.current = true;
+      logSession({ minutes: FOCUS_MINUTES, mode: 'focus', day: getSlovenianDateKey() });
+    }
+  }, [finished, isBreak, logSession]);
 
   useEffect(() => {
     if (!running) return undefined;
@@ -32,7 +43,7 @@ export default function FocusTimer() {
         <h2 className="section-title">{isBreak ? 'Odmor' : 'Fokus'}</h2>
         <button
           type="button"
-          onClick={() => { setRunning(false); setFinished(false); const n = !isBreak; setIsBreak(n); setSecondsLeft((n ? BREAK_MINUTES : FOCUS_MINUTES) * 60); }}
+          onClick={() => { setRunning(false); setFinished(false); const n = !isBreak; setIsBreak(n); setSecondsLeft((n ? BREAK_MINUTES : FOCUS_MINUTES) * 60); loggedRef.current = false; }}
           className="link-signal"
         >
           {isBreak ? 'Na fokus' : 'Na odmor'}
@@ -48,17 +59,17 @@ export default function FocusTimer() {
         </div>
         <div className="min-w-0 flex-1">
           <p className="text-[13px] leading-5 text-rp-muted" aria-live="polite">
-            {finished ? 'Končano. Vzemi si odmor.' : running ? 'Ena stvar naenkrat.' : 'Začni, ko si pripravljen.'}
+            {finished ? (isBreak ? 'Odmor je končan.' : 'Seja je zabeležena. Vzemi si odmor.') : running ? 'Ena stvar naenkrat.' : 'Začni, ko si pripravljen.'}
           </p>
           <div className="mt-3 flex gap-2">
             <button
               type="button"
-              onClick={() => { setFinished(false); if (secondsLeft === 0) setSecondsLeft(total); setRunning((v) => (secondsLeft === 0 ? true : !v)); }}
+              onClick={() => { setFinished(false); if (secondsLeft === 0) setSecondsLeft(total); loggedRef.current = false; setRunning((v) => (secondsLeft === 0 ? true : !v)); }}
               className="btn-primary !px-4 !py-2 !text-[13px]"
             >
               {running ? 'Pavza' : 'Začni'}
             </button>
-            <button type="button" onClick={() => { setRunning(false); setFinished(false); setSecondsLeft(total); }} className="btn-ghost !px-3 !py-2 !text-xs" aria-label="Ponastavi časovnik">
+            <button type="button" onClick={() => { setRunning(false); setFinished(false); setSecondsLeft(total); loggedRef.current = false; }} className="btn-ghost !px-3 !py-2 !text-xs" aria-label="Ponastavi časovnik">
               Ponastavi
             </button>
           </div>
