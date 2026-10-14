@@ -34,6 +34,8 @@ export default function TasksPage() {
   const [subjectFilter, setSubjectFilter] = useState('');
   const [sortBy, setSortBy] = useState('dueDate');
   const [search, setSearch] = useState('');
+  const [selecting, setSelecting] = useState(false);
+  const [selected, setSelected] = useState([]);
 
   function getSubject(task) {
     return subjects.find((subject) => subject.id === task.subjectId) || null;
@@ -84,6 +86,36 @@ export default function TasksPage() {
     if (window.confirm(`Izbrišem nalogo »${task.title}«?`)) deleteTask(task.id);
   }
 
+  function toggleSelecting() {
+    setSelecting((v) => !v);
+    setSelected([]);
+  }
+
+  function toggleSelect(task) {
+    setSelected((prev) => (prev.includes(task.id) ? prev.filter((id) => id !== task.id) : [...prev, task.id]));
+  }
+
+  function toggleSelectAll() {
+    setSelected((prev) => (prev.length === filtered.length ? [] : filtered.map((t) => t.id)));
+  }
+
+  async function bulkComplete() {
+    for (const id of selected) {
+      await updateTask(id, { completed: true });
+    }
+    setSelected([]);
+    setSelecting(false);
+  }
+
+  async function bulkDelete() {
+    if (!window.confirm(`Izbrišem ${selected.length} ${selected.length === 1 ? 'nalogo' : selected.length === 2 ? 'nalogi' : 'nalog'}?`)) return;
+    for (const id of selected) {
+      await deleteTask(id);
+    }
+    setSelected([]);
+    setSelecting(false);
+  }
+
   function closeTaskModal() {
     setModalOpen(false);
     setEditTask(null);
@@ -127,12 +159,33 @@ export default function TasksPage() {
           <div className="flex gap-1 overflow-x-auto rounded-xl border border-rp-hl-med/50 bg-rp-overlay/65 p-1">
             {FILTERS.map((filter) => <button key={filter.key} type="button" onClick={() => setStatusFilter(filter.key)} aria-pressed={statusFilter === filter.key} className={`whitespace-nowrap rounded-lg px-4 py-2 text-xs font-semibold transition ${statusFilter === filter.key ? 'bg-rp-iris text-rp-base shadow-sm' : 'text-rp-subtle hover:bg-rp-hl-med/25 hover:text-rp-text'}`}>{filter.label}</button>)}
           </div>
+          <button type="button" onClick={toggleSelecting} aria-pressed={selecting} className={`shrink-0 self-start rounded-xl border px-4 py-2 text-xs font-semibold transition lg:self-auto ${selecting ? 'border-rp-iris bg-rp-iris/[.08] text-rp-text' : 'border-rp-hl-med/60 text-rp-subtle hover:border-rp-hl-high hover:text-rp-text'}`}>
+            {selecting ? 'Prekliči izbor' : 'Izberi'}
+          </button>
           <div className="grid gap-2 sm:grid-cols-[minmax(12rem,1fr)_auto_auto]">
             <label className="relative block"><span className="sr-only">Poišči nalogo</span><svg className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-rp-muted" fill="none" viewBox="0 0 24 24" stroke="currentColor"><circle cx="11" cy="11" r="7" strokeWidth={2} /><path strokeLinecap="round" strokeWidth={2} d="m16 16 4 4" /></svg><input value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Poišči nalogo…" className="w-full rounded-xl border border-rp-hl-med/60 bg-rp-surface/70 py-2.5 pl-9 pr-3 text-xs text-rp-text outline-none placeholder:text-rp-muted focus:border-rp-iris/60" /></label>
             <select value={subjectFilter} onChange={(event) => setSubjectFilter(event.target.value)} aria-label="Filtriraj po predmetu" className="rounded-xl border border-rp-hl-med/60 bg-rp-surface/70 px-3 py-2.5 text-xs text-rp-subtle outline-none focus:border-rp-iris/60"><option value="">Vsi predmeti</option>{subjects.map((subject) => <option key={subject.id} value={subject.id}>{subject.name}</option>)}</select>
             <select value={sortBy} onChange={(event) => setSortBy(event.target.value)} aria-label="Razvrsti naloge" className="rounded-xl border border-rp-hl-med/60 bg-rp-surface/70 px-3 py-2.5 text-xs text-rp-subtle outline-none focus:border-rp-iris/60"><option value="dueDate">Po roku</option><option value="createdAt">Najnovejše</option></select>
           </div>
         </div>
+
+        {selecting && (
+          <div className="card rise flex flex-wrap items-center gap-2 p-3" role="toolbar" aria-label="Množična dejanja">
+            <label className="flex cursor-pointer items-center gap-2.5 rounded-lg px-2 py-1.5 text-[13px] font-semibold transition-colors hover:bg-rp-overlay">
+              <input
+                type="checkbox"
+                checked={filtered.length > 0 && selected.length === filtered.length}
+                onChange={toggleSelectAll}
+                className="h-4 w-4 accent-[var(--rp-iris)]"
+              />
+              Izberi vse ({filtered.length})
+            </label>
+            <span className="text-[13px] text-rp-muted">Izbranih {selected.length}</span>
+            <span className="flex-1" />
+            <button type="button" onClick={bulkComplete} disabled={selected.length === 0} className="btn-ghost !py-2 !text-xs disabled:opacity-50">Označi kot opravljene</button>
+            <button type="button" onClick={bulkDelete} disabled={selected.length === 0} className="rounded-[14px] border border-rp-love/30 px-4 py-2 text-xs font-semibold text-rp-love transition hover:bg-rp-love/10 disabled:opacity-50">Izbriši izbrane</button>
+          </div>
+        )}
 
         {loading || subjectsLoading ? (
           <Skeleton lines={5} />
@@ -144,7 +197,7 @@ export default function TasksPage() {
             {!search && pending.length === 0 && subjects.length > 0 && <button type="button" onClick={openNewTask} className="btn-primary mt-4 !py-2.5 !text-xs">Dodaj nalogo</button>}
           </div>
         ) : (
-          <div className="space-y-3 stagger-children">{filtered.map((task) => <TaskCard key={task.id} task={task} subject={getSubject(task)} onToggle={toggleTask} onEdit={handleEdit} onDelete={handleDelete} />)}</div>
+          <div className="space-y-3 stagger-children">{filtered.map((task) => <TaskCard key={task.id} task={task} subject={getSubject(task)} onToggle={toggleTask} onEdit={handleEdit} onDelete={handleDelete} selectionMode={selecting} selected={selected.includes(task.id)} onSelect={toggleSelect} />)}</div>
         )}
       </section>
 

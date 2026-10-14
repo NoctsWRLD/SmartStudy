@@ -63,3 +63,37 @@ export function mondayOfThisWeek(today = getSlovenianDateKey()) {
   const dow = getDateKeyDayOfWeek(today);
   return addDaysToDateKey(today, dow === 0 ? -6 : 1 - dow);
 }
+
+function mondayOfWeekContaining(dateKey) {
+  const dow = getDateKeyDayOfWeek(dateKey);
+  return addDaysToDateKey(dateKey, dow === 0 ? -6 : 1 - dow);
+}
+
+/* Semesterja slovenskega šolskega leta: 1. sep–jan, 2. feb–jun. */
+export function semesterRange(which, today = getSlovenianDateKey()) {
+  const year = Number(today.slice(0, 4));
+  const month = Number(today.slice(5, 7));
+  const startYear = month >= 9 ? year : year - 1;
+  const [start, end, label] = which === 2
+    ? [`${startYear + 1}-02-01`, `${startYear + 1}-06-24`, '2. semester']
+    : [`${startYear}-09-01`, `${startYear + 1}-01-31`, '1. semester'];
+  const thisMonday = mondayOfThisWeek(today);
+  const startMonday = mondayOfWeekContaining(start) < thisMonday ? thisMonday : mondayOfWeekContaining(start);
+  const endMonday = mondayOfWeekContaining(end);
+  return { startMonday, endMonday, label, past: startMonday > endMonday };
+}
+
+export function listWeekMondays(startMonday, endMonday) {
+  const weeks = [];
+  let cur = startMonday;
+  while (cur <= endMonday) {
+    weeks.push(cur);
+    cur = addDaysToDateKey(cur, 7);
+  }
+  return weeks;
+}
+
+export function weekLabel(mondayKey) {
+  const sunday = addDaysToDateKey(mondayKey, 6);
+  return `${mondayKey.slice(8, 10)}.${mondayKey.slice(5, 7)}. – ${sunday.slice(8, 10)}.${sunday.slice(5, 7)}.`;
+}

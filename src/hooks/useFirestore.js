@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import {
   collection, query, where,
-  onSnapshot, addDoc, updateDoc, deleteDoc, doc, serverTimestamp,
+  onSnapshot, addDoc, updateDoc, deleteDoc, doc, serverTimestamp, writeBatch,
 } from 'firebase/firestore';
 import { db } from '../firebase';
 import { useAuth } from '../contexts/AuthContext';
@@ -137,5 +137,24 @@ export function useTasks() {
     }
   }
 
-  return { tasks, loading, addTask, updateTask, toggleTask, deleteTask };
+  async function addTasks(rows) {
+    try {
+      for (let i = 0; i < rows.length; i += 400) {
+        const batch = writeBatch(db);
+        for (const data of rows.slice(i, i + 400)) {
+          batch.set(doc(collection(db, 'tasks')), {
+            ...data,
+            completed: false,
+            uid: currentUser.uid,
+            createdAt: serverTimestamp(),
+          });
+        }
+        await batch.commit();
+      }
+    } catch (err) {
+      reportWriteError('Adding tasks', err);
+    }
+  }
+
+  return { tasks, loading, addTask, addTasks, updateTask, toggleTask, deleteTask };
 }

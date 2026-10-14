@@ -30,7 +30,7 @@ function getWeekStart(dateKey) {
 
 export default function SchedulePage() {
   const { subjects } = useSubjects();
-  const { tasks, addTask, updateTask, toggleTask } = useTasks();
+  const { tasks, addTask, addTasks, updateTask, toggleTask } = useTasks();
   const [weekOffset, setWeekOffset] = useState(0);
   const [modalOpen, setModalOpen] = useState(false);
   const [importOpen, setImportOpen] = useState(false);
@@ -80,9 +80,7 @@ export default function SchedulePage() {
   }
 
   async function handleImport(rows) {
-    for (const row of rows) {
-      await addTask(row);
-    }
+    await addTasks(rows);
   }
 
   const weekLabel = `${formatSlovenianDate(weekDays[0], { day: 'numeric', month: 'short' })} – ${formatSlovenianDate(weekDays[6], { day: 'numeric', month: 'short' })} ${getYearFromDateKey(weekDays[6])}`;
@@ -338,6 +336,7 @@ export default function SchedulePage() {
       </div>
 
       <ScheduleImportModal
+        key={importOpen ? 'open' : 'closed'}
         isOpen={importOpen}
         onClose={() => setImportOpen(false)}
         subjects={subjects}
