@@ -99,7 +99,7 @@ export default function SubjectModal({ isOpen, onClose, onSave, subject }) {
               Prekliči
             </button>
             <button type="submit"
-              className="flex-1 py-2.5 rounded-xl text-sm font-semibold text-rp-base transition-all hover:opacity-90 bg-gradient-to-br from-rp-iris to-rp-foam"
+              className="btn-primary flex-1 !py-2.5 !text-sm"
             >
               {subject ? 'Shrani' : 'Dodaj predmet'}
             </button>

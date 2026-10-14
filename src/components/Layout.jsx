@@ -6,15 +6,25 @@ import AccountMenu from './AccountMenu';
 import Logo from './Logo';
 import { getSlovenianDateKey } from '../utils/dates';
 
-const NAV_ITEMS = [
-  { to: '/', label: 'Domov' },
-  { to: '/subjects', label: 'Predmeti' },
-  { to: '/tasks', label: 'Naloge' },
-  { to: '/exams', label: 'Preverjanja' },
-  { to: '/flashcards', label: 'Kartice' },
-  { to: '/schedule', label: 'Urnik' },
-  { to: '/chat', label: 'Klepet' },
-  { to: '/friends', label: 'Prijatelji' },
+const NAV_GROUPS = [
+  {
+    label: 'Učenje',
+    items: [
+      { to: '/', label: 'Domov' },
+      { to: '/tasks', label: 'Naloge' },
+      { to: '/exams', label: 'Preverjanja' },
+      { to: '/flashcards', label: 'Kartice' },
+      { to: '/schedule', label: 'Urnik' },
+      { to: '/subjects', label: 'Predmeti' },
+    ],
+  },
+  {
+    label: 'Skupnost',
+    items: [
+      { to: '/chat', label: 'Klepet' },
+      { to: '/friends', label: 'Prijatelji' },
+    ],
+  },
 ];
 
 const PAGE_TITLES = {
@@ -100,11 +110,19 @@ export default function Layout({ children }) {
         Preskoči na vsebino
       </a>
 
+      {/* Namizje: stranska vrstica z enim samim vstopom v račun (spodnja kartica) */}
       <aside className="sticky top-0 hidden h-dvh w-64 shrink-0 flex-col border-r border-rp-hl-med bg-rp-surface px-4 py-5 md:flex" aria-label="Glavna navigacija">
         <Wordmark />
-        <nav className="mt-8 flex flex-1 flex-col gap-1">
-          {NAV_ITEMS.map((item) => (
-            <SideLink key={item.to} to={item.to} label={item.label} end={item.to === '/'} />
+        <nav className="mt-8 flex flex-1 flex-col gap-5 overflow-y-auto">
+          {NAV_GROUPS.map((group) => (
+            <div key={group.label}>
+              <p className="mb-1.5 px-3.5 text-xs font-medium text-rp-muted">{group.label}</p>
+              <div className="flex flex-col gap-1">
+                {group.items.map((item) => (
+                  <SideLink key={item.to} to={item.to} label={item.label} end={item.to === '/'} />
+                ))}
+              </div>
+            </div>
           ))}
         </nav>
         <div className="space-y-3">
@@ -124,10 +142,13 @@ export default function Layout({ children }) {
                 <span className="font-display text-base font-extrabold tracking-tight">SmartStudy</span>
               </NavLink>
             </div>
-            <p className="hidden text-sm text-rp-muted md:block">{active}</p>
+            <h1 className="hidden text-[15px] font-bold tracking-tight md:block">{active}</h1>
             <div className="flex items-center gap-2">
               <NavLink to="/tasks" className="btn-primary !py-2.5">Nova naloga</NavLink>
-              <AccountMenu user={currentUser} placement="bottom" variant="avatar" />
+              {/* Mobilni računski meni — na namizju je račun dostopen samo iz stranske vrstice */}
+              <div className="md:hidden">
+                <AccountMenu user={currentUser} placement="bottom" variant="avatar" />
+              </div>
             </div>
           </div>
         </header>

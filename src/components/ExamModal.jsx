@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/set-state-in-effect */
 import { useEffect, useState } from 'react';
 
 export default function ExamModal({ isOpen, onClose, onSave, subjects, exam }) {

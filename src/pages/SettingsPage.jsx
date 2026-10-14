@@ -74,10 +74,10 @@ export default function SettingsPage() {
   }
 
   return (
-    <div className="mx-auto max-w-5xl space-y-6 pb-8 sm:space-y-8">
-      <section className="app-hero relative overflow-hidden rounded-[1.6rem] px-5 py-6 sm:px-8 sm:py-8">
-        <div className="pointer-events-none absolute -right-12 -top-24 h-64 w-64 rounded-full bg-rp-iris/10 blur-3xl" />
-        <div className="relative"><p className="text-xs font-semibold uppercase tracking-[.2em] text-rp-foam">Prilagodi si SmartStudy</p><h1 className="mt-2 text-3xl font-semibold tracking-tight text-rp-text sm:text-4xl">Nastavitve</h1><p className="mt-2 max-w-xl text-sm leading-6 text-rp-subtle">Izberi videz, ki ti ustreza, prilagodi dostopnost in si oglej pregled svojih učnih podatkov.</p></div>
+    <div className="mx-auto max-w-5xl space-y-7 pb-8">
+      <section className="rise">
+        <h1 className="page-title">Nastavitve</h1>
+        <p className="body-quiet mt-2">Izberi videz, ki ti ustreza, prilagodi dostopnost in si oglej pregled svojih učnih podatkov.</p>
       </section>
 
       <section className="space-y-4" aria-labelledby="theme-heading">

@@ -94,7 +94,7 @@ export default function SchedulePage() {
         <div className="flex flex-wrap items-center gap-2">
           <button
             onClick={() => setWeekOffset(0)}
-            className="px-3 py-1.5 rounded-xl text-xs font-medium transition-all hover:opacity-80 border border-rp-hl-med/50 text-rp-subtle hover:bg-rp-hl-med/35 hover:text-rp-text"
+            className="btn-ghost !py-1.5 !text-xs"
           >
             Ta teden
           </button>
@@ -141,7 +141,7 @@ export default function SchedulePage() {
               setPreselectedDate(todayStr);
               setModalOpen(true);
             }}
-            className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold transition-all hover:opacity-90 bg-gradient-to-br from-rp-iris to-rp-foam text-rp-base"
+            className="btn-primary !py-2 !text-xs"
           >
             <svg
               className="w-3.5 h-3.5"
@@ -181,7 +181,7 @@ export default function SchedulePage() {
                 </p>
                 <div
                   className={`w-7 h-7 rounded-full flex items-center justify-center mx-auto mt-1 text-sm font-bold transition-all ${
-                    isToday ? 'bg-gradient-to-br from-rp-iris to-rp-foam text-rp-base' : 'text-rp-subtle'
+                    isToday ? 'bg-rp-iris text-white' : 'text-rp-subtle'
                   }`}
                 >
                   {getDayOfMonth(day)}
@@ -266,7 +266,7 @@ export default function SchedulePage() {
                             toggleTask(task);
                           }}
                           className={`mt-0.5 w-5 h-5 rounded-full border-2 flex-shrink-0 flex items-center justify-center transition-all ${
-                            task.completed ? 'bg-gradient-to-br from-rp-iris to-rp-foam border-transparent' : 'border-rp-hl-high'
+                            task.completed ? 'bg-rp-iris border-transparent' : 'border-rp-hl-high'
                           }`}
                         >
                           {task.completed && (

@@ -24,7 +24,7 @@ function Avatar({ src, initial, size = 8 }) {
     );
   return (
     <div
-      className="rounded-full flex items-center justify-center font-bold flex-shrink-0 bg-gradient-to-br from-rp-iris to-rp-foam text-rp-base"
+      className="rounded-full flex items-center justify-center font-bold flex-shrink-0 bg-rp-iris text-white"
       style={{
         width: px,
         height: px,
@@ -59,7 +59,7 @@ function FileBubble({ fileURL, fileName, fileType, fileSize, isOwn }) {
       rel="noreferrer"
       className={`flex items-center gap-2.5 px-4 py-3 rounded-2xl transition-all hover:opacity-80 shadow-md ${
         isOwn
-          ? 'bg-gradient-to-br from-rp-iris to-rp-foam text-rp-base'
+          ? 'bg-rp-iris text-white'
           : 'bg-rp-overlay/90 text-rp-text border border-rp-hl-med/50'
       }`}
     >
@@ -122,7 +122,7 @@ function MessageBubble({ msg, isOwn, onDelete }) {
               <div
                 className={`px-3 py-2 md:px-4 md:py-2.5 rounded-2xl text-[13px] md:text-sm leading-relaxed break-words shadow-sm ${
                   isOwn
-                    ? 'bg-gradient-to-br from-rp-iris to-rp-foam text-rp-base'
+                    ? 'bg-rp-iris text-white'
                     : 'bg-rp-overlay/90 text-rp-text border border-rp-hl-med/50'
                 }`}
               >
@@ -248,7 +248,7 @@ function MessageInput({ chatId, currentUser }) {
         <button
           onClick={handleSend}
           disabled={!text.trim() || sending}
-          className="p-2 rounded-xl transition-all flex-shrink-0 disabled:opacity-30 bg-gradient-to-br from-rp-iris to-rp-foam text-rp-base"
+          className="p-2 rounded-xl transition-all flex-shrink-0 disabled:opacity-30 bg-rp-iris text-white"
           title="Pošlji"
         >
           {sending ? (
@@ -281,7 +281,7 @@ function RoomItem({ label, icon, active, onClick }) {
       onClick={onClick}
       className={`w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-sm font-medium transition-all text-left group ${
         active
-          ? 'bg-gradient-to-br from-rp-iris/25 to-rp-foam/15 border border-rp-iris/30 text-rp-text'
+          ? 'bg-rp-iris/10 border border-rp-iris/20 text-rp-text'
           : 'text-rp-subtle hover:text-rp-text hover:bg-rp-hl-med/40'
       }`}
     >
@@ -310,7 +310,7 @@ function SidePanel({
     <div className="flex flex-col h-full overflow-y-auto py-3 space-y-4">
       {/* Channels */}
       <div>
-        <p className="text-xs font-semibold uppercase tracking-wider px-3 mb-1 text-rp-hl-high">
+        <p className="text-xs font-medium px-3 mb-1 text-rp-muted">
           Kanali
         </p>
         <RoomItem
@@ -363,7 +363,7 @@ function SidePanel({
       {/* School channel */}
       {schoolChatId && (
         <div>
-          <p className="text-xs font-semibold uppercase tracking-wider px-3 mb-1 text-rp-hl-high">
+          <p className="text-xs font-medium px-3 mb-1 text-rp-muted">
             Moja šola
           </p>
           <RoomItem
@@ -391,7 +391,7 @@ function SidePanel({
 
       {/* Direct messages */}
       <div>
-        <p className="text-xs font-semibold uppercase tracking-wider px-3 mb-1 text-rp-hl-high">
+        <p className="text-xs font-medium px-3 mb-1 text-rp-muted">
           Direktna sporočila
         </p>
         {friends.length === 0 ? (
@@ -408,7 +408,7 @@ function SidePanel({
                 active={activeChatId === dmId}
                 onClick={() => onSelect(dmId, f.displayName || 'Neznan')}
                 icon={
-                  <div className="w-5 h-5 rounded-full flex items-center justify-center text-white text-xs font-bold bg-gradient-to-br from-rp-foam to-rp-pine">
+                  <div className="w-5 h-5 rounded-full flex items-center justify-center text-white text-xs font-bold bg-rp-pine">
                     {(f.displayName?.[0] || '?').toUpperCase()}
                   </div>
                 }
@@ -501,7 +501,7 @@ export default function ChatPage() {
         {/* ── Desktop sidebar ── */}
         <aside className="hidden md:flex flex-col w-56 flex-shrink-0 overflow-hidden border-r border-rp-hl-med/40">
           <div className="px-4 pt-4 pb-2">
-            <p className="text-xs font-semibold uppercase tracking-wider text-rp-hl-high">
+            <p className="text-sm font-bold">
               Chat
             </p>
           </div>
@@ -524,7 +524,7 @@ export default function ChatPage() {
             />
             <aside className="absolute left-0 top-0 bottom-0 w-64 z-50 flex flex-col overflow-hidden bg-rp-base/98 border-r border-rp-hl-med/50">
               <div className="flex items-center justify-between px-4 pt-4 pb-2">
-                <p className="text-xs font-semibold uppercase tracking-wider text-rp-hl-high">
+                <p className="text-sm font-bold">
                   Chat
                 </p>
                 <button
@@ -570,7 +570,7 @@ export default function ChatPage() {
               <MenuIcon />
             </button>
 
-            <div className="w-8 h-8 rounded-xl flex items-center justify-center flex-shrink-0 bg-gradient-to-br from-rp-iris/25 to-rp-foam/15 border border-rp-iris/30">
+            <div className="w-8 h-8 rounded-xl flex items-center justify-center flex-shrink-0 bg-rp-iris/10 border border-rp-iris/20">
               <svg
                 className="w-4 h-4 text-rp-iris"
                 fill="none"

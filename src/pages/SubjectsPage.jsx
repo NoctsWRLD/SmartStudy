@@ -93,31 +93,24 @@ export default function SubjectsPage() {
   }
 
   return (
-    <div className="mx-auto max-w-7xl space-y-6 pb-8 sm:space-y-8">
-      <section className="app-hero relative overflow-hidden rounded-[1.6rem] px-5 py-6 sm:px-8 sm:py-8">
-        <div className="pointer-events-none absolute -right-12 -top-24 h-64 w-64 rounded-full bg-rp-iris/15 blur-3xl" />
-        <div className="relative flex flex-col justify-between gap-5 sm:flex-row sm:items-end">
-          <div>
-            <p className="text-xs font-semibold uppercase tracking-[.2em] text-rp-foam">Tvoj učni prostor</p>
-            <h1 className="mt-2 text-3xl font-semibold tracking-tight text-rp-text sm:text-4xl">Predmeti</h1>
-            <p className="mt-2 max-w-xl text-sm leading-6 text-rp-subtle">Vsak predmet ima svoj prostor za naloge in napredek. Tako hitro vidiš, kaj je že za tabo in kaj te še čaka.</p>
-          </div>
-          <button type="button" onClick={() => { setEditSubject(null); setModalOpen(true); }} className="inline-flex shrink-0 items-center justify-center gap-2 rounded-xl bg-rp-iris px-4 py-3 text-sm font-semibold text-white shadow-lg shadow-rp-iris/15 transition hover:-translate-y-0.5 hover:bg-[#5847bd]"><span aria-hidden="true">＋</span> Nov predmet</button>
-        </div>
-        <div className="relative mt-6 grid max-w-xl grid-cols-2 gap-3">
-          <div className="rounded-xl border border-rp-hl-med/70 bg-rp-surface/75 px-4 py-3 shadow-sm"><p className="text-2xl font-semibold text-rp-text">{subjects.length}</p><p className="mt-1 text-xs text-rp-muted">{subjects.length === 1 ? 'predmet' : 'predmetov'}</p></div>
-          <div className="rounded-xl border border-rp-hl-med/70 bg-rp-surface/75 px-4 py-3 shadow-sm"><p className="text-2xl font-semibold text-rp-pine">{completedTasks}</p><p className="mt-1 text-xs text-rp-muted">opravljenih nalog</p></div>
+    <div className="mx-auto max-w-6xl space-y-7 pb-8">
+      <section className="rise">
+        <h1 className="page-title">Predmeti</h1>
+        <p className="body-quiet mt-2">Vsak predmet ima svoj prostor za naloge in napredek. Tako hitro vidiš, kaj je že za tabo in kaj te še čaka.</p>
+        <div className="mt-4 flex flex-wrap items-center gap-3">
+          <button type="button" onClick={() => { setEditSubject(null); setModalOpen(true); }} className="btn-primary">Nov predmet</button>
+          <p className="text-sm text-rp-muted">{subjects.length} {subjects.length === 1 ? 'predmet' : subjects.length === 2 ? 'predmeta' : subjects.length >= 3 && subjects.length <= 4 ? 'predmeti' : 'predmetov'} · {completedTasks} opravljenih nalog</p>
         </div>
       </section>
 
-      <section className="grid gap-3 sm:grid-cols-3" aria-label="Kako delujejo predmeti">
+      <section className="grid gap-2.5 sm:grid-cols-3" aria-label="Kako delujejo predmeti">
         {[
-          ['01', 'Ustvari predmet', 'Dodaj predmete, ki jih imaš v šoli.'],
-          ['02', 'Poveži naloge', 'Vsaka naloga pripada enemu predmetu.'],
-          ['03', 'Spremljaj napredek', 'Obkljukaj opravljeno in vidi, kako napreduješ.'],
+          ['1', 'Ustvari predmet', 'Dodaj predmete, ki jih imaš v šoli.'],
+          ['2', 'Poveži naloge', 'Vsaka naloga pripada enemu predmetu.'],
+          ['3', 'Spremljaj napredek', 'Obkljukaj opravljeno in vidi, kako napreduješ.'],
         ].map(([step, title, description]) => (
-          <article key={step} className="flex gap-3 rounded-2xl border border-rp-hl-med/45 bg-rp-surface/40 p-4">
-            <span className="grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-rp-iris/10 text-xs font-bold text-rp-iris">{step}</span>
+          <article key={step} className="card flex gap-3 p-4">
+            <span className="grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-rp-iris/10 text-xs font-bold text-rp-iris" aria-hidden="true">{step}</span>
             <div><h2 className="text-sm font-semibold text-rp-text">{title}</h2><p className="mt-1 text-xs leading-5 text-rp-muted">{description}</p></div>
           </article>
         ))}
@@ -143,7 +136,7 @@ export default function SubjectsPage() {
           <span className="grid h-16 w-16 place-items-center rounded-3xl border border-rp-iris/20 bg-rp-iris/10 text-3xl text-rp-iris" aria-hidden="true">▤</span>
           <h2 className="mt-5 text-xl font-semibold text-rp-text">Začni s prvim predmetom</h2>
           <p className="mt-2 max-w-md text-sm leading-6 text-rp-muted">Ustvari na primer Matematiko ali Slovenščino. Nato ti bomo naloge samodejno povezali s predmetom.</p>
-          <button type="button" onClick={() => setModalOpen(true)} className="mt-6 rounded-xl bg-gradient-to-r from-rp-iris to-rp-foam px-5 py-3 text-sm font-semibold text-white transition hover:-translate-y-0.5">Ustvari prvi predmet <span aria-hidden="true">→</span></button>
+          <button type="button" onClick={() => setModalOpen(true)} className="btn-primary mt-6">Ustvari prvi predmet</button>
         </section>
       ) : visibleSubjects.length === 0 ? (
         <div className="glass-card px-6 py-12 text-center"><p className="text-sm text-rp-muted">Noben predmet se ne ujema z »{search}«.</p></div>

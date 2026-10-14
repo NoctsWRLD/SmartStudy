@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/set-state-in-effect */
 import { useEffect, useState } from 'react';
 
 export default function FlashcardModal({ isOpen, onClose, onSave, subjects, card, defaultSubjectId }) {

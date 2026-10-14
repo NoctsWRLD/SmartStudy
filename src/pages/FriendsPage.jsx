@@ -13,12 +13,12 @@ import {
 // ─── Tiny avatar ──────────────────────────────────────────────────────────────
 function MiniAvatar({
   name,
-  bgClass = 'bg-gradient-to-br from-rp-iris to-rp-foam',
+  bgClass = 'bg-rp-iris',
   size = 36,
 }) {
   return (
     <div
-      className={`flex items-center justify-center rounded-full text-rp-base font-bold flex-shrink-0 ${bgClass}`}
+      className={`flex items-center justify-center rounded-full text-white font-bold flex-shrink-0 ${bgClass}`}
       style={{
         width: size,
         height: size,
@@ -88,7 +88,7 @@ export default function FriendsPage() {
   return (
     <div className="max-w-2xl mx-auto space-y-6 animate-fade-in-up pb-8">
       <div className="flex items-center gap-4">
-        <div className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 bg-gradient-to-br from-rp-iris/25 to-rp-foam/15 border border-rp-iris/30">
+        <div className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 bg-rp-iris/10 border border-rp-iris/20">
           <svg
             className="w-5 h-5 text-rp-iris"
             fill="none"
@@ -120,14 +120,14 @@ export default function FriendsPage() {
               <div className="flex items-center gap-3">
                 <MiniAvatar
                   name={req.fromName}
-                  bgClass="bg-gradient-to-br from-rp-rose to-rp-love"
+                  bgClass="bg-rp-rose text-white"
                 />
                 <span className="text-sm font-medium text-rp-text">{req.fromName}</span>
               </div>
               <div className="flex gap-2">
                 <button
                   onClick={() => handleRespond(req.id, 'accepted')}
-                  className="px-3 py-1.5 rounded-lg text-xs font-semibold transition-all hover:opacity-90 bg-gradient-to-br from-rp-foam to-rp-pine text-rp-base"
+                  className="px-3 py-1.5 rounded-lg text-xs font-semibold transition-all hover:opacity-90 bg-rp-pine text-white"
                 >
                   Sprejmi
                 </button>
@@ -211,7 +211,7 @@ export default function FriendsPage() {
               <div className="flex items-center gap-3">
                 <MiniAvatar
                   name={u.displayName}
-                  bgClass="bg-gradient-to-br from-rp-gold to-rp-rose"
+                  bgClass="bg-rp-gold text-white"
                 />
                 <div>
                   <p className="text-sm font-medium text-rp-text">
@@ -221,7 +221,7 @@ export default function FriendsPage() {
               </div>
               <button
                 onClick={() => handleSendRequest(u)}
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all hover:opacity-90 bg-gradient-to-br from-rp-iris to-rp-foam text-rp-base"
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all hover:opacity-90 bg-rp-iris text-white"
               >
                 <svg
                   className="w-4 h-4"
@@ -244,8 +244,8 @@ export default function FriendsPage() {
 
         {/* Pending sent */}
         {sent.length > 0 && (
-          <div className="pt-2 space-y-2 border-t border-slate-700/50">
-            <p className="text-xs uppercase tracking-wider font-semibold text-rp-hl-high">
+          <div className="space-y-2 border-t border-rp-hl-med pt-3">
+            <p className="text-xs font-semibold text-rp-muted">
               Čaka na odziv
             </p>
             {sent.map((req) => (

@@ -98,12 +98,12 @@ export default function TasksPage() {
   const completion = tasks.length ? Math.round((completed.length / tasks.length) * 100) : 0;
 
   return (
-    <div className="mx-auto max-w-7xl space-y-6 pb-8 sm:space-y-8">
-      <section className="app-hero relative overflow-hidden rounded-[1.6rem] px-5 py-6 sm:px-8 sm:py-8">
-        <div className="pointer-events-none absolute -right-12 -top-24 h-64 w-64 rounded-full bg-rp-iris/15 blur-3xl" />
-        <div className="relative flex flex-col justify-between gap-5 sm:flex-row sm:items-end">
-          <div><p className="text-xs font-semibold uppercase tracking-[.2em] text-rp-foam">Majhni koraki, velik napredek</p><h1 className="mt-2 text-3xl font-semibold tracking-tight text-rp-text sm:text-4xl">Tvoje naloge</h1><p className="mt-2 max-w-xl text-sm leading-6 text-rp-subtle">Poišči nalogo, preveri najbližje roke in označi opravljeno. Vsaka zaključena naloga je korak naprej.</p></div>
-          <button id="add-task-btn" type="button" onClick={openNewTask} disabled={subjectsLoading} className="inline-flex shrink-0 items-center justify-center gap-2 rounded-xl bg-rp-iris px-4 py-3 text-sm font-semibold text-white shadow-lg shadow-rp-iris/15 transition hover:-translate-y-0.5 hover:bg-[#5847bd] disabled:cursor-wait disabled:opacity-60"><span aria-hidden="true">＋</span> Nova naloga</button>
+    <div className="mx-auto max-w-6xl space-y-7 pb-8">
+      <section className="rise">
+        <h1 className="page-title">Tvoje naloge</h1>
+        <p className="body-quiet mt-2">Poišči nalogo, preveri najbližje roke in označi opravljeno. Vsaka zaključena naloga je korak naprej.</p>
+        <div className="mt-4">
+          <button id="add-task-btn" type="button" onClick={openNewTask} disabled={subjectsLoading} className="btn-primary disabled:opacity-60">Nova naloga</button>
         </div>
       </section>
 
@@ -140,7 +140,7 @@ export default function TasksPage() {
             <span className="grid h-14 w-14 place-items-center rounded-2xl bg-rp-foam/10 text-2xl text-rp-foam" aria-hidden="true">✓</span>
             <h2 className="mt-4 text-lg font-semibold text-rp-text">{search ? 'Ni zadetkov' : statusFilter === 'completed' ? 'Še ni opravljenih nalog' : 'Vse je urejeno'}</h2>
             <p className="mt-1 max-w-sm text-sm leading-6 text-rp-muted">{search ? `Poskusi drug izraz za »${search}«.` : pending.length ? 'Vse naloge so opravljene. Vzemi si zaslužen odmor!' : 'Dodaj novo nalogo in jo razdeli na majhen, izvedljiv korak.'}</p>
-            {!search && pending.length === 0 && subjects.length > 0 && <button type="button" onClick={openNewTask} className="mt-4 rounded-xl bg-rp-iris px-4 py-2.5 text-xs font-semibold text-white transition hover:bg-[#5847bd]">Dodaj nalogo</button>}
+            {!search && pending.length === 0 && subjects.length > 0 && <button type="button" onClick={openNewTask} className="btn-primary mt-4 !py-2.5 !text-xs">Dodaj nalogo</button>}
           </div>
         ) : (
           <div className="space-y-3 stagger-children">{filtered.map((task) => <TaskCard key={task.id} task={task} subject={getSubject(task)} onToggle={toggleTask} onEdit={handleEdit} onDelete={handleDelete} />)}</div>

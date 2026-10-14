@@ -44,7 +44,7 @@ export default function SubjectTaskModal({ isOpen, onClose, subject, tasks, onTo
             </p>
           </div>
           <div className="flex shrink-0 items-center gap-1">
-            {onAddTask && <button type="button" onClick={onAddTask} className="rounded-lg bg-rp-iris px-3 py-2 text-xs font-semibold text-white transition hover:bg-[#5847bd]">＋ Naloga</button>}
+            {onAddTask && <button type="button" onClick={onAddTask} className="rounded-lg bg-rp-iris px-3 py-2 text-xs font-semibold text-white transition hover:opacity-90">＋ Naloga</button>}
             <button type="button" onClick={onClose} aria-label="Zapri predmet" className="rounded-xl p-2 text-rp-muted transition hover:bg-rp-hl-med/50 hover:text-rp-text focus:outline-none">
               <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
             </button>
@@ -63,7 +63,7 @@ export default function SubjectTaskModal({ isOpen, onClose, subject, tasks, onTo
               onClick={() => setFilter(f.id)}
               className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all whitespace-nowrap outline-none ${
                 filter === f.id
-                  ? 'bg-gradient-to-br from-rp-iris to-rp-foam text-rp-base shadow-[0_2px_10px_rgba(196,167,231,0.25)] border border-transparent'
+                  ? 'bg-rp-iris text-white shadow-[0_2px_10px_rgba(196,167,231,0.25)] border border-transparent'
                   : 'bg-rp-overlay/70 text-rp-subtle border border-rp-hl-med/40 hover:bg-rp-hl-med/30'
               }`}>
               {f.label}
@@ -86,7 +86,7 @@ export default function SubjectTaskModal({ isOpen, onClose, subject, tasks, onTo
                     onClick={() => onToggleTask(task)}
                     className={`mt-0.5 w-4 h-4 rounded-full border-2 flex-shrink-0 flex items-center justify-center transition-all focus:outline-none ${
                       task.completed 
-                        ? 'bg-gradient-to-br from-rp-iris to-rp-foam border-transparent' 
+                        ? 'bg-rp-iris text-white border border-transparent'
                         : 'border-rp-hl-high hover:border-rp-iris'
                     }`}>
                     {task.completed && (

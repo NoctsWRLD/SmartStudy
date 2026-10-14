@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 function EditField({ label, value, onChange, placeholder, maxLength }) {
   return (
     <div>
-      <label className="block text-xs font-semibold uppercase tracking-wider mb-1.5 text-rp-muted">
+      <label className="mb-1.5 block text-[13px] font-semibold text-rp-subtle">
         {label}
       </label>
       <input
@@ -15,7 +15,7 @@ function EditField({ label, value, onChange, placeholder, maxLength }) {
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
-        className="w-full px-4 py-2.5 rounded-xl text-sm outline-none bg-rp-overlay/90 border border-rp-hl-med/50 text-rp-text focus:border-rp-iris/50 transition-colors"
+        className="field"
       />
     </div>
   );
@@ -54,14 +54,17 @@ export default function ProfilePage() {
   }
 
   return (
-    <div className="max-w-2xl mx-auto space-y-6 animate-fade-in-up pb-8">
-      <h1 className="text-2xl font-bold text-rp-text">Moj profil</h1>
+    <div className="mx-auto max-w-2xl space-y-7 pb-8">
+      <div>
+        <h1 className="page-title">Moj profil</h1>
+        <p className="body-quiet mt-2">Tako te vidijo sošolci v klepetu in med prijatelji.</p>
+      </div>
 
       {/* ─── Profile card ─── */}
-      <div className="glass-card p-6 space-y-6">
+      <div className="card space-y-6 p-6">
         {/* Static avatar with initials */}
         <div className="flex justify-center">
-          <div className="w-24 h-24 rounded-full flex items-center justify-center text-3xl font-bold text-rp-base bg-gradient-to-br from-rp-iris to-rp-foam">
+          <div className="flex h-24 w-24 items-center justify-center rounded-full bg-rp-iris text-3xl font-bold text-white">
             {(currentUser?.displayName?.[0] || '?').toUpperCase()}
           </div>
         </div>
@@ -86,19 +89,19 @@ export default function ProfilePage() {
         <button
           onClick={handleSave}
           disabled={saving}
-          className="w-full py-2.5 rounded-xl text-sm font-semibold transition-all hover:opacity-90 disabled:opacity-50 bg-gradient-to-br from-rp-iris to-rp-foam text-rp-base"
+          className="btn-primary w-full !py-3 disabled:opacity-50"
         >
-          {saving ? 'Shranjujem…' : saved ? '✓ Shranjeno!' : 'Shrani spremembe'}
+          {saving ? 'Shranjujem…' : saved ? 'Shranjene!' : 'Shrani spremembe'}
         </button>
       </div>
 
       {/* ─── Quick link to friends ─── */}
       <button
         onClick={() => navigate('/friends')}
-        className="w-full glass-card p-4 flex items-center justify-between hover:bg-slate-700/30 transition-all"
+        className="card card-hover flex w-full items-center justify-between p-4"
       >
         <div className="flex items-center gap-4">
-          <div className="w-9 h-9 rounded-xl flex items-center justify-center bg-gradient-to-br from-rp-iris/20 to-rp-foam/15 border border-rp-iris/30">
+          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-rp-iris/10 text-rp-iris">
             <svg
               className="w-[1.125rem] h-[1.125rem] text-rp-iris"
               fill="none"

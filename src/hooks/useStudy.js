@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import {
   collection, query, where,
   onSnapshot, addDoc, updateDoc, deleteDoc, doc, serverTimestamp,
@@ -11,7 +11,7 @@ function reportWriteError(action, error) {
   window.alert('Shranjevanje ni uspelo. Preveri povezavo in dostop do Firebase ter poskusi znova.');
 }
 
-function useUserCollection(name, sortFn) {
+function useUserCollection(name) {
   const { currentUser } = useAuth();
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -22,9 +22,7 @@ function useUserCollection(name, sortFn) {
     const unsub = onSnapshot(
       q,
       (snap) => {
-        const docs = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
-        if (sortFn) docs.sort(sortFn);
-        setItems(docs);
+        setItems(snap.docs.map((d) => ({ id: d.id, ...d.data() })));
         setLoading(false);
       },
       (err) => {
@@ -41,7 +39,8 @@ function useUserCollection(name, sortFn) {
 /* Preverjanja: { title, subjectId, date: 'YYYY-MM-DD', uid, createdAt } */
 export function useExams() {
   const { currentUser } = useAuth();
-  const { items: exams, loading } = useUserCollection('exams', (a, b) => (a.date || '').localeCompare(b.date || ''));
+  const { items: raw, loading } = useUserCollection('exams');
+  const exams = useMemo(() => [...raw].sort((a, b) => (a.date || '').localeCompare(b.date || '')), [raw]);
 
   async function addExam(data) {
     try {
@@ -63,7 +62,11 @@ export function useExams() {
 /* Kartice: { subjectId, front, back, known, uid, createdAt } */
 export function useFlashcards() {
   const { currentUser } = useAuth();
-  const { items: cards, loading } = useUserCollection('flashcards', (a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0));
+  const { items: rawCards, loading } = useUserCollection('flashcards');
+  const cards = useMemo(
+    () => [...rawCards].sort((a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0)),
+    [rawCards],
+  );
 
   async function addCard(data) {
     try {
@@ -85,7 +88,7 @@ export function useFlashcards() {
 /* Fokus: { minutes, mode: 'focus'|'break', day: 'YYYY-MM-DD', uid, createdAt } */
 export function useFocusSessions() {
   const { currentUser } = useAuth();
-  const { items: sessions, loading } = useUserCollection('focusSessions', (a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0));
+  const { items: sessions, loading } = useUserCollection('focusSessions');
 
   async function logSession({ minutes, mode, day }) {
     try {
