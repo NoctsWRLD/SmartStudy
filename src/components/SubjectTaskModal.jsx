@@ -34,7 +34,7 @@ export default function SubjectTaskModal({ isOpen, onClose, subject, tasks, onTo
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
       <div className="absolute inset-0 bg-black/60 backdrop-blur-sm overlay-fade" onClick={onClose} />
       
-      <div className="relative glass-card p-6 w-full max-w-lg max-h-[85vh] flex flex-col modal-pop">
+      <div className="relative card p-6 w-full max-w-lg max-h-[85vh] flex flex-col modal-pop">
         {/* Header */}
         <div className="flex items-start justify-between gap-3 mb-4">
           <div>
@@ -81,7 +81,7 @@ export default function SubjectTaskModal({ isOpen, onClose, subject, tasks, onTo
             </div>
           ) : (
             filteredTasks.map(task => (
-              <div key={task.id} className={`flex items-start gap-3 glass-card px-4 py-3 transition-all ${task.completed ? 'opacity-70' : ''}`}>
+              <div key={task.id} className={`flex items-start gap-3 card px-4 py-3 transition-all ${task.completed ? 'opacity-70' : ''}`}>
                  <button
                     onClick={() => onToggleTask(task)}
                     className={`mt-0.5 w-4 h-4 rounded-full border-2 flex-shrink-0 flex items-center justify-center transition-all focus:outline-none ${

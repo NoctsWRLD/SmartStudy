@@ -31,7 +31,7 @@ export default function ExamCountdown({ subjects }) {
 
   return (
     <section className="card rise overflow-hidden" aria-label="Naslednje preverjanje">
-      <div className="bg-rp-iris px-5 pb-4 pt-5 text-white">
+      <div className="bg-rp-text px-5 pb-4 pt-5 text-[var(--rp-base)]">
         <p className="text-xs font-semibold opacity-80">Naslednje preverjanje {label}</p>
         <p className="font-display mt-1 text-5xl font-extrabold tracking-tight tabular-nums">{diff === 0 ? '!' : diff}</p>
         <p className="mt-1 text-sm font-semibold">{diff <= 1 ? '' : diff === 1 ? 'dan do testa' : 'dni do testa'}</p>

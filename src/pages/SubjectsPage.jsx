@@ -133,14 +133,14 @@ export default function SubjectsPage() {
       {loading ? (
         <Skeleton lines={4} />
       ) : subjects.length === 0 ? (
-        <section className="glass-card flex flex-col items-center px-6 py-12 text-center sm:py-16">
+        <section className="card flex flex-col items-center px-6 py-12 text-center sm:py-16">
           <span className="grid h-16 w-16 place-items-center rounded-3xl border border-rp-iris/20 bg-rp-iris/10 text-3xl text-rp-iris" aria-hidden="true">▤</span>
           <h2 className="mt-5 text-xl font-semibold text-rp-text">Začni s prvim predmetom</h2>
           <p className="mt-2 max-w-md text-sm leading-6 text-rp-muted">Ustvari na primer Matematiko ali Slovenščino. Nato ti bomo naloge samodejno povezali s predmetom.</p>
           <button type="button" onClick={() => setModalOpen(true)} className="btn-primary mt-6">Ustvari prvi predmet</button>
         </section>
       ) : visibleSubjects.length === 0 ? (
-        <div className="glass-card px-6 py-12 text-center"><p className="text-sm text-rp-muted">Noben predmet se ne ujema z »{search}«.</p></div>
+        <div className="card px-6 py-12 text-center"><p className="text-sm text-rp-muted">Noben predmet se ne ujema z »{search}«.</p></div>
       ) : (
         <div className="grid gap-4 stagger-children sm:grid-cols-2 xl:grid-cols-3">
           {visibleSubjects.map((subject) => (

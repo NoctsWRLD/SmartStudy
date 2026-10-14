@@ -33,7 +33,7 @@ function MiniAvatar({
 // ─── Section card ─────────────────────────────────────────────────────────────
 function Section({ title, badge, children }) {
   return (
-    <div className="glass-card p-5 space-y-3">
+    <div className="card p-5 space-y-3">
       <div className="flex items-center gap-2">
         <h2 className="text-sm font-semibold text-rp-text">{title}</h2>
         {badge != null && (

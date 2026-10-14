@@ -257,7 +257,7 @@ export default function SchedulePage() {
                     return (
                       <div
                         key={task.id}
-                        className="flex items-start gap-3 glass-card px-4 py-3 cursor-pointer"
+                        className="flex items-start gap-3 card px-4 py-3 cursor-pointer"
                         onClick={() => handleEdit(task)}
                       >
                         <button

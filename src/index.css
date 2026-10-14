@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap');
 @import 'tailwindcss';
 
 @theme {
@@ -18,55 +18,55 @@
   --color-rp-hl-med: var(--rp-hl-med);
   --color-rp-hl-high: var(--rp-hl-high);
   --font-sans: Inter, ui-sans-serif, system-ui, sans-serif;
-  --font-display: "Fraunces", Georgia, serif;
+  --font-display: "Sora", Inter, ui-sans-serif, system-ui, sans-serif;
 }
 
-/* Ena sama tema: šolska tabla */
+/* Svetla učilnica: papir, črnilo, petrol */
 :root {
   font-family: Inter, ui-sans-serif, system-ui, sans-serif;
-  color: #15211b;
-  background: #f5f7f3;
+  color: #101e18;
+  background: #f2f4f1;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   color-scheme: light;
-  --rp-base: #f5f7f3;
+  --rp-base: #f2f4f1;
   --rp-surface: #ffffff;
-  --rp-overlay: #e9ede6;
-  --rp-muted: #55645a;
+  --rp-overlay: #e7ece7;
+  --rp-muted: #5c6b61;
   --rp-subtle: #33413a;
-  --rp-text: #15211b;
+  --rp-text: #101e18;
   --rp-love: #cf3a52;
   --rp-gold: #8a6100;
   --rp-rose: #bd5478;
-  --rp-pine: #17714d;
+  --rp-pine: #0c7c72;
   --rp-foam: #0f7d6c;
-  --rp-iris: #17714d;
+  --rp-iris: #0c7c72;
   --rp-hl-low: #f4f6f2;
-  --rp-hl-med: #e2e8e0;
-  --rp-hl-high: #c2ccc2;
+  --rp-hl-med: #dfe6e0;
+  --rp-hl-high: #bcc8bd;
 }
 
-/* Temna različica iste teme */
+/* Nočna učilnica: ista tema, temni videz */
 :root[data-theme='tabla-temna'] {
   color-scheme: dark;
-  --rp-base: #0e1512;
-  --rp-surface: #15211a;
-  --rp-overlay: #223227;
-  --rp-muted: #93a39a;
-  --rp-subtle: #c6d2c9;
-  --rp-text: #edf4ee;
+  --rp-base: #0a120f;
+  --rp-surface: #121d18;
+  --rp-overlay: #1e2e25;
+  --rp-muted: #8fa098;
+  --rp-subtle: #c3cfc6;
+  --rp-text: #eaf3ed;
   --rp-love: #f0728c;
   --rp-gold: #e3c26a;
   --rp-rose: #de9db6;
-  --rp-pine: #62c79a;
+  --rp-pine: #43c6a5;
   --rp-foam: #5fc4b2;
-  --rp-iris: #4fae7f;
-  --rp-hl-low: #18251e;
-  --rp-hl-med: #2a3b31;
-  --rp-hl-high: #42574b;
+  --rp-iris: #43c6a5;
+  --rp-hl-low: #15211b;
+  --rp-hl-med: #26382f;
+  --rp-hl-high: #3f544a;
 }
-:root[data-theme='tabla-temna'] .btn-primary { color: #0b130e; }
+:root[data-theme='tabla-temna'] .btn-primary { color: #0a120f; }
 :root[data-theme='tabla-temna'] .skel::after {
   background: linear-gradient(100deg, transparent 20%, rgba(255, 255, 255, 0.12) 50%, transparent 80%);
 }
@@ -77,7 +77,7 @@ body {
   min-width: 320px; min-height: 100vh; margin: 0;
   background: var(--rp-base);
   color: var(--rp-text);
-  line-height: 1.55;
+  line-height: 1.6;
 }
 button, input, select, textarea { font: inherit; }
 button { cursor: pointer; }
@@ -88,22 +88,22 @@ button:disabled { cursor: not-allowed; }
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { border: 3px solid transparent; border-radius: 99px; background: var(--rp-hl-high); background-clip: padding-box; }
 
-/* Vlogi pisav: Fraunces za naslove in velike številke, Inter za vmesnik */
-.font-display { font-family: "Fraunces", Georgia, serif; font-optical-sizing: auto; }
+/* Sora za naslove in številke, Inter za vmesnik */
+.font-display { font-family: "Sora", Inter, ui-sans-serif, system-ui, sans-serif; }
 .page-title {
-  font-family: "Fraunces", Georgia, serif;
-  font-weight: 600; letter-spacing: -0.01em;
-  font-size: 2rem; line-height: 1.1;
+  font-family: "Sora", Inter, ui-sans-serif, system-ui, sans-serif;
+  font-weight: 700; letter-spacing: -0.025em;
+  font-size: 1.9rem; line-height: 1.12;
 }
-@media (min-width: 640px) { .page-title { font-size: 2.5rem; } }
+@media (min-width: 640px) { .page-title { font-size: 2.4rem; } }
 .section-title {
-  font-family: "Fraunces", Georgia, serif;
-  font-weight: 600; letter-spacing: -0.01em;
-  font-size: 1.25rem; line-height: 1.3;
+  font-family: "Sora", Inter, ui-sans-serif, system-ui, sans-serif;
+  font-weight: 600; letter-spacing: -0.02em;
+  font-size: 1.15rem; line-height: 1.3;
 }
 .display-number {
-  font-family: "Fraunces", Georgia, serif;
-  font-weight: 700; letter-spacing: -0.01em;
+  font-family: "Sora", Inter, ui-sans-serif, system-ui, sans-serif;
+  font-weight: 700; letter-spacing: -0.02em;
   font-variant-numeric: tabular-nums;
 }
 .body-quiet { color: var(--rp-muted); font-size: 0.93rem; line-height: 1.65; max-width: 62ch; }
@@ -111,13 +111,10 @@ button:disabled { cursor: not-allowed; }
 .card {
   background: var(--rp-surface);
   border: 1px solid var(--rp-hl-med);
-  border-radius: 18px;
+  border-radius: 20px;
 }
 .card-hover { transition: border-color 0.2s ease, transform 0.2s ease; }
 .card-hover:hover { border-color: var(--rp-hl-high); transform: translateY(-1px); }
-.glass-card { background: var(--rp-surface); border: 1px solid var(--rp-hl-med); border-radius: 18px; }
-.app-hero { background: var(--rp-surface); border: 1px solid var(--rp-hl-med); border-radius: 18px; }
-.gradient-text { color: var(--rp-text); background: none; }
 
 .row-item {
   background: var(--rp-surface);
@@ -126,23 +123,23 @@ button:disabled { cursor: not-allowed; }
   transition: border-color 0.18s ease, background 0.18s ease;
 }
 .row-item:hover { border-color: var(--rp-hl-high); }
-.row-item + .row-item { margin-top: 8px; }
+.row-item + .row-item { margin-top: 10px; }
 
 .btn-primary {
   display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
   background: var(--rp-iris); color: #fff;
   border: 1px solid var(--rp-iris);
   border-radius: 14px; font-weight: 700; font-size: 0.875rem;
-  padding: 0.72rem 1.3rem;
+  padding: 0.75rem 1.35rem;
   transition: transform 0.15s ease, filter 0.18s ease;
 }
-.btn-primary:hover { filter: brightness(1.08); }
+.btn-primary:hover { filter: brightness(1.07); }
 .btn-primary:active { transform: scale(0.97); }
 .btn-ghost {
   display: inline-flex; align-items: center; justify-content: center; gap: 0.4rem;
   background: transparent; color: var(--rp-subtle);
   border: 1px solid var(--rp-hl-med); border-radius: 14px;
-  font-weight: 600; font-size: 0.83rem; padding: 0.6rem 1.05rem;
+  font-weight: 600; font-size: 0.83rem; padding: 0.65rem 1.1rem;
   transition: border-color 0.18s ease, background 0.18s ease, transform 0.15s ease;
 }
 .btn-ghost:hover { border-color: var(--rp-hl-high); background: var(--rp-hl-low); }
@@ -151,7 +148,7 @@ button:disabled { cursor: not-allowed; }
 .link-signal:hover { text-decoration: underline; text-underline-offset: 3px; }
 
 .field {
-  width: 100%; border-radius: 12px; padding: 0.72rem 0.95rem;
+  width: 100%; border-radius: 12px; padding: 0.75rem 1rem;
   background: var(--rp-surface); border: 1px solid var(--rp-hl-med);
   color: var(--rp-text); outline: none;
   transition: border-color 0.18s ease, box-shadow 0.18s ease;
@@ -171,24 +168,12 @@ button:disabled { cursor: not-allowed; }
 .stagger > :nth-child(4) { animation-delay: 165ms; }
 .stagger > :nth-child(5) { animation-delay: 220ms; }
 @keyframes rise-in { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
-.animate-fade-in-up { animation: rise-in 0.5s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
-.stagger-children > :nth-child(1) { animation-delay: 0ms; }
-.stagger-children > :nth-child(2) { animation-delay: 55ms; }
-.stagger-children > :nth-child(3) { animation-delay: 110ms; }
-.stagger-children > :nth-child(4) { animation-delay: 165ms; }
-.stagger-children > :nth-child(5) { animation-delay: 220ms; }
-.stagger-children > :nth-child(6) { animation-delay: 275ms; }
-.account-menu-enter { animation: rise-in 0.16s ease-out both; }
-.animate-pulse-glow { animation: none; }
-.doodle, .doodle-delay { animation: none; }
-.marker::after { content: none; }
 
 /* Povratne animacije na dejanje */
 .tick-pop { animation: tick-pop 0.28s cubic-bezier(0.34, 1.56, 0.64, 1) both; }
 @keyframes tick-pop { 0% { transform: scale(0.6); } 100% { transform: scale(1); } }
 .bar-grow { transform-origin: left center; animation: grow-x 0.8s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
 @keyframes grow-x { from { transform: scaleX(0); } to { transform: scaleX(1); } }
-.progress-grow { transform-origin: left center; animation: grow-x 0.8s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
 .flip-inner { transform-style: preserve-3d; transition: transform 0.45s cubic-bezier(0.2, 0.7, 0.2, 1); }
 .flip-inner.flipped { transform: rotateY(180deg); }
 .flip-face { backface-visibility: hidden; -webkit-backface-visibility: hidden; }
@@ -211,24 +196,6 @@ button:disabled { cursor: not-allowed; }
   animation: skel-sheen 1.4s ease-in-out infinite;
 }
 @keyframes skel-sheen { from { transform: translateX(-100%); } to { transform: translateX(100%); } }
-
-/* Zložljiva stranska vrstica */
-.sidebar-rail { transition: width 0.32s cubic-bezier(0.2, 0.7, 0.2, 1); }
-.sidebar-label {
-  white-space: nowrap; overflow: hidden;
-  transition: opacity 0.22s ease, transform 0.28s cubic-bezier(0.2, 0.7, 0.2, 1);
-}
-.sidebar-collapsed .sidebar-label { opacity: 0; transform: translateX(-8px); pointer-events: none; }
-.sidebar-expanded .sidebar-label { opacity: 1; transform: translateX(0); }
-.sidebar-tip {
-  position: absolute; left: calc(100% + 10px); top: 50%; transform: translateY(-50%) translateX(-4px);
-  opacity: 0; pointer-events: none; transition: opacity 0.18s ease, transform 0.18s ease;
-  background: var(--rp-text); color: var(--rp-base);
-  font-size: 12px; font-weight: 600; padding: 0.4rem 0.65rem; border-radius: 9px;
-  white-space: nowrap; z-index: 60;
-}
-.sidebar-collapsed .side-link:hover .sidebar-tip,
-.sidebar-collapsed .side-link:focus-visible .sidebar-tip { opacity: 1; transform: translateY(-50%) translateX(0); }
 
 :root[data-motion='reduced'] *, :root[data-motion='reduced'] *::before, :root[data-motion='reduced'] *::after {
   scroll-behavior: auto !important; animation-duration: 0.01ms !important;

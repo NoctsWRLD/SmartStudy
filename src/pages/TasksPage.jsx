@@ -137,7 +137,7 @@ export default function TasksPage() {
         {loading || subjectsLoading ? (
           <Skeleton lines={5} />
         ) : filtered.length === 0 ? (
-          <div className="glass-card flex min-h-64 flex-col items-center justify-center px-6 py-10 text-center">
+          <div className="card flex min-h-64 flex-col items-center justify-center px-6 py-10 text-center">
             <span className="grid h-14 w-14 place-items-center rounded-2xl bg-rp-foam/10 text-2xl text-rp-foam" aria-hidden="true">✓</span>
             <h2 className="mt-4 text-lg font-semibold text-rp-text">{search ? 'Ni zadetkov' : statusFilter === 'completed' ? 'Še ni opravljenih nalog' : 'Vse je urejeno'}</h2>
             <p className="mt-1 max-w-sm text-sm leading-6 text-rp-muted">{search ? `Poskusi drug izraz za »${search}«.` : pending.length ? 'Vse naloge so opravljene. Vzemi si zaslužen odmor!' : 'Dodaj novo nalogo in jo razdeli na majhen, izvedljiv korak.'}</p>

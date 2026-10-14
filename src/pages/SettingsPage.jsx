@@ -7,8 +7,8 @@ import { useExams, useFlashcards, useFocusSessions } from '../hooks/useStudy';
 import { getSlovenianDateKey } from '../utils/dates';
 
 const THEME_INFO = {
-  'tabla': { name: 'Svetli videz', description: 'Šolska tabla podnevi — privzeti videz aplikacije.', swatches: ['#f5f7f3', '#17714d', '#15211b'] },
-  'tabla-temna': { name: 'Temni videz', description: 'Šolska tabla ponoči — za učenje zvečer.', swatches: ['#0e1512', '#4fae7f', '#edf4ee'] },
+  'tabla': { name: 'Svetli videz', description: 'Svetla učilnica — privzeti videz aplikacije.', swatches: ['#f2f4f1', '#0c7c72', '#101e18'] },
+  'tabla-temna': { name: 'Temni videz', description: 'Nočna učilnica — za učenje zvečer.', swatches: ['#0a120f', '#43c6a5', '#eaf3ed'] },
 };
 
 function SettingToggle({ title, description, checked, onChange }) {
@@ -102,7 +102,7 @@ export default function SettingsPage() {
       </section>
 
       <div className="grid items-start gap-5 lg:grid-cols-[minmax(0,1.2fr)_minmax(18rem,.8fr)]">
-        <section className="glass-card p-5 sm:p-6" aria-labelledby="accessibility-heading">
+        <section className="card p-5 sm:p-6" aria-labelledby="accessibility-heading">
           <h2 id="accessibility-heading" className="text-lg font-semibold text-rp-text">Dostopnost</h2>
           <p className="mt-1 text-sm text-rp-muted">Nastavitve za lažje branje in manj vizualnih motenj.</p>
           <div className="mt-2">
@@ -111,7 +111,7 @@ export default function SettingsPage() {
           </div>
         </section>
 
-        <section className="glass-card p-5 sm:p-6" aria-labelledby="account-heading">
+        <section className="card p-5 sm:p-6" aria-labelledby="account-heading">
           <div className="flex items-center justify-between gap-3"><div><h2 id="account-heading" className="text-lg font-semibold text-rp-text">Tvoj račun</h2><p className="mt-1 text-sm text-rp-muted">Osnovni podatki profila.</p></div><Link to="/profile" className="rounded-lg px-3 py-2 text-xs font-semibold text-rp-iris transition hover:bg-rp-iris/10">Uredi profil →</Link></div>
           <dl className="mt-5 space-y-3 text-sm">
             <div className="flex justify-between gap-4 border-b border-rp-hl-med/70 pb-3"><dt className="text-rp-muted">Ime</dt><dd className="truncate font-medium text-rp-text">{currentUser?.displayName || '—'}</dd></div>
@@ -121,7 +121,7 @@ export default function SettingsPage() {
         </section>
       </div>
 
-      <section className="glass-card p-5 sm:p-6" aria-labelledby="study-data-heading">
+      <section className="card p-5 sm:p-6" aria-labelledby="study-data-heading">
         <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-end"><div><h2 id="study-data-heading" className="text-lg font-semibold text-rp-text">Učni podatki</h2><p className="mt-1 text-sm text-rp-muted">Pregled tvojih predmetov in nalog.</p></div><p className="text-xs text-rp-muted">Uspešnost nalog: <strong className="text-rp-text">{completionRate}%</strong></p></div>
         <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4"><Metric label="Predmeti" value={subjects.length} tone="text-rp-iris" /><Metric label="Vse naloge" value={tasks.length} /><Metric label="Odprte naloge" value={pending} tone="text-rp-gold" /><Metric label="Opravljene" value={completed} tone="text-rp-pine" /></div>
         <div className="mt-5 flex flex-col justify-between gap-4 border-t border-rp-hl-med/70 pt-5 sm:flex-row sm:items-center"><div><h3 className="text-sm font-semibold text-rp-text">Prenesi svoje podatke</h3><p className="mt-1 max-w-xl text-xs leading-5 text-rp-muted">Shrani profil, predmete in naloge v datoteko JSON. Datoteka se ustvari v tvoji napravi.</p></div><button type="button" onClick={exportStudyData} disabled={subjectsLoading || tasksLoading} className="shrink-0 rounded-xl border border-rp-iris/25 bg-rp-iris/[.07] px-4 py-2.5 text-xs font-semibold text-rp-iris transition hover:bg-rp-iris/15 disabled:cursor-wait disabled:opacity-50">{exported ? '✓ Datoteka prenesena' : subjectsLoading || tasksLoading ? 'Nalagam podatke…' : 'Izvozi podatke'}</button></div>
