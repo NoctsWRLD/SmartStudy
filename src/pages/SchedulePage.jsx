@@ -1,6 +1,7 @@
 import { useState, useMemo } from 'react';
 import { useSubjects, useTasks } from '../hooks/useFirestore';
 import TaskModal from '../components/TaskModal';
+import ScheduleImportModal from '../components/ScheduleImportModal';
 import Badge from '../components/Badge';
 import SUBJECT_COLORS from '../utils/colors';
 import {
@@ -32,6 +33,7 @@ export default function SchedulePage() {
   const { tasks, addTask, updateTask, toggleTask } = useTasks();
   const [weekOffset, setWeekOffset] = useState(0);
   const [modalOpen, setModalOpen] = useState(false);
+  const [importOpen, setImportOpen] = useState(false);
   const [editTask, setEditTask] = useState(null);
   const [preselectedDate, setPreselectedDate] = useState('');
 
@@ -75,6 +77,12 @@ export default function SchedulePage() {
     setEditTask(task);
     setPreselectedDate('');
     setModalOpen(true);
+  }
+
+  async function handleImport(rows) {
+    for (const row of rows) {
+      await addTask(row);
+    }
   }
 
   const weekLabel = `${formatSlovenianDate(weekDays[0], { day: 'numeric', month: 'short' })} – ${formatSlovenianDate(weekDays[6], { day: 'numeric', month: 'short' })} ${getYearFromDateKey(weekDays[6])}`;
@@ -133,6 +141,28 @@ export default function SchedulePage() {
                 d="M9 5l7 7-7 7"
               />
             </svg>
+          </button>
+          <button
+            type="button"
+            onClick={() => setImportOpen(true)}
+            className="btn-ghost !py-2 !text-xs"
+          >
+            <svg
+              className="w-3.5 h-3.5"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              aria-hidden="true"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M4 16l4.5-4.5 3.5 3.5 2.5-2.5L20 17M4 20h16M6 4h12a2 2 0 012 2v12a2 2 0 01-2 2H6a2 2 0 01-2-2V6a2 2 0 012-2z"
+              />
+              <circle cx="9" cy="9" r="1.5" />
+            </svg>
+            Urnik iz slike
           </button>
           <button
             id="schedule-add-task"
@@ -306,6 +336,13 @@ export default function SchedulePage() {
           );
         })}
       </div>
+
+      <ScheduleImportModal
+        isOpen={importOpen}
+        onClose={() => setImportOpen(false)}
+        subjects={subjects}
+        onImport={handleImport}
+      />
 
       <TaskModal
         isOpen={modalOpen}
