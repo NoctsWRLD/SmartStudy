@@ -5,7 +5,7 @@ import { db } from '../firebase';
 
 const STORAGE_KEY = 'smartstudy.settings.v1';
 const DEFAULT_THEME = 'tabla';
-const THEMES = ['tabla'];
+const THEMES = ['tabla', 'tabla-temna'];
 const DEFAULT_SETTINGS = { highContrast: false, reduceMotion: false };
 const SettingsContext = createContext(null);
 

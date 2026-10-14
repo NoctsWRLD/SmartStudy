@@ -47,6 +47,30 @@
   --rp-hl-high: #c2ccc2;
 }
 
+/* Temna različica iste teme */
+:root[data-theme='tabla-temna'] {
+  color-scheme: dark;
+  --rp-base: #0e1512;
+  --rp-surface: #15211a;
+  --rp-overlay: #223227;
+  --rp-muted: #93a39a;
+  --rp-subtle: #c6d2c9;
+  --rp-text: #edf4ee;
+  --rp-love: #f0728c;
+  --rp-gold: #e3c26a;
+  --rp-rose: #de9db6;
+  --rp-pine: #62c79a;
+  --rp-foam: #5fc4b2;
+  --rp-iris: #4fae7f;
+  --rp-hl-low: #18251e;
+  --rp-hl-med: #2a3b31;
+  --rp-hl-high: #42574b;
+}
+:root[data-theme='tabla-temna'] .btn-primary { color: #0b130e; }
+:root[data-theme='tabla-temna'] .skel::after {
+  background: linear-gradient(100deg, transparent 20%, rgba(255, 255, 255, 0.12) 50%, transparent 80%);
+}
+
 * { box-sizing: border-box; }
 html { min-width: 320px; min-height: 100%; scroll-behavior: smooth; }
 body {

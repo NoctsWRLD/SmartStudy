@@ -6,7 +6,10 @@ import { useSubjects, useTasks } from '../hooks/useFirestore';
 import { useExams, useFlashcards, useFocusSessions } from '../hooks/useStudy';
 import { getSlovenianDateKey } from '../utils/dates';
 
-const THEME = { id: 'tabla', name: 'Šolska tabla', description: 'Svetel, miren videz z globoko zeleno — privzeti videz aplikacije.', swatches: ['#f5f7f3', '#17714d', '#15211b'] };
+const THEME_INFO = {
+  'tabla': { name: 'Svetli videz', description: 'Šolska tabla podnevi — privzeti videz aplikacije.', swatches: ['#f5f7f3', '#17714d', '#15211b'] },
+  'tabla-temna': { name: 'Temni videz', description: 'Šolska tabla ponoči — za učenje zvečer.', swatches: ['#0e1512', '#4fae7f', '#edf4ee'] },
+};
 
 function SettingToggle({ title, description, checked, onChange }) {
   return (
@@ -25,7 +28,8 @@ function Metric({ label, value, tone = 'text-rp-text' }) {
 
 export default function SettingsPage() {
   const { currentUser, userProfile } = useAuth();
-  const { highContrast, setHighContrast, reduceMotion, setReduceMotion } = useSettings();
+  const { theme, setTheme, highContrast, setHighContrast, reduceMotion, setReduceMotion } = useSettings();
+  const info = THEME_INFO[theme] || THEME_INFO['tabla'];
   const { subjects, loading: subjectsLoading } = useSubjects();
   const { tasks, loading: tasksLoading } = useTasks();
   const { exams } = useExams();
@@ -70,15 +74,29 @@ export default function SettingsPage() {
       </section>
 
       <section className="space-y-4" aria-labelledby="theme-heading">
-        <div><h2 id="theme-heading" className="section-title">Videz aplikacije</h2><p className="mt-1 text-sm text-rp-muted">En sam videz za vse — da je aplikacija vedno prepoznavna in mirna.</p></div>
-        <div className="card flex items-center gap-4 p-4">
-          <span className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-rp-iris font-display text-xl font-bold text-white" aria-hidden="true">S</span>
-          <div className="min-w-0 flex-1">
-            <p className="text-[15px] font-bold">{THEME.name}</p>
-            <p className="mt-0.5 text-[13px] text-rp-muted">{THEME.description}</p>
+        <div><h2 id="theme-heading" className="section-title">Videz aplikacije</h2><p className="mt-1 text-sm text-rp-muted">Ena tema, dva videza — izbira se shrani v tvoj račun.</p></div>
+        <div className="card flex flex-col gap-4 p-4 sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex items-center gap-4">
+            <span className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-rp-iris font-display text-xl font-bold text-white" aria-hidden="true">S</span>
+            <div className="min-w-0">
+              <p className="text-[15px] font-bold">{info.name}</p>
+              <p className="mt-0.5 text-[13px] text-rp-muted">{info.description}</p>
+            </div>
           </div>
-          <div className="flex shrink-0 overflow-hidden rounded-xl border border-rp-hl-med" aria-hidden="true">
-            {THEME.swatches.map((c) => <span key={c} className="h-10 w-8" style={{ backgroundColor: c }} />)}
+          <div className="flex gap-1 rounded-xl bg-rp-overlay p-1" role="group" aria-label="Izbira videza">
+            {['tabla', 'tabla-temna'].map((id) => (
+              <button
+                key={id}
+                type="button"
+                onClick={() => setTheme(id)}
+                aria-pressed={theme === id}
+                className={`rounded-lg px-4 py-2 text-[13px] font-semibold transition-all active:scale-95 ${
+                  theme === id ? 'bg-rp-surface text-rp-text shadow-sm' : 'text-rp-muted hover:text-rp-text'
+                }`}
+              >
+                {id === 'tabla' ? 'Svetlo' : 'Temno'}
+              </button>
+            ))}
           </div>
         </div>
       </section>

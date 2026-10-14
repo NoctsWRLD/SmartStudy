@@ -15,7 +15,7 @@ service cloud.firestore {
     }
 
     function validTheme(value) {
-      return value in ['tabla'];
+      return value in ['tabla', 'tabla-temna'];
     }
 
     function isOwnSubject(subjectId) {
