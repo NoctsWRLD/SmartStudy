@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { useTasks } from '../hooks/useFirestore';
@@ -40,16 +41,27 @@ const PAGE_TITLES = {
   '/settings': 'Nastavitve',
 };
 
-function Wordmark() {
-  return (
-    <NavLink to="/" className="flex items-center gap-2.5 rounded-xl" aria-label="SmartStudy domov">
-      <Logo size={36} />
-      <span className="font-display text-[17px] font-extrabold tracking-tight">SmartStudy</span>
-    </NavLink>
-  );
-}
+const PIN_KEY = 'smartstudy.sidebar.v1';
 
-function SideLink({ to, label, end }) {
+function SideLink({ to, label, end, expanded }) {
+  if (!expanded) {
+    return (
+      <NavLink
+        to={to}
+        end={end}
+        title={label}
+        aria-label={label}
+        className={({ isActive }) =>
+          `side-link relative mx-auto grid h-11 w-11 place-items-center rounded-2xl text-[15px] font-bold transition-all active:scale-90 ${
+            isActive ? 'bg-rp-iris text-white' : 'text-rp-muted hover:bg-rp-overlay hover:text-rp-text'
+          }`
+        }
+      >
+        {label[0]}
+        <span className="sidebar-tip" aria-hidden="true">{label}</span>
+      </NavLink>
+    );
+  }
   return (
     <NavLink
       to={to}
@@ -103,6 +115,15 @@ export default function Layout({ children }) {
   const location = useLocation();
   const { currentUser } = useAuth();
   const active = PAGE_TITLES[location.pathname] || 'SmartStudy';
+  const [pinned, setPinned] = useState(() => {
+    try { return localStorage.getItem(PIN_KEY) !== 'collapsed'; } catch { return true; }
+  });
+  const [hovered, setHovered] = useState(false);
+  const expanded = pinned || hovered;
+
+  useEffect(() => {
+    try { localStorage.setItem(PIN_KEY, pinned ? 'expanded' : 'collapsed'); } catch { /* shramba ni nujna */ }
+  }, [pinned]);
 
   return (
     <div className="flex min-h-dvh">
@@ -110,26 +131,55 @@ export default function Layout({ children }) {
         Preskoči na vsebino
       </a>
 
-      {/* Namizje: stranska vrstica z enim samim vstopom v račun (spodnja kartica) */}
-      <aside className="sticky top-0 hidden h-dvh w-64 shrink-0 flex-col border-r border-rp-hl-med bg-rp-surface px-4 py-5 md:flex" aria-label="Glavna navigacija">
-        <Wordmark />
-        <nav className="mt-8 flex flex-1 flex-col gap-5 overflow-y-auto">
+      <aside
+        onMouseEnter={() => setHovered(true)}
+        onMouseLeave={() => setHovered(false)}
+        onFocusCapture={() => setHovered(true)}
+        onBlur={(e) => { if (!e.currentTarget.contains(e.relatedTarget)) setHovered(false); }}
+        className={`sidebar-rail ${expanded ? 'sidebar-expanded w-64' : 'sidebar-collapsed w-[76px]'} sticky top-0 hidden h-dvh shrink-0 flex-col overflow-hidden border-r border-rp-hl-med bg-rp-surface px-3 py-5 md:flex`}
+        aria-label="Glavna navigacija"
+      >
+        <div className={`flex items-center ${expanded ? 'gap-2.5 px-1' : 'flex-col gap-2'}`}>
+          <NavLink to="/" className="rounded-xl transition-transform hover:scale-105 active:scale-95" aria-label="SmartStudy domov">
+            <Logo size={36} />
+          </NavLink>
+          <span className={`sidebar-label font-display text-[17px] font-extrabold tracking-tight ${expanded ? '' : 'hidden'}`}>SmartStudy</span>
+          <button
+            type="button"
+            onClick={() => setPinned((p) => !p)}
+            title={pinned ? 'Zloži vrstico' : 'Razširi vrstico'}
+            aria-label={pinned ? 'Zloži stransko vrstico' : 'Razširi stransko vrstico'}
+            aria-pressed={pinned}
+            className={`grid h-8 w-8 place-items-center rounded-xl text-rp-muted transition-colors hover:bg-rp-overlay hover:text-rp-text ${expanded ? 'ml-auto' : ''}`}
+          >
+            <svg className={`h-4 w-4 transition-transform duration-300 ${pinned ? '' : 'rotate-180'}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 19l-7-7 7-7m8 14l-7-7 7-7" />
+            </svg>
+          </button>
+        </div>
+
+        <nav className={`flex flex-1 flex-col gap-5 overflow-y-auto overflow-x-hidden ${expanded ? 'mt-8' : 'mt-6 items-center'}`} aria-label="Glavna navigacija">
           {NAV_GROUPS.map((group) => (
-            <div key={group.label}>
-              <p className="mb-1.5 px-3.5 text-xs font-medium text-rp-muted">{group.label}</p>
-              <div className="flex flex-col gap-1">
+            <div key={group.label} className={expanded ? '' : 'flex flex-col items-center gap-1'}>
+              {expanded && <p className="sidebar-label mb-1.5 px-3.5 text-xs font-medium text-rp-muted">{group.label}</p>}
+              <div className={expanded ? 'flex flex-col gap-1' : 'flex flex-col items-center gap-1'}>
                 {group.items.map((item) => (
-                  <SideLink key={item.to} to={item.to} label={item.label} end={item.to === '/'} />
+                  <SideLink key={item.to} to={item.to} label={item.label} end={item.to === '/'} expanded={expanded} />
                 ))}
               </div>
             </div>
           ))}
         </nav>
-        <div className="space-y-3">
-          <TodayAgenda />
-          <div className="border-t border-rp-hl-med pt-4">
-            <AccountMenu user={currentUser} placement="top" variant="sidebar" />
-          </div>
+
+        <div className={`space-y-3 ${expanded ? '' : 'flex flex-col items-center'}`}>
+          {expanded && <TodayAgenda />}
+          {expanded ? (
+            <div className="border-t border-rp-hl-med pt-4">
+              <AccountMenu user={currentUser} placement="top" variant="sidebar" />
+            </div>
+          ) : (
+            <AccountMenu user={currentUser} placement="top" variant="avatar" />
+          )}
         </div>
       </aside>
 
@@ -142,10 +192,9 @@ export default function Layout({ children }) {
                 <span className="font-display text-base font-extrabold tracking-tight">SmartStudy</span>
               </NavLink>
             </div>
-            <h1 className="hidden text-[15px] font-bold tracking-tight md:block">{active}</h1>
+            <h1 className="hidden font-display text-xl font-semibold tracking-tight md:block">{active}</h1>
             <div className="flex items-center gap-2">
               <NavLink to="/tasks" className="btn-primary !py-2.5">Nova naloga</NavLink>
-              {/* Mobilni računski meni — na namizju je račun dostopen samo iz stranske vrstice */}
               <div className="md:hidden">
                 <AccountMenu user={currentUser} placement="bottom" variant="avatar" />
               </div>

@@ -5,6 +5,7 @@ import { useSubjects, useTasks } from '../hooks/useFirestore';
 import { useFlashcards } from '../hooks/useStudy';
 import TaskCard from '../components/TaskCard';
 import TaskModal from '../components/TaskModal';
+import Skeleton from '../components/Skeleton';
 import FocusTimer from '../components/FocusTimer';
 import StudyTipCard from '../components/StudyTipCard';
 import ExamCountdown from '../components/ExamCountdown';
@@ -100,9 +101,8 @@ export default function DashboardPage() {
             <Link to="/tasks" className="link-signal">Vse naloge</Link>
           </div>
           {tasksLoading ? (
-            <div className="card grid min-h-40 place-items-center" role="status">
-              <span className="h-7 w-7 animate-spin rounded-full border-2 border-rp-iris border-t-transparent" />
-              <span className="sr-only">Naloge se nalagajo</span>
+            <div className="card p-4">
+              <Skeleton lines={4} />
             </div>
           ) : upcoming.length ? (
             <div className="stagger">
@@ -143,8 +143,8 @@ export default function DashboardPage() {
           <Link to="/subjects" className="link-signal">Uredi</Link>
         </div>
         {subjectsLoading ? (
-          <div className="card grid min-h-24 place-items-center" role="status">
-            <span className="h-6 w-6 animate-spin rounded-full border-2 border-rp-iris border-t-transparent" />
+          <div className="card p-4">
+            <Skeleton lines={2} />
           </div>
         ) : subjects.length === 0 ? (
           <div className="card flex flex-col items-start gap-3 p-5 sm:flex-row sm:items-center sm:justify-between">

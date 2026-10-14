@@ -3,6 +3,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useSubjects, useTasks } from '../hooks/useFirestore';
 import TaskCard from '../components/TaskCard';
 import TaskModal from '../components/TaskModal';
+import Skeleton from '../components/Skeleton';
 import { addDaysToDateKey, getSlovenianDateKey } from '../utils/dates';
 
 const FILTERS = [
@@ -134,7 +135,7 @@ export default function TasksPage() {
         </div>
 
         {loading || subjectsLoading ? (
-          <div className="glass-card grid min-h-48 place-items-center"><span className="h-8 w-8 animate-spin rounded-full border-2 border-rp-iris border-t-transparent" role="status" aria-label="Nalagam naloge" /></div>
+          <Skeleton lines={5} />
         ) : filtered.length === 0 ? (
           <div className="glass-card flex min-h-64 flex-col items-center justify-center px-6 py-10 text-center">
             <span className="grid h-14 w-14 place-items-center rounded-2xl bg-rp-foam/10 text-2xl text-rp-foam" aria-hidden="true">✓</span>

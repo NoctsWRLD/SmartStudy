@@ -15,7 +15,7 @@ service cloud.firestore {
     }
 
     function validTheme(value) {
-      return value in ['cloud', 'lavender', 'mint', 'sunset', 'midnight', 'graphite', 'forest', 'plum', 'ocean', 'ember'];
+      return value in ['tabla'];
     }
 
     function isOwnSubject(subjectId) {

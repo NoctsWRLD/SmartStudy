@@ -32,9 +32,9 @@ export default function SubjectTaskModal({ isOpen, onClose, subject, tasks, onTo
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-      <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={onClose} />
+      <div className="absolute inset-0 bg-black/60 backdrop-blur-sm overlay-fade" onClick={onClose} />
       
-      <div className="relative glass-card p-6 w-full max-w-lg max-h-[85vh] flex flex-col animate-fade-in-up">
+      <div className="relative glass-card p-6 w-full max-w-lg max-h-[85vh] flex flex-col modal-pop">
         {/* Header */}
         <div className="flex items-start justify-between gap-3 mb-4">
           <div>

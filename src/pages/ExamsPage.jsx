@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useSubjects } from '../hooks/useFirestore';
 import { useExams } from '../hooks/useStudy';
 import ExamModal from '../components/ExamModal';
+import Skeleton from '../components/Skeleton';
 import { daysBetweenDateKeys, formatSlovenianDate, getSlovenianDateKey } from '../utils/dates';
 
 function countdown(dateStr, today) {
@@ -86,8 +87,8 @@ export default function ExamsPage() {
       </section>
 
       {loading ? (
-        <div className="card grid min-h-40 place-items-center" role="status">
-          <span className="h-7 w-7 animate-spin rounded-full border-2 border-rp-iris border-t-transparent" />
+        <div className="card p-4">
+          <Skeleton lines={4} />
         </div>
       ) : filtered.length === 0 ? (
         <div className="card rise p-6">

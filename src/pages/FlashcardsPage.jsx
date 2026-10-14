@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useSubjects } from '../hooks/useFirestore';
 import { useFlashcards } from '../hooks/useStudy';
 import FlashcardModal from '../components/FlashcardModal';
+import Skeleton from '../components/Skeleton';
 
 function shuffle(list) {
   const arr = [...list];
@@ -80,8 +81,8 @@ export default function FlashcardsPage() {
       </section>
 
       {loading || subjectsLoading ? (
-        <div className="card grid min-h-40 place-items-center" role="status">
-          <span className="h-7 w-7 animate-spin rounded-full border-2 border-rp-iris border-t-transparent" />
+        <div className="card p-4">
+          <Skeleton lines={4} />
         </div>
       ) : studying && card ? (
         <section className="rise mx-auto max-w-xl" aria-label="Učenje">

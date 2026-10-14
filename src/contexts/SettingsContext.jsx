@@ -4,8 +4,8 @@ import { useAuth } from './AuthContext';
 import { db } from '../firebase';
 
 const STORAGE_KEY = 'smartstudy.settings.v1';
-const DEFAULT_THEME = 'cloud';
-const THEMES = ['cloud', 'lavender', 'mint', 'sunset', 'midnight', 'graphite', 'forest', 'plum', 'ocean', 'ember'];
+const DEFAULT_THEME = 'tabla';
+const THEMES = ['tabla'];
 const DEFAULT_SETTINGS = { highContrast: false, reduceMotion: false };
 const SettingsContext = createContext(null);
 

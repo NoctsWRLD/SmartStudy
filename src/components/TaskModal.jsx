@@ -34,8 +34,8 @@ export default function TaskModal({ isOpen, onClose, onSave, subjects, task, def
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-      <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={onClose} />
-      <div className="relative glass-card p-6 w-full max-w-md animate-fade-in-up">
+      <div className="absolute inset-0 bg-black/60 backdrop-blur-sm overlay-fade" onClick={onClose} />
+      <div className="relative glass-card p-6 w-full max-w-md modal-pop">
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-lg font-semibold text-rp-text">
             {task ? 'Uredi nalogo' : 'Nova naloga'}

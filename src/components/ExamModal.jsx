@@ -24,8 +24,8 @@ export default function ExamModal({ isOpen, onClose, onSave, subjects, exam }) {
 
   return (
     <div className="fixed inset-0 z-50 grid place-items-center p-4" role="dialog" aria-modal="true" aria-label={exam ? 'Uredi preverjanje' : 'Novo preverjanje'}>
-      <div className="absolute inset-0 bg-black/30" onClick={onClose} />
-      <form onSubmit={handleSubmit} className="card relative w-full max-w-md p-6">
+      <div className="absolute inset-0 bg-black/30 overlay-fade" onClick={onClose} />
+      <form onSubmit={handleSubmit} className="card modal-pop relative w-full max-w-md p-6">
         <h2 className="section-title">{exam ? 'Uredi preverjanje' : 'Novo preverjanje'}</h2>
         <p className="body-quiet mt-1 text-sm">Zapiši test, spraševanje ali izpit — odštevanje te bo držalo v ritmu.</p>
         <div className="mt-4 space-y-3">

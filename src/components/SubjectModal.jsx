@@ -29,8 +29,8 @@ export default function SubjectModal({ isOpen, onClose, onSave, subject }) {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-      <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={onClose} />
-      <div className="relative glass-card p-6 w-full max-w-sm animate-fade-in-up">
+      <div className="absolute inset-0 bg-black/60 backdrop-blur-sm overlay-fade" onClick={onClose} />
+      <div className="relative glass-card p-6 w-full max-w-sm modal-pop">
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-lg font-semibold text-rp-text">
             {subject ? 'Uredi predmet' : 'Nov predmet'}

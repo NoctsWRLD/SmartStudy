@@ -24,8 +24,8 @@ export default function FlashcardModal({ isOpen, onClose, onSave, subjects, card
 
   return (
     <div className="fixed inset-0 z-50 grid place-items-center p-4" role="dialog" aria-modal="true" aria-label={card ? 'Uredi kartico' : 'Nova kartica'}>
-      <div className="absolute inset-0 bg-black/30" onClick={onClose} />
-      <form onSubmit={handleSubmit} className="card relative w-full max-w-md p-6">
+      <div className="absolute inset-0 bg-black/30 overlay-fade" onClick={onClose} />
+      <form onSubmit={handleSubmit} className="card modal-pop relative w-full max-w-md p-6">
         <h2 className="section-title">{card ? 'Uredi kartico' : 'Nova kartica'}</h2>
         <p className="body-quiet mt-1 text-sm">Spredaj vprašanje ali pojem, zadaj odgovor.</p>
         <div className="mt-4 space-y-3">

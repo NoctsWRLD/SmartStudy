@@ -6,18 +6,7 @@ import { useSubjects, useTasks } from '../hooks/useFirestore';
 import { useExams, useFlashcards, useFocusSessions } from '../hooks/useStudy';
 import { getSlovenianDateKey } from '../utils/dates';
 
-const THEMES = [
-  { id: 'cloud', name: 'Oblak', description: 'Čista svetla tema z vijoličnimi poudarki.', swatches: ['#f5f7fb', '#6d5bd0', '#247b90'] },
-  { id: 'lavender', name: 'Sivka', description: 'Mehki lila odtenki za mirno učno okolje.', swatches: ['#f7f5ff', '#7655c8', '#438393'] },
-  { id: 'mint', name: 'Meta', description: 'Sveža zelena tema z nežnimi modrimi poudarki.', swatches: ['#f2f8f5', '#5277b4', '#278066'] },
-  { id: 'sunset', name: 'Topel pesek', description: 'Topli kremni toni za prijeten občutek.', swatches: ['#fff8f1', '#b45b7a', '#348392'] },
-  { id: 'midnight', name: 'Polnoč', description: 'Temna modra tema z vijoličnimi poudarki.', swatches: ['#101827', '#baa8ff', '#77c8d6'] },
-  { id: 'graphite', name: 'Grafit', description: 'Nevtralna temna tema z umirjenimi sivimi toni.', swatches: ['#131820', '#a6b5ca', '#83c0c2'] },
-  { id: 'forest', name: 'Gozd', description: 'Globoki zeleni odtenki za mirno večerno učenje.', swatches: ['#101c19', '#a6bd8e', '#78c6bc'] },
-  { id: 'plum', name: 'Sliva', description: 'Temna slivova tema z nežnimi lila poudarki.', swatches: ['#1a1422', '#c89bea', '#8fc8dc'] },
-  { id: 'ocean', name: 'Ocean', description: 'Globoka modra tema s svetlimi morskimi poudarki.', swatches: ['#0e1c2b', '#7ca8ff', '#65c8da'] },
-  { id: 'ember', name: 'Žerjavica', description: 'Topli temni toni z bakrenimi poudarki.', swatches: ['#201713', '#ed9b72', '#dfb46c'] },
-];
+const THEME = { id: 'tabla', name: 'Šolska tabla', description: 'Svetel, miren videz z globoko zeleno — privzeti videz aplikacije.', swatches: ['#f5f7f3', '#17714d', '#15211b'] };
 
 function SettingToggle({ title, description, checked, onChange }) {
   return (
@@ -36,7 +25,7 @@ function Metric({ label, value, tone = 'text-rp-text' }) {
 
 export default function SettingsPage() {
   const { currentUser, userProfile } = useAuth();
-  const { theme, setTheme, highContrast, setHighContrast, reduceMotion, setReduceMotion } = useSettings();
+  const { highContrast, setHighContrast, reduceMotion, setReduceMotion } = useSettings();
   const { subjects, loading: subjectsLoading } = useSubjects();
   const { tasks, loading: tasksLoading } = useTasks();
   const { exams } = useExams();
@@ -81,19 +70,16 @@ export default function SettingsPage() {
       </section>
 
       <section className="space-y-4" aria-labelledby="theme-heading">
-        <div><h2 id="theme-heading" className="text-lg font-semibold text-rp-text">Videz aplikacije</h2><p className="mt-1 text-sm text-rp-muted">Izbrana tema se shrani v tvoj račun in se uporabi tudi ob naslednji prijavi.</p></div>
-        <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
-          {THEMES.map((option) => (
-            <button key={option.id} type="button" aria-pressed={theme === option.id} onClick={() => setTheme(option.id)} className={`glass-card group p-4 text-left transition-all hover:-translate-y-0.5 ${theme === option.id ? 'border-rp-iris/50 ring-2 ring-rp-iris/20' : 'hover:border-rp-hl-high'}`}>
-              <div className="flex items-center justify-between gap-3"><span className="font-semibold text-rp-text">{option.name}</span><span className={`grid h-5 w-5 place-items-center rounded-full border ${theme === option.id ? 'border-rp-iris bg-rp-iris text-white' : 'border-rp-hl-high text-transparent'}`} aria-hidden="true">✓</span></div>
-              <div className="mt-3 flex h-16 overflow-hidden rounded-xl border border-rp-hl-med/70">
-                <span className="flex-1" style={{ backgroundColor: option.swatches[0] }} />
-                <span className="w-1/4" style={{ backgroundColor: option.swatches[1] }} />
-                <span className="w-1/4" style={{ backgroundColor: option.swatches[2] }} />
-              </div>
-              <p className="mt-3 text-xs leading-5 text-rp-muted">{option.description}</p>
-            </button>
-          ))}
+        <div><h2 id="theme-heading" className="section-title">Videz aplikacije</h2><p className="mt-1 text-sm text-rp-muted">En sam videz za vse — da je aplikacija vedno prepoznavna in mirna.</p></div>
+        <div className="card flex items-center gap-4 p-4">
+          <span className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-rp-iris font-display text-xl font-bold text-white" aria-hidden="true">S</span>
+          <div className="min-w-0 flex-1">
+            <p className="text-[15px] font-bold">{THEME.name}</p>
+            <p className="mt-0.5 text-[13px] text-rp-muted">{THEME.description}</p>
+          </div>
+          <div className="flex shrink-0 overflow-hidden rounded-xl border border-rp-hl-med" aria-hidden="true">
+            {THEME.swatches.map((c) => <span key={c} className="h-10 w-8" style={{ backgroundColor: c }} />)}
+          </div>
         </div>
       </section>
 

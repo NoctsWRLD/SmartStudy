@@ -4,6 +4,7 @@ import SUBJECT_COLORS from '../utils/colors';
 import { useSubjects, useTasks } from '../hooks/useFirestore';
 import SubjectModal from '../components/SubjectModal';
 import SubjectTaskModal from '../components/SubjectTaskModal';
+import Skeleton from '../components/Skeleton';
 
 function SubjectCard({ subject, tasks, onOpen, onEdit, onDelete }) {
   const color = SUBJECT_COLORS[subject.colorIndex] || SUBJECT_COLORS[0];
@@ -12,7 +13,7 @@ function SubjectCard({ subject, tasks, onOpen, onEdit, onDelete }) {
   const progress = tasks.length ? Math.round((done / tasks.length) * 100) : 0;
 
   return (
-    <article className="card card-hover group relative p-5">
+    <article className="card card-hover group relative overflow-hidden p-5" style={{ borderTop: `3px solid ${color.colorCode}` }}>
       <div className="flex items-start justify-between gap-3">
         <button type="button" onClick={onOpen} className="flex min-w-0 flex-1 items-center gap-3 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rp-iris">
           <span className={`grid h-12 w-12 shrink-0 place-items-center rounded-2xl border text-lg font-bold ${color.bg} ${color.text} ${color.border}`}>
@@ -130,7 +131,7 @@ export default function SubjectsPage() {
       )}
 
       {loading ? (
-        <div className="glass-card grid min-h-48 place-items-center"><span className="h-8 w-8 animate-spin rounded-full border-2 border-rp-iris border-t-transparent" role="status" aria-label="Nalagam predmete" /></div>
+        <Skeleton lines={4} />
       ) : subjects.length === 0 ? (
         <section className="glass-card flex flex-col items-center px-6 py-12 text-center sm:py-16">
           <span className="grid h-16 w-16 place-items-center rounded-3xl border border-rp-iris/20 bg-rp-iris/10 text-3xl text-rp-iris" aria-hidden="true">▤</span>
