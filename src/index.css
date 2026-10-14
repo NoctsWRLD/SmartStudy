@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap');
 @import 'tailwindcss';
 
 @theme {
@@ -18,7 +18,7 @@
   --color-rp-hl-med: var(--rp-hl-med);
   --color-rp-hl-high: var(--rp-hl-high);
   --font-sans: Inter, ui-sans-serif, system-ui, sans-serif;
-  --font-display: "Sora", Inter, ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Manrope", Inter, ui-sans-serif, system-ui, sans-serif;
 }
 
 /* Svetla učilnica: papir, črnilo, petrol */
@@ -88,22 +88,22 @@ button:disabled { cursor: not-allowed; }
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { border: 3px solid transparent; border-radius: 99px; background: var(--rp-hl-high); background-clip: padding-box; }
 
-/* Sora za naslove in številke, Inter za vmesnik */
-.font-display { font-family: "Sora", Inter, ui-sans-serif, system-ui, sans-serif; }
+/* Manrope za naslove in številke, Inter za vmesnik */
+.font-display { font-family: "Manrope", Inter, ui-sans-serif, system-ui, sans-serif; }
 .page-title {
-  font-family: "Sora", Inter, ui-sans-serif, system-ui, sans-serif;
-  font-weight: 700; letter-spacing: -0.025em;
+  font-family: "Manrope", Inter, ui-sans-serif, system-ui, sans-serif;
+  font-weight: 800; letter-spacing: -0.03em;
   font-size: 1.9rem; line-height: 1.12;
 }
 @media (min-width: 640px) { .page-title { font-size: 2.4rem; } }
 .section-title {
-  font-family: "Sora", Inter, ui-sans-serif, system-ui, sans-serif;
-  font-weight: 600; letter-spacing: -0.02em;
+  font-family: "Manrope", Inter, ui-sans-serif, system-ui, sans-serif;
+  font-weight: 700; letter-spacing: -0.02em;
   font-size: 1.15rem; line-height: 1.3;
 }
 .display-number {
-  font-family: "Sora", Inter, ui-sans-serif, system-ui, sans-serif;
-  font-weight: 700; letter-spacing: -0.02em;
+  font-family: "Manrope", Inter, ui-sans-serif, system-ui, sans-serif;
+  font-weight: 800; letter-spacing: -0.02em;
   font-variant-numeric: tabular-nums;
 }
 .body-quiet { color: var(--rp-muted); font-size: 0.93rem; line-height: 1.65; max-width: 62ch; }

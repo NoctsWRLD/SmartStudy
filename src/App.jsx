@@ -14,6 +14,7 @@ import ChatPage from './pages/ChatPage';
 import ProfilePage from './pages/ProfilePage';
 import FriendsPage from './pages/FriendsPage';
 import SettingsPage from './pages/SettingsPage';
+import { SparkIcon } from './components/icons';
 import { SettingsProvider } from './contexts/SettingsContext';
 import { isFirebaseConfigured } from './firebase';
 
@@ -22,7 +23,7 @@ function FirebaseSetupNotice() {
     <main className="relative grid min-h-screen place-items-center overflow-hidden px-4 py-10">
       <div className="pointer-events-none absolute left-1/2 top-0 h-80 w-80 -translate-x-1/2 rounded-full bg-rp-iris/10 blur-3xl" />
       <section className="card relative w-full max-w-xl p-6 sm:p-8" aria-labelledby="setup-title">
-        <div className="grid h-12 w-12 place-items-center rounded-2xl bg-rp-iris/10 text-2xl text-rp-iris" aria-hidden="true">✦</div>
+        <div className="grid h-12 w-12 place-items-center rounded-2xl bg-rp-iris/10 text-rp-iris" aria-hidden="true"><SparkIcon className="h-6 w-6" /></div>
         <p className="mt-5 text-xs font-semibold uppercase tracking-[.18em] text-rp-iris">Še en korak</p>
         <h1 id="setup-title" className="mt-2 text-2xl font-semibold tracking-tight text-rp-text">Poveži Firebase, da zaženeš SmartStudy</h1>
         <p className="mt-3 text-sm leading-6 text-rp-subtle">Aplikacija se je uspešno naložila, vendar še nima Firebase nastavitev. Zato prijava in shranjevanje podatkov še nista na voljo.</p>

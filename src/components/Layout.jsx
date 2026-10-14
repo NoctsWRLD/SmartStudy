@@ -2,8 +2,8 @@ import { useEffect, useRef, useState } from 'react';
 import { NavLink, useLocation, Link, useNavigate } from 'react-router-dom';
 import { useTasks } from '../hooks/useFirestore';
 import { useAuth } from '../contexts/AuthContext';
-import { useSettings } from '../contexts/SettingsContext';
 import Logo from './Logo';
+import { GearIcon } from './icons';
 import { getSlovenianDateKey } from '../utils/dates';
 
 const NAV_GROUPS = [
@@ -26,23 +26,6 @@ const NAV_GROUPS = [
     ],
   },
 ];
-
-function ThemeToggle() {
-  const { theme, setTheme } = useSettings();
-  const dark = theme === 'tabla-temna';
-  return (
-    <button
-      type="button"
-      onClick={() => setTheme(dark ? 'tabla' : 'tabla-temna')}
-      title={dark ? 'Preklopi na svetli videz' : 'Preklopi na temni videz'}
-      aria-label={dark ? 'Preklopi na svetli videz' : 'Preklopi na temni videz'}
-      aria-pressed={dark}
-      className="grid h-10 w-10 shrink-0 place-items-center rounded-xl text-[15px] text-rp-muted transition-colors hover:bg-rp-overlay hover:text-rp-text active:scale-90"
-    >
-      <span aria-hidden="true">{dark ? '☀' : '☾'}</span>
-    </button>
-  );
-}
 
 function TodayPill() {
   const { tasks } = useTasks();
@@ -182,11 +165,11 @@ function SettingsMenu({ active }) {
         aria-haspopup="menu"
         aria-expanded={open}
         onClick={() => setOpen((v) => !v)}
-        className={`grid h-10 w-10 place-items-center rounded-xl text-[15px] transition-colors ${
+        className={`grid h-10 w-10 place-items-center rounded-xl transition-colors ${
           active || open ? 'bg-rp-iris/[.12] text-rp-iris' : 'text-rp-muted hover:bg-rp-overlay hover:text-rp-text'
         }`}
       >
-        <span aria-hidden="true">⚙</span>
+        <GearIcon className="h-5 w-5" />
       </button>
 
       {open && (
@@ -203,7 +186,7 @@ function SettingsMenu({ active }) {
               onClick={() => setOpen(false)}
               className="flex items-center gap-3 rounded-xl px-3.5 py-2.5 text-[14.5px] font-semibold text-rp-text transition-colors hover:bg-rp-overlay"
             >
-              <span aria-hidden="true">⚙</span>
+              <GearIcon className="h-4 w-4 text-rp-muted" />
               Nastavitve
             </NavLink>
             <button
@@ -278,7 +261,6 @@ export default function Layout({ children }) {
             <TodayPill />
             <NavLink to="/tasks" className="btn-primary hidden !py-2.5 min-[480px]:inline-flex">Nova naloga</NavLink>
             <SettingsMenu active={location.pathname === '/settings' || location.pathname === '/profile'} />
-            <ThemeToggle />
           </div>
         </div>
 

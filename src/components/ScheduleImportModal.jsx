@@ -1,6 +1,7 @@
 import { useRef, useState } from 'react';
 import { addDaysToDateKey } from '../utils/dates';
 import { DAY_NAMES, listWeekMondays, mondayOfThisWeek, parseTimetableText, semesterRange, weekLabel } from '../utils/timetable';
+import { XIcon } from './icons';
 
 const PERIODS = [
   { id: 'week', label: 'Ta teden' },
@@ -163,7 +164,7 @@ export default function ScheduleImportModal({ isOpen, onClose, subjects, onImpor
                   <div key={d.key} className="rounded-xl border border-rp-hl-med p-2.5">
                     <div className="flex items-center gap-2">
                       <input value={d.title} onChange={(e) => updateDraft(d.key, { title: e.target.value })} placeholder="Naziv naloge" maxLength={120} className="field !py-2 !text-[13px]" aria-label="Naziv naloge" />
-                      <button type="button" onClick={() => removeDraft(d.key)} aria-label="Odstrani vrstico" className="rounded-lg p-1.5 text-rp-muted transition-colors hover:bg-rp-love/10 hover:text-rp-love">✕</button>
+                      <button type="button" onClick={() => removeDraft(d.key)} aria-label="Odstrani vrstico" className="rounded-lg p-1.5 text-rp-muted transition-colors hover:bg-rp-love/10 hover:text-rp-love"><XIcon className="h-3.5 w-3.5" /></button>
                     </div>
                     <div className="mt-2 grid grid-cols-2 gap-2">
                       <select value={d.weekday} onChange={(e) => updateDraft(d.key, { weekday: Number(e.target.value) })} className="field !py-2 !text-[13px]" aria-label="Dan v tednu">

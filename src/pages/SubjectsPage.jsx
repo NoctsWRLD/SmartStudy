@@ -5,6 +5,7 @@ import { useSubjects, useTasks } from '../hooks/useFirestore';
 import SubjectModal from '../components/SubjectModal';
 import SubjectTaskModal from '../components/SubjectTaskModal';
 import Skeleton from '../components/Skeleton';
+import { SparkIcon } from '../components/icons';
 
 function SubjectCard({ subject, tasks, onOpen, onEdit, onDelete }) {
   const color = SUBJECT_COLORS[subject.colorIndex] || SUBJECT_COLORS[0];
@@ -44,7 +45,7 @@ function SubjectCard({ subject, tasks, onOpen, onEdit, onDelete }) {
         </div>
         <span className="mt-3 flex items-center justify-between text-xs text-rp-muted">
           <span>{done} {done === 1 ? 'opravljena naloga' : 'opravljenih nalog'}</span>
-          <span className="text-rp-subtle transition group-hover:text-rp-iris">Odpri naloge <span aria-hidden="true">→</span></span>
+          <span className="text-rp-subtle transition group-hover:text-rp-iris">Odpri naloge</span>
         </span>
       </button>
     </article>
@@ -117,7 +118,7 @@ export default function SubjectsPage() {
         ))}
       </section>
 
-      {fromTask && <div role="status" className="flex gap-3 rounded-2xl border border-rp-gold/20 bg-rp-gold/[.06] p-4 text-sm leading-6 text-rp-gold"><span aria-hidden="true">✦</span><p><strong>Najprej ustvari predmet.</strong> Nalogo bova nato samodejno povezala z njim.</p></div>}
+      {fromTask && <div role="status" className="flex gap-3 rounded-2xl border border-rp-gold/20 bg-rp-gold/[.06] p-4 text-sm leading-6 text-rp-gold"><SparkIcon className="mt-1 h-4 w-4 shrink-0" /><p><strong>Najprej ustvari predmet.</strong> Nalogo bova nato samodejno povezala z njim.</p></div>}
 
       {!loading && subjects.length > 0 && (
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">

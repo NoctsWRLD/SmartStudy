@@ -1,5 +1,6 @@
 import { useState, useMemo } from 'react';
 import Badge from './Badge';
+import { PlusIcon } from './icons';
 import { getSlovenianDateKey } from '../utils/dates';
 
 export default function SubjectTaskModal({ isOpen, onClose, subject, tasks, onToggleTask, onDeleteTask, onAddTask }) {
@@ -44,7 +45,7 @@ export default function SubjectTaskModal({ isOpen, onClose, subject, tasks, onTo
             </p>
           </div>
           <div className="flex shrink-0 items-center gap-1">
-            {onAddTask && <button type="button" onClick={onAddTask} className="rounded-lg bg-rp-iris px-3 py-2 text-xs font-semibold text-white transition hover:opacity-90">＋ Naloga</button>}
+            {onAddTask && <button type="button" onClick={onAddTask} aria-label="Dodaj nalogo" className="flex items-center gap-1.5 rounded-lg bg-rp-iris px-3 py-2 text-xs font-semibold text-white transition hover:opacity-90"><PlusIcon /><span aria-hidden="true">Naloga</span></button>}
             <button type="button" onClick={onClose} aria-label="Zapri predmet" className="rounded-xl p-2 text-rp-muted transition hover:bg-rp-hl-med/50 hover:text-rp-text focus:outline-none">
               <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
             </button>

@@ -4,6 +4,7 @@ import { useSubjects, useTasks } from '../hooks/useFirestore';
 import TaskCard from '../components/TaskCard';
 import TaskModal from '../components/TaskModal';
 import Skeleton from '../components/Skeleton';
+import { CheckIcon } from '../components/icons';
 import { addDaysToDateKey, getSlovenianDateKey } from '../utils/dates';
 
 const FILTERS = [
@@ -141,16 +142,16 @@ export default function TasksPage() {
       </section>
 
       <section className="grid grid-cols-2 gap-3 lg:grid-cols-4 sm:gap-4" aria-label="Pregled nalog">
-        <SummaryCard label="Odprte naloge" value={pending.length} caption="čakajo na tvoj korak" tone="text-rp-iris" icon="◷" />
-        <SummaryCard label="Rok v 3 dneh" value={dueSoon} caption="pripravi si čas zanje" tone="text-rp-gold" icon="⌁" />
-        <SummaryCard label="Zamujene" value={overdue} caption="začni z najstarejšim rokom" tone="text-rp-love" icon="!" />
-        <SummaryCard label="Opravljeno" value={`${completion}%`} caption={`${completed.length} zaključenih nalog`} tone="text-rp-pine" icon="✓" />
+        <SummaryCard label="Odprte naloge" value={pending.length} caption="čakajo na tvoj korak" />
+        <SummaryCard label="Rok v 3 dneh" value={dueSoon} caption="pripravi si čas zanje" />
+        <SummaryCard label="Zamujene" value={overdue} caption="začni z najstarejšim rokom" />
+        <SummaryCard label="Opravljeno" value={`${completion}%`} caption={`${completed.length} zaključenih nalog`} />
       </section>
 
       {!subjectsLoading && subjects.length === 0 && (
         <section role="alert" className="flex flex-col gap-4 rounded-2xl border border-rp-gold/20 bg-rp-gold/[.06] p-4 sm:flex-row sm:items-center sm:justify-between sm:p-5">
           <div className="flex gap-3"><span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-rp-gold/10 text-rp-gold" aria-hidden="true">!</span><div><h2 className="text-sm font-semibold text-rp-text">Najprej ustvari predmet</h2><p className="mt-1 text-xs leading-5 text-rp-subtle">Tako bo vsaka nova naloga lepo razvrščena po predmetu. Po ustvarjanju te vrnem sem in odprem obrazec za nalogo.</p></div></div>
-          <button type="button" onClick={() => navigate('/subjects?create=1&from=task')} className="shrink-0 rounded-xl border border-rp-gold/30 px-4 py-2.5 text-xs font-semibold text-rp-gold transition hover:bg-rp-gold/10">Ustvari predmet <span aria-hidden="true">→</span></button>
+          <button type="button" onClick={() => navigate('/subjects?create=1&from=task')} className="shrink-0 rounded-xl border border-rp-gold/30 px-4 py-2.5 text-xs font-semibold text-rp-gold transition hover:bg-rp-gold/10">Ustvari predmet</button>
         </section>
       )}
 
@@ -191,7 +192,7 @@ export default function TasksPage() {
           <Skeleton lines={5} />
         ) : filtered.length === 0 ? (
           <div className="card flex min-h-64 flex-col items-center justify-center px-6 py-10 text-center">
-            <span className="grid h-14 w-14 place-items-center rounded-2xl bg-rp-foam/10 text-2xl text-rp-foam" aria-hidden="true">✓</span>
+            <span className="grid h-14 w-14 place-items-center rounded-2xl bg-rp-foam/10 text-rp-foam" aria-hidden="true"><CheckIcon className="h-7 w-7" /></span>
             <h2 className="mt-4 text-lg font-semibold text-rp-text">{search ? 'Ni zadetkov' : statusFilter === 'completed' ? 'Še ni opravljenih nalog' : 'Vse je urejeno'}</h2>
             <p className="mt-1 max-w-sm text-sm leading-6 text-rp-muted">{search ? `Poskusi drug izraz za »${search}«.` : pending.length ? 'Vse naloge so opravljene. Vzemi si zaslužen odmor!' : 'Dodaj novo nalogo in jo razdeli na majhen, izvedljiv korak.'}</p>
             {!search && pending.length === 0 && subjects.length > 0 && <button type="button" onClick={openNewTask} className="btn-primary mt-4 !py-2.5 !text-xs">Dodaj nalogo</button>}
