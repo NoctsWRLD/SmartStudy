@@ -1,176 +1,132 @@
-import { useState } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import AccountMenu from './AccountMenu';
 
 const NAV_ITEMS = [
-  {
-    to: '/',
-    label: 'Nadzorna plošča',
-    icon: (
-      <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-          d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
-      </svg>
-    ),
-  },
-  {
-    to: '/subjects',
-    label: 'Predmeti',
-    icon: (
-      <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-          d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-      </svg>
-    ),
-  },
-  {
-    to: '/tasks',
-    label: 'Naloge',
-    icon: (
-      <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-          d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
-      </svg>
-    ),
-  },
-  {
-    to: '/schedule',
-    label: 'Urnik',
-    icon: (
-      <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-          d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-      </svg>
-    ),
-  },
-  {
-    to: '/chat',
-    label: 'Chat',
-    icon: (
-      <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-          d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z" />
-      </svg>
-    ),
-  },
-  {
-    to: '/friends',
-    label: 'Prijatelji',
-    icon: (
-      <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-          d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
-      </svg>
-    ),
-  },
+  { to: '/', label: 'Domov', short: 'Domov', icon: '⌂' },
+  { to: '/subjects', label: 'Predmeti', short: 'Šola', icon: '✎' },
+  { to: '/tasks', label: 'Naloge', short: 'Naloge', icon: '✓' },
+  { to: '/schedule', label: 'Urnik', short: 'Urnik', icon: '◷' },
+  { to: '/chat', label: 'Klepet', short: 'Klepet', icon: '◌' },
+  { to: '/friends', label: 'Prijatelji', short: 'Folks', icon: '☺' },
 ];
 
-function SidebarContent({ onClose }) {
-  const { currentUser } = useAuth();
-
+function Logo({ size = 'md' }) {
+  const box = size === 'lg' ? 'h-11 w-11 text-xl' : 'h-10 w-10 text-lg';
   return (
-    <div className="flex h-full flex-col overflow-y-auto">
-      {/* Brand */}
-      <div className="flex items-center gap-3 border-b border-rp-hl-med/60 px-5 py-5">
-        <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-rp-iris to-rp-foam shadow-[0_6px_22px_rgba(185,161,255,.2)]">
-          <svg className="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-              d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-          </svg>
-        </div>
-        <span className="text-lg font-bold tracking-tight gradient-text">SmartStudy</span>
-      </div>
+    <span className={`grid ${box} place-items-center rounded-2xl bg-rp-iris font-display font-bold text-white`} aria-hidden="true">
+      S
+    </span>
+  );
+}
 
-      {/* Nav items */}
-      <nav aria-label="Glavna navigacija" className="flex-1 space-y-1 px-3 py-4">
-        {NAV_ITEMS.map(({ to, label, icon }) => (
-          <NavLink
-            key={to}
-            to={to}
-            end={to === '/'}
-            onClick={onClose}
-            className={({ isActive }) =>
-              `flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all ${
-                isActive
-                  ? 'text-rp-iris bg-rp-iris/[.08] border border-rp-iris/15 shadow-[inset_3px_0_0_0_#6d5bd0]'
-                  : 'text-rp-subtle hover:text-rp-text hover:bg-rp-overlay/70 border border-transparent'
-              }`
-            }
+function RailLink({ to, label, icon, end }) {
+  return (
+    <NavLink
+      to={to}
+      end={end}
+      aria-label={label}
+      title={label}
+      className={({ isActive }) =>
+        `rail-link group relative flex flex-col items-center gap-1 rounded-2xl px-2 py-2.5 text-[11px] font-medium transition-all duration-200 ${
+          isActive ? 'text-rp-text' : 'text-rp-muted hover:text-rp-text hover:bg-rp-overlay'
+        }`
+      }
+    >
+      {({ isActive }) => (
+        <>
+          <span
+            className={`grid h-10 w-12 place-items-center rounded-2xl text-base transition-all duration-200 group-active:scale-90 ${
+              isActive ? 'bg-rp-iris text-white shadow-[0_6px_16px_rgba(67,73,232,.3)]' : 'bg-transparent group-hover:bg-rp-hl-med/60'
+            }`}
           >
             {icon}
-            {label}
-          </NavLink>
-        ))}
-      </nav>
-
-      <div className="border-t border-rp-hl-med/60 px-3 pb-4 pt-4">
-        <AccountMenu user={currentUser} placement="top" variant="sidebar" onNavigate={onClose} />
-      </div>
-    </div>
+          </span>
+          {label}
+          <span
+            className={`nav-dot absolute -left-[13px] top-1/2 h-6 w-1 -translate-y-1/2 rounded-full bg-rp-iris ${isActive ? 'scale-100 opacity-100' : 'scale-0 opacity-0'}`}
+            aria-hidden="true"
+          />
+        </>
+      )}
+    </NavLink>
   );
 }
 
 export default function Layout({ children }) {
-  const [mobileOpen, setMobileOpen] = useState(false);
   const location = useLocation();
-  const pageTitle = NAV_ITEMS.find((item) => item.to === location.pathname)?.label
-    || (location.pathname === '/settings' ? 'Nastavitve' : 'Moj profil');
   const { currentUser } = useAuth();
+  const active = NAV_ITEMS.find((item) => item.to === location.pathname)?.label
+    || (location.pathname === '/settings' ? 'Nastavitve' : 'Moj profil');
+  const firstName = currentUser?.displayName?.trim().split(/\s+/)[0] || 'hej';
 
   return (
-    <div className="flex h-dvh min-h-[32rem] overflow-hidden">
-      <a href="#main-content" className="sr-only z-[100] rounded-lg bg-rp-iris px-4 py-2 font-semibold text-rp-base focus:not-sr-only focus:fixed focus:left-4 focus:top-4">Preskoči na vsebino</a>
-      {/* Desktop sidebar */}
-      <aside className="hidden w-64 flex-shrink-0 flex-col border-r border-rp-hl-med/75 bg-rp-surface/90 backdrop-blur-xl md:flex">
-        <SidebarContent />
+    <div className="flex min-h-dvh">
+      <a href="#main-content" className="sr-only z-[100] rounded-full bg-rp-iris px-4 py-2 font-semibold text-white focus:not-sr-only focus:fixed focus:left-4 focus:top-4">
+        Preskoči na vsebino
+      </a>
+
+      {/* Slim icon rail — desktop */}
+      <aside className="sticky top-0 hidden h-dvh w-[92px] shrink-0 flex-col items-center gap-1 border-r border-rp-hl-med bg-rp-surface/95 px-2 py-4 backdrop-blur-xl md:flex" aria-label="Glavna navigacija">
+        <NavLink to="/" className="mb-3 transition-transform hover:scale-105 active:scale-95" aria-label="SmartStudy domov">
+          <Logo />
+        </NavLink>
+        <nav className="flex w-full flex-1 flex-col gap-0.5">
+          {NAV_ITEMS.map((item) => (
+            <RailLink key={item.to} to={item.to} label={item.short} icon={item.icon} end={item.to === '/'} />
+          ))}
+        </nav>
+        <div className="mt-2">
+          <AccountMenu user={currentUser} placement="top" variant="avatar" />
+        </div>
       </aside>
 
-      {/* Mobile overlay */}
-      {mobileOpen && (
-        <div className="fixed inset-0 z-40 md:hidden">
-          <div className="absolute inset-0 bg-slate-900/25 backdrop-blur-sm" onClick={() => setMobileOpen(false)} />
-          <aside className="absolute bottom-0 left-0 top-0 z-50 flex w-72 flex-col border-r border-rp-hl-med bg-rp-surface">
-            <SidebarContent onClose={() => setMobileOpen(false)} />
-          </aside>
-        </div>
-      )}
-
-      {/* Main content */}
-      <div className="flex-1 flex flex-col overflow-hidden">
-        <header className="hidden h-[4.25rem] shrink-0 items-center justify-between border-b border-rp-hl-med/70 bg-rp-surface/80 px-6 backdrop-blur-xl md:flex xl:px-8">
-          <div className="flex items-center gap-3 text-sm">
-            <span className="text-rp-muted">SmartStudy</span>
-            <span className="text-rp-hl-high" aria-hidden="true">/</span>
-            <h1 className="font-semibold text-rp-text">{pageTitle}</h1>
-          </div>
-          <div className="flex items-center gap-3">
-            <span className="hidden text-xs text-rp-muted lg:block">Lep napredek se začne z majhnim korakom.</span>
-            <AccountMenu user={currentUser} placement="bottom" variant="avatar" />
+      {/* Content column */}
+      <div className="min-w-0 flex-1 pb-24 md:pb-0">
+        <header className="sticky top-0 z-30 border-b border-rp-hl-med/70 bg-rp-base/85 backdrop-blur-xl">
+          <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-3 md:px-8">
+            <div className="flex min-w-0 items-center gap-3">
+              <span className="md:hidden"><Logo /></span>
+              <div className="min-w-0">
+                <p className="font-hand text-lg leading-none text-rp-muted">živjo, {firstName}! ✳</p>
+                <h1 className="font-display truncate text-lg font-bold tracking-tight">{active}</h1>
+              </div>
+            </div>
+            <div className="hidden items-center gap-2 md:flex">
+              <NavLink to="/settings" className="btn-ghost" aria-label="Nastavitve">⚙ <span className="hidden lg:inline">Nastavitve</span></NavLink>
+              <NavLink to="/tasks" className="btn-primary !py-2.5">+ Nova naloga</NavLink>
+            </div>
+            <div className="md:hidden">
+              <AccountMenu user={currentUser} placement="bottom" variant="avatar" />
+            </div>
           </div>
         </header>
 
-        {/* Mobile header */}
-        <header className="flex items-center justify-between border-b border-rp-hl-med/70 bg-rp-surface/90 px-4 py-3 backdrop-blur-xl md:hidden">
-          <button
-            type="button"
-            aria-label="Odpri navigacijo"
-            aria-expanded={mobileOpen}
-            onClick={() => setMobileOpen(true)}
-            className="rounded-xl p-2 text-rp-subtle transition-all hover:bg-rp-overlay hover:text-rp-text"
-          >
-            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-            </svg>
-          </button>
-          <span className="text-lg font-bold gradient-text">SmartStudy</span>
-          <div className="w-9" />
-        </header>
-
-        <main id="main-content" className="flex-1 overflow-y-auto p-4 md:p-6 xl:p-8">
+        <main id="main-content" className="mx-auto max-w-6xl px-4 pt-5 md:px-8 md:pt-8">
           {children}
         </main>
       </div>
+
+      {/* Bottom bar — mobile */}
+      <nav className="fixed inset-x-3 bottom-3 z-40 flex items-center justify-around rounded-3xl border border-rp-hl-med bg-rp-surface/95 px-2 py-2 shadow-[0_12px_32px_rgba(19,27,42,.12)] backdrop-blur-xl md:hidden" aria-label="Glavna navigacija">
+        {NAV_ITEMS.slice(0, 5).map((item) => (
+          <NavLink
+            key={item.to}
+            to={item.to}
+            end={item.to === '/'}
+            className={({ isActive }) =>
+              `flex min-w-12 flex-col items-center gap-0.5 rounded-2xl px-3 py-1.5 text-[10px] font-semibold transition-all active:scale-90 ${isActive ? 'text-rp-iris' : 'text-rp-muted'}`
+            }
+          >
+            {({ isActive }) => (
+              <>
+                <span className={`grid h-8 w-10 place-items-center rounded-xl text-base ${isActive ? 'bg-rp-iris text-white' : ''}`}>{item.icon}</span>
+                {item.short}
+              </>
+            )}
+          </NavLink>
+        ))}
+      </nav>
     </div>
   );
 }
