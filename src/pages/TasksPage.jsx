@@ -11,10 +11,12 @@ const FILTERS = [
   { key: 'completed', label: 'Opravljene' },
 ];
 
-function SummaryCard({ label, value, caption, tone, icon }) {
+function SummaryCard({ label, value, caption }) {
   return (
-    <div className="rounded-2xl border border-rp-hl-med/50 bg-rp-surface/65 p-4 sm:p-5">
-      <div className="flex items-start justify-between gap-3"><div><p className="text-xs text-rp-muted">{label}</p><p className={`mt-2 text-3xl font-semibold tracking-tight ${tone}`}>{value}</p><p className="mt-1 text-[11px] text-rp-muted">{caption}</p></div><span className={`grid h-10 w-10 place-items-center rounded-xl bg-rp-overlay/75 text-lg ${tone}`} aria-hidden="true">{icon}</span></div>
+    <div className="card p-4 sm:p-5">
+      <p className="text-[13px] text-rp-muted">{label}</p>
+      <p className="font-display mt-1 text-3xl font-bold tracking-tight tabular-nums">{value}</p>
+      <p className="mt-1 text-xs text-rp-muted">{caption}</p>
     </div>
   );
 }

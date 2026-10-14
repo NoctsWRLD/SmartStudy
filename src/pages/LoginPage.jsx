@@ -2,25 +2,26 @@ import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 
-function AuthShell({ title, hand, subtitle, error, children, footer }) {
+export function AuthShell({ title, subtitle, error, children, footer }) {
   return (
-    <div className="relative flex min-h-screen items-center justify-center overflow-hidden p-4">
-      <svg className="doodle pointer-events-none absolute left-[8%] top-[12%] hidden h-20 w-20 text-rp-iris/25 sm:block" viewBox="0 0 100 100" fill="none" aria-hidden="true">
-        <path d="M15 75 C 35 25, 60 85, 85 35" stroke="currentColor" strokeWidth="5" strokeLinecap="round" />
-      </svg>
-      <svg className="doodle doodle-delay pointer-events-none absolute bottom-[10%] right-[8%] hidden h-16 w-16 text-rp-iris/20 sm:block" viewBox="0 0 100 100" fill="currentColor" aria-hidden="true">
-        <path d="M50 10l7 22 22 7-22 7-7 22-7-22-22-7 22-7z" />
-      </svg>
-      <div className="card rise w-full max-w-md p-7 sm:p-9">
-        <div className="mb-7">
-          <span className="grid h-11 w-11 place-items-center rounded-2xl bg-rp-iris font-display text-xl font-bold text-white" aria-hidden="true">S</span>
-          <p className="font-hand mt-4 text-2xl leading-none text-rp-iris">{hand}</p>
-          <h1 className="font-display mt-1 text-3xl font-bold tracking-tight">{title}</h1>
-          <p className="mt-1.5 text-sm text-rp-muted">{subtitle}</p>
+    <div className="grid min-h-screen md:grid-cols-2">
+      <div className="hidden flex-col justify-between bg-rp-text p-10 text-[var(--rp-base)] md:flex">
+        <span className="grid h-10 w-10 place-items-center rounded-xl bg-[var(--rp-base)] font-display text-lg font-bold text-rp-text" aria-hidden="true">S</span>
+        <div>
+          <p className="font-display text-4xl font-bold leading-[1.05] tracking-tight">Mirna glava.<br />Narejene naloge.</p>
+          <p className="mt-4 max-w-sm text-[15px] leading-6 opacity-70">SmartStudy zbere predmete, naloge in urnik na enem mestu — za osnovnošolce, dijake in študente.</p>
         </div>
-        {error && <div className="mb-4 rounded-2xl border border-rp-love/25 bg-rp-love/[.07] p-3 text-sm text-rp-love" role="alert">{error}</div>}
-        {children}
-        <p className="mt-6 text-center text-sm text-rp-muted">{footer}</p>
+        <p className="text-sm opacity-60">25 minut fokusa naenkrat.</p>
+      </div>
+      <div className="flex items-center justify-center p-4 sm:p-8">
+        <div className="rise w-full max-w-md">
+          <span className="grid h-11 w-11 place-items-center rounded-2xl bg-rp-text font-display text-xl font-bold text-[var(--rp-base)] md:hidden" aria-hidden="true">S</span>
+          <h1 className="page-title mt-4 md:mt-0">{title}</h1>
+          <p className="body-quiet mt-2">{subtitle}</p>
+          {error && <div className="mt-5 rounded-2xl border border-rp-love/30 bg-rp-love/[.07] p-3 text-sm text-rp-love" role="alert">{error}</div>}
+          <div className="mt-6">{children}</div>
+          <p className="mt-6 text-sm text-rp-muted">{footer}</p>
+        </div>
       </div>
     </div>
   );
@@ -69,15 +70,13 @@ export default function LoginPage() {
   }
 
   return (
-    <AuthShell hand="hej, dobrodošel nazaj *" title="Prijava" subtitle="Tvoje naloge te že čakajo." error={error}
+    <AuthShell title="Prijava" subtitle="Tvoje naloge te že čakajo." error={error}
       footer={<>Še nimaš računa? <Link to="/register" className="font-semibold text-rp-iris hover:underline">Ustvari ga</Link></>}>
       <form onSubmit={handleSubmit} className="space-y-3.5">
         <AuthField label="E-pošta" id="login-email" type="email" required value={email} onChange={(e) => setEmail(e.target.value)} placeholder="tia@sola.si" autoComplete="email" />
         <AuthField label="Geslo" id="login-password" type="password" required value={password} onChange={(e) => setPassword(e.target.value)} placeholder="••••••••" autoComplete="current-password" />
-        <AuthSubmit loading={loading} idle="Prijavi me →" busy="Prijavljam…" />
+        <AuthSubmit loading={loading} idle="Prijavi me" busy="Prijavljam…" />
       </form>
     </AuthShell>
   );
 }
-
-export { AuthShell };

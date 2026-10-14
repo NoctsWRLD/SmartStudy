@@ -12,8 +12,7 @@ function SubjectCard({ subject, tasks, onOpen, onEdit, onDelete }) {
   const progress = tasks.length ? Math.round((done / tasks.length) * 100) : 0;
 
   return (
-    <article className="group relative overflow-hidden rounded-2xl border border-rp-hl-med/50 bg-rp-surface/65 p-5 shadow-[0_12px_35px_rgba(0,0,0,.12)] transition-all duration-300 hover:-translate-y-1 hover:border-rp-hl-high/70 hover:shadow-[0_20px_45px_rgba(0,0,0,.2)]">
-      <div className="absolute inset-x-0 top-0 h-1" style={{ background: `linear-gradient(90deg, ${color.colorCode}, transparent)` }} />
+    <article className="card card-hover group relative p-5">
       <div className="flex items-start justify-between gap-3">
         <button type="button" onClick={onOpen} className="flex min-w-0 flex-1 items-center gap-3 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rp-iris">
           <span className={`grid h-12 w-12 shrink-0 place-items-center rounded-2xl border text-lg font-bold ${color.bg} ${color.text} ${color.border}`}>
@@ -39,8 +38,8 @@ function SubjectCard({ subject, tasks, onOpen, onEdit, onDelete }) {
           <span className="font-medium text-rp-subtle">Napredek pri predmetu</span>
           <span className={`font-semibold ${color.text}`}>{progress}%</span>
         </div>
-        <div className="mt-2 h-2 overflow-hidden rounded-full bg-rp-hl-med/55">
-          <div className="h-full rounded-full transition-[width] duration-700" style={{ width: `${progress}%`, background: `linear-gradient(90deg, ${color.colorCode}, #9ccfd8)` }} />
+        <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-rp-overlay">
+          <div className="bar-grow h-full rounded-full" style={{ width: `${progress}%`, backgroundColor: color.colorCode }} />
         </div>
         <span className="mt-3 flex items-center justify-between text-xs text-rp-muted">
           <span>{done} {done === 1 ? 'opravljena naloga' : 'opravljenih nalog'}</span>

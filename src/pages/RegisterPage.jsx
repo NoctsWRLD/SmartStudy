@@ -29,7 +29,7 @@ export default function RegisterPage() {
   }
 
   return (
-    <AuthShell hand="pridi, začneva *" title="Ustvari račun" subtitle="Brezplačno, v manj kot minuti." error={error}
+    <AuthShell title="Ustvari račun" subtitle="Brezplačno, v manj kot minuti." error={error}
       footer={<>Že imaš račun? <Link to="/login" className="font-semibold text-rp-iris hover:underline">Prijavi se</Link></>}>
       <form onSubmit={handleSubmit} className="space-y-3.5">
         <AuthField label="Ime" id="register-name" type="text" required maxLength={60} value={name} onChange={(e) => setName(e.target.value)} placeholder="Tia Novak" autoComplete="name" />
@@ -38,7 +38,7 @@ export default function RegisterPage() {
           <AuthField label="Geslo" id="register-password" type="password" required value={password} onChange={(e) => setPassword(e.target.value)} placeholder="••••••••" autoComplete="new-password" />
           <AuthField label="Ponovi geslo" id="register-confirm" type="password" required value={confirm} onChange={(e) => setConfirm(e.target.value)} placeholder="••••••••" autoComplete="new-password" />
         </div>
-        <AuthSubmit loading={loading} idle="Ustvari račun →" busy="Ustvarjam…" />
+        <AuthSubmit loading={loading} idle="Ustvari račun" busy="Ustvarjam…" />
       </form>
     </AuthShell>
   );

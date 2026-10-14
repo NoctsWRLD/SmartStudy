@@ -4,7 +4,7 @@ import { useAuth } from '../contexts/AuthContext';
 
 function AccountAvatar({ user, className = '' }) {
   return (
-    <span className={`flex shrink-0 items-center justify-center overflow-hidden rounded-full bg-rp-iris font-bold text-white ${className}`}>
+    <span className={`flex shrink-0 items-center justify-center overflow-hidden rounded-full bg-rp-text font-bold text-[var(--rp-base)] ${className}`}>
       {user?.photoURL ? <img src={user.photoURL} alt="" className="h-full w-full object-cover" /> : user?.displayName?.[0]?.toUpperCase() || '?'}
     </span>
   );
