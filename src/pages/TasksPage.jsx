@@ -149,24 +149,24 @@ export default function TasksPage() {
       </section>
 
       {!subjectsLoading && subjects.length === 0 && (
-        <section role="alert" className="flex flex-col gap-4 rounded-2xl border border-rp-gold/20 bg-rp-gold/[.06] p-4 sm:flex-row sm:items-center sm:justify-between sm:p-5">
-          <div className="flex gap-3"><span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-rp-gold/10 text-rp-gold" aria-hidden="true">!</span><div><h2 className="text-sm font-semibold text-rp-text">Najprej ustvari predmet</h2><p className="mt-1 text-xs leading-5 text-rp-subtle">Tako bo vsaka nova naloga lepo razvrščena po predmetu. Po ustvarjanju te vrnem sem in odprem obrazec za nalogo.</p></div></div>
-          <button type="button" onClick={() => navigate('/subjects?create=1&from=task')} className="shrink-0 rounded-xl border border-rp-gold/30 px-4 py-2.5 text-xs font-semibold text-rp-gold transition hover:bg-rp-gold/10">Ustvari predmet</button>
+        <section role="alert" className="flex flex-col gap-4 rounded-2xl border border-rp-warn/20 bg-rp-warn/[.06] p-4 sm:flex-row sm:items-center sm:justify-between sm:p-5">
+          <div className="flex gap-3"><span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-rp-warn/10 text-rp-warn" aria-hidden="true">!</span><div><h2 className="text-sm font-semibold text-rp-text">Najprej ustvari predmet</h2><p className="mt-1 text-xs leading-5 text-rp-subtle">Tako bo vsaka nova naloga lepo razvrščena po predmetu. Po ustvarjanju te vrnem sem in odprem obrazec za nalogo.</p></div></div>
+          <button type="button" onClick={() => navigate('/subjects?create=1&from=task')} className="shrink-0 rounded-xl border border-rp-warn/30 px-4 py-2.5 text-xs font-semibold text-rp-warn transition hover:bg-rp-warn/10">Ustvari predmet</button>
         </section>
       )}
 
       <section className="space-y-4" aria-label="Seznam nalog">
         <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
-          <div className="flex gap-1 overflow-x-auto rounded-xl border border-rp-hl-med/50 bg-rp-overlay/65 p-1">
-            {FILTERS.map((filter) => <button key={filter.key} type="button" onClick={() => setStatusFilter(filter.key)} aria-pressed={statusFilter === filter.key} className={`whitespace-nowrap rounded-lg px-4 py-2 text-xs font-semibold transition ${statusFilter === filter.key ? 'bg-rp-iris text-rp-base shadow-sm' : 'text-rp-subtle hover:bg-rp-hl-med/25 hover:text-rp-text'}`}>{filter.label}</button>)}
+          <div className="flex gap-1 overflow-x-auto rounded-xl border border-rp-line/50 bg-rp-overlay/65 p-1">
+            {FILTERS.map((filter) => <button key={filter.key} type="button" onClick={() => setStatusFilter(filter.key)} aria-pressed={statusFilter === filter.key} className={`whitespace-nowrap rounded-lg px-4 py-2 text-xs font-semibold transition ${statusFilter === filter.key ? 'bg-rp-accent text-rp-accent-ink shadow-sm' : 'text-rp-subtle hover:bg-rp-line/25 hover:text-rp-text'}`}>{filter.label}</button>)}
           </div>
-          <button type="button" onClick={toggleSelecting} aria-pressed={selecting} className={`shrink-0 self-start rounded-xl border px-4 py-2 text-xs font-semibold transition lg:self-auto ${selecting ? 'border-rp-iris bg-rp-iris/[.08] text-rp-text' : 'border-rp-hl-med/60 text-rp-subtle hover:border-rp-hl-high hover:text-rp-text'}`}>
+          <button type="button" onClick={toggleSelecting} aria-pressed={selecting} className={`shrink-0 self-start rounded-xl border px-4 py-2 text-xs font-semibold transition lg:self-auto ${selecting ? 'border-rp-accent bg-rp-accent/[.08] text-rp-text' : 'border-rp-line/60 text-rp-subtle hover:border-rp-line-strong hover:text-rp-text'}`}>
             {selecting ? 'Prekliči izbor' : 'Izberi'}
           </button>
           <div className="grid gap-2 sm:grid-cols-[minmax(12rem,1fr)_auto_auto]">
-            <label className="relative block"><span className="sr-only">Poišči nalogo</span><svg className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-rp-muted" fill="none" viewBox="0 0 24 24" stroke="currentColor"><circle cx="11" cy="11" r="7" strokeWidth={2} /><path strokeLinecap="round" strokeWidth={2} d="m16 16 4 4" /></svg><input value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Poišči nalogo…" className="w-full rounded-xl border border-rp-hl-med/60 bg-rp-surface/70 py-2.5 pl-9 pr-3 text-xs text-rp-text outline-none placeholder:text-rp-muted focus:border-rp-iris/60" /></label>
-            <select value={subjectFilter} onChange={(event) => setSubjectFilter(event.target.value)} aria-label="Filtriraj po predmetu" className="rounded-xl border border-rp-hl-med/60 bg-rp-surface/70 px-3 py-2.5 text-xs text-rp-subtle outline-none focus:border-rp-iris/60"><option value="">Vsi predmeti</option>{subjects.map((subject) => <option key={subject.id} value={subject.id}>{subject.name}</option>)}</select>
-            <select value={sortBy} onChange={(event) => setSortBy(event.target.value)} aria-label="Razvrsti naloge" className="rounded-xl border border-rp-hl-med/60 bg-rp-surface/70 px-3 py-2.5 text-xs text-rp-subtle outline-none focus:border-rp-iris/60"><option value="dueDate">Po roku</option><option value="createdAt">Najnovejše</option></select>
+            <label className="relative block"><span className="sr-only">Poišči nalogo</span><svg className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-rp-muted" fill="none" viewBox="0 0 24 24" stroke="currentColor"><circle cx="11" cy="11" r="7" strokeWidth={2} /><path strokeLinecap="round" strokeWidth={2} d="m16 16 4 4" /></svg><input value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Poišči nalogo…" className="w-full rounded-xl border border-rp-line/60 bg-rp-raised/70 py-2.5 pl-9 pr-3 text-xs text-rp-text outline-none placeholder:text-rp-muted focus:border-rp-accent/60" /></label>
+            <select value={subjectFilter} onChange={(event) => setSubjectFilter(event.target.value)} aria-label="Filtriraj po predmetu" className="rounded-xl border border-rp-line/60 bg-rp-raised/70 px-3 py-2.5 text-xs text-rp-subtle outline-none focus:border-rp-accent/60"><option value="">Vsi predmeti</option>{subjects.map((subject) => <option key={subject.id} value={subject.id}>{subject.name}</option>)}</select>
+            <select value={sortBy} onChange={(event) => setSortBy(event.target.value)} aria-label="Razvrsti naloge" className="rounded-xl border border-rp-line/60 bg-rp-raised/70 px-3 py-2.5 text-xs text-rp-subtle outline-none focus:border-rp-accent/60"><option value="dueDate">Po roku</option><option value="createdAt">Najnovejše</option></select>
           </div>
         </div>
 
@@ -177,14 +177,14 @@ export default function TasksPage() {
                 type="checkbox"
                 checked={filtered.length > 0 && selected.length === filtered.length}
                 onChange={toggleSelectAll}
-                className="h-4 w-4 accent-[var(--rp-iris)]"
+                className="h-4 w-4 accent-[var(--rp-accent)]"
               />
               Izberi vse ({filtered.length})
             </label>
             <span className="text-[13px] text-rp-muted">Izbranih {selected.length}</span>
             <span className="flex-1" />
             <button type="button" onClick={bulkComplete} disabled={selected.length === 0} className="btn-ghost !py-2 !text-xs disabled:opacity-50">Označi kot opravljene</button>
-            <button type="button" onClick={bulkDelete} disabled={selected.length === 0} className="rounded-[14px] border border-rp-love/30 px-4 py-2 text-xs font-semibold text-rp-love transition hover:bg-rp-love/10 disabled:opacity-50">Izbriši izbrane</button>
+            <button type="button" onClick={bulkDelete} disabled={selected.length === 0} className="rounded-[14px] border border-rp-danger/30 px-4 py-2 text-xs font-semibold text-rp-danger transition hover:bg-rp-danger/10 disabled:opacity-50">Izbriši izbrane</button>
           </div>
         )}
 
@@ -192,7 +192,7 @@ export default function TasksPage() {
           <Skeleton lines={5} />
         ) : filtered.length === 0 ? (
           <div className="card flex min-h-64 flex-col items-center justify-center px-6 py-10 text-center">
-            <span className="grid h-14 w-14 place-items-center rounded-2xl bg-rp-foam/10 text-rp-foam" aria-hidden="true"><CheckIcon className="h-7 w-7" /></span>
+            <span className="grid h-14 w-14 place-items-center rounded-2xl bg-rp-info/10 text-rp-info" aria-hidden="true"><CheckIcon className="h-7 w-7" /></span>
             <h2 className="mt-4 text-lg font-semibold text-rp-text">{search ? 'Ni zadetkov' : statusFilter === 'completed' ? 'Še ni opravljenih nalog' : 'Vse je urejeno'}</h2>
             <p className="mt-1 max-w-sm text-sm leading-6 text-rp-muted">{search ? `Poskusi drug izraz za »${search}«.` : pending.length ? 'Vse naloge so opravljene. Vzemi si zaslužen odmor!' : 'Dodaj novo nalogo in jo razdeli na majhen, izvedljiv korak.'}</p>
             {!search && pending.length === 0 && subjects.length > 0 && <button type="button" onClick={openNewTask} className="btn-primary mt-4 !py-2.5 !text-xs">Dodaj nalogo</button>}

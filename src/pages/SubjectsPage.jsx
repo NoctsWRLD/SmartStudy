@@ -14,9 +14,9 @@ function SubjectCard({ subject, tasks, onOpen, onEdit, onDelete }) {
   const progress = tasks.length ? Math.round((done / tasks.length) * 100) : 0;
 
   return (
-    <article className="card card-hover group relative overflow-hidden p-5" style={{ borderTop: `3px solid ${color.colorCode}` }}>
+    <article className="card card-hover group relative overflow-hidden p-5" style={{ borderTop: `3px solid ${color.colorVar}` }}>
       <div className="flex items-start justify-between gap-3">
-        <button type="button" onClick={onOpen} className="flex min-w-0 flex-1 items-center gap-3 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rp-iris">
+        <button type="button" onClick={onOpen} className="flex min-w-0 flex-1 items-center gap-3 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rp-accent">
           <span className={`grid h-12 w-12 shrink-0 place-items-center rounded-2xl border text-lg font-bold ${color.bg} ${color.text} ${color.border}`}>
             {subject.name?.trim()[0]?.toUpperCase() || '•'}
           </span>
@@ -26,26 +26,26 @@ function SubjectCard({ subject, tasks, onOpen, onEdit, onDelete }) {
           </span>
         </button>
         <div className="flex shrink-0 gap-1">
-          <button type="button" onClick={onEdit} aria-label={`Uredi predmet ${subject.name}`} title="Uredi predmet" className="rounded-lg p-2 text-rp-muted transition hover:bg-rp-iris/10 hover:text-rp-iris focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rp-iris">
+          <button type="button" onClick={onEdit} aria-label={`Uredi predmet ${subject.name}`} title="Uredi predmet" className="rounded-lg p-2 text-rp-muted transition hover:bg-rp-accent/10 hover:text-rp-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rp-accent">
             <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828z" /></svg>
           </button>
-          <button type="button" onClick={onDelete} aria-label={`Izbriši predmet ${subject.name}`} title="Izbriši predmet" className="rounded-lg p-2 text-rp-muted transition hover:bg-rp-love/10 hover:text-rp-love focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rp-love">
+          <button type="button" onClick={onDelete} aria-label={`Izbriši predmet ${subject.name}`} title="Izbriši predmet" className="rounded-lg p-2 text-rp-muted transition hover:bg-rp-danger/10 hover:text-rp-danger focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rp-danger">
             <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
           </button>
         </div>
       </div>
 
-      <button type="button" onClick={onOpen} className="mt-6 block w-full text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rp-iris">
+      <button type="button" onClick={onOpen} className="mt-6 block w-full text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rp-accent">
         <div className="flex items-center justify-between text-xs">
           <span className="font-medium text-rp-subtle">Napredek pri predmetu</span>
           <span className={`font-semibold ${color.text}`}>{progress}%</span>
         </div>
         <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-rp-overlay">
-          <div className="bar-grow h-full rounded-full" style={{ width: `${progress}%`, backgroundColor: color.colorCode }} />
+          <div className="bar-grow h-full rounded-full" style={{ width: `${progress}%`, backgroundColor: color.colorVar }} />
         </div>
         <span className="mt-3 flex items-center justify-between text-xs text-rp-muted">
           <span>{done} {done === 1 ? 'opravljena naloga' : 'opravljenih nalog'}</span>
-          <span className="text-rp-subtle transition group-hover:text-rp-iris">Odpri naloge</span>
+          <span className="text-rp-subtle transition group-hover:text-rp-accent">Odpri naloge</span>
         </span>
       </button>
     </article>
@@ -112,13 +112,13 @@ export default function SubjectsPage() {
           ['3', 'Spremljaj napredek', 'Obkljukaj opravljeno in vidi, kako napreduješ.'],
         ].map(([step, title, description]) => (
           <article key={step} className="card flex gap-3 p-4">
-            <span className="grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-rp-iris/10 text-xs font-bold text-rp-iris" aria-hidden="true">{step}</span>
+            <span className="grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-rp-accent/10 text-xs font-bold text-rp-accent" aria-hidden="true">{step}</span>
             <div><h2 className="text-sm font-semibold text-rp-text">{title}</h2><p className="mt-1 text-xs leading-5 text-rp-muted">{description}</p></div>
           </article>
         ))}
       </section>
 
-      {fromTask && <div role="status" className="flex gap-3 rounded-2xl border border-rp-gold/20 bg-rp-gold/[.06] p-4 text-sm leading-6 text-rp-gold"><SparkIcon className="mt-1 h-4 w-4 shrink-0" /><p><strong>Najprej ustvari predmet.</strong> Nalogo bova nato samodejno povezala z njim.</p></div>}
+      {fromTask && <div role="status" className="flex gap-3 rounded-2xl border border-rp-warn/20 bg-rp-warn/[.06] p-4 text-sm leading-6 text-rp-warn"><SparkIcon className="mt-1 h-4 w-4 shrink-0" /><p><strong>Najprej ustvari predmet.</strong> Nalogo bova nato samodejno povezala z njim.</p></div>}
 
       {!loading && subjects.length > 0 && (
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
@@ -126,7 +126,7 @@ export default function SubjectsPage() {
           <label className="relative block w-full sm:max-w-xs">
             <span className="sr-only">Išči predmet</span>
             <svg className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-rp-muted" fill="none" viewBox="0 0 24 24" stroke="currentColor"><circle cx="11" cy="11" r="7" strokeWidth={2} /><path strokeLinecap="round" strokeWidth={2} d="m16 16 4 4" /></svg>
-            <input value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Poišči predmet…" className="w-full rounded-xl border border-rp-hl-med/60 bg-rp-surface/70 py-3 pl-10 pr-4 text-sm text-rp-text outline-none placeholder:text-rp-muted focus:border-rp-iris/60" />
+            <input value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Poišči predmet…" className="w-full rounded-xl border border-rp-line/60 bg-rp-raised/70 py-3 pl-10 pr-4 text-sm text-rp-text outline-none placeholder:text-rp-muted focus:border-rp-accent/60" />
           </label>
         </div>
       )}
@@ -135,7 +135,7 @@ export default function SubjectsPage() {
         <Skeleton lines={4} />
       ) : subjects.length === 0 ? (
         <section className="card flex flex-col items-center px-6 py-12 text-center sm:py-16">
-          <span className="grid h-16 w-16 place-items-center rounded-3xl border border-rp-iris/20 bg-rp-iris/10 text-3xl text-rp-iris" aria-hidden="true">▤</span>
+          <span className="grid h-16 w-16 place-items-center rounded-3xl border border-rp-accent/20 bg-rp-accent/10 text-3xl text-rp-accent" aria-hidden="true">▤</span>
           <h2 className="mt-5 text-xl font-semibold text-rp-text">Začni s prvim predmetom</h2>
           <p className="mt-2 max-w-md text-sm leading-6 text-rp-muted">Ustvari na primer Matematiko ali Slovenščino. Nato ti bomo naloge samodejno povezali s predmetom.</p>
           <button type="button" onClick={() => setModalOpen(true)} className="btn-primary mt-6">Ustvari prvi predmet</button>

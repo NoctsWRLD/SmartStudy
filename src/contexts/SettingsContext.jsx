@@ -2,10 +2,12 @@ import { createContext, useCallback, useContext, useLayoutEffect, useMemo, useSt
 import { doc, updateDoc } from 'firebase/firestore';
 import { useAuth } from './AuthContext';
 import { db } from '../firebase';
+import { DEFAULT_THEME, normalizeThemeId } from '../utils/themes';
 
 const STORAGE_KEY = 'smartstudy.settings.v1';
-const DEFAULT_THEME = 'tabla';
-const THEMES = ['tabla', 'tabla-temna'];
+
+const THEME_IDS = ['noc', 'dnevnik'];
+
 const DEFAULT_SETTINGS = { highContrast: false, reduceMotion: false };
 const SettingsContext = createContext(null);
 
@@ -30,8 +32,8 @@ export function SettingsProvider({ children }) {
   const { currentUser, userProfile } = useAuth();
   const currentUid = currentUser?.uid;
   const [settings, setSettings] = useState(readSettings);
-  // Signed-out visitors use the base theme; signed-in users use their Firestore profile.
-  const theme = currentUid && THEMES.includes(userProfile?.theme) ? userProfile.theme : DEFAULT_THEME;
+  // Signed-out visitors use the default theme; signed-in users use their Firestore profile.
+  const theme = normalizeThemeId(userProfile?.theme) || DEFAULT_THEME;
 
   useLayoutEffect(() => {
     const root = document.documentElement;
@@ -46,7 +48,7 @@ export function SettingsProvider({ children }) {
   }, [settings, theme]);
 
   const setTheme = useCallback(async (nextTheme) => {
-    if (!THEMES.includes(nextTheme)) return;
+    if (!THEME_IDS.includes(nextTheme)) return;
     if (!currentUid || !db) return;
 
     try {

@@ -64,7 +64,7 @@ export default function ProfilePage() {
       <div className="card space-y-6 p-6">
         {/* Static avatar with initials */}
         <div className="flex justify-center">
-          <div className="flex h-24 w-24 items-center justify-center rounded-full bg-rp-iris text-3xl font-bold text-white">
+          <div className="flex h-24 w-24 items-center justify-center rounded-full bg-rp-accent text-3xl font-bold text-white">
             {(currentUser?.displayName?.[0] || '?').toUpperCase()}
           </div>
         </div>
@@ -101,9 +101,9 @@ export default function ProfilePage() {
         className="card card-hover flex w-full items-center justify-between p-4"
       >
         <div className="flex items-center gap-4">
-          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-rp-iris/10 text-rp-iris">
+          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-rp-accent/10 text-rp-accent">
             <svg
-              className="w-[1.125rem] h-[1.125rem] text-rp-iris"
+              className="w-[1.125rem] h-[1.125rem] text-rp-accent"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"

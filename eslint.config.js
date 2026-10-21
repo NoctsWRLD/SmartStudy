@@ -33,4 +33,11 @@ export default defineConfig([
       globals: globals.node,
     },
   },
+  {
+    // Tests run in Node and read project files off disk.
+    files: ['**/*.test.{js,jsx}', 'test/**/*.js'],
+    languageOptions: {
+      globals: { ...globals.node, ...globals.browser },
+    },
+  },
 ])

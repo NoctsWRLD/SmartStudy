@@ -1,207 +1,718 @@
-@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap');
+/* ==========================================================================
+   SmartStudy — "Zora" design system
+   --------------------------------------------------------------------------
+   Layer 1  literal   --rp-* raw values (one place, per theme)
+   Layer 2  semantic  role names that components actually read
+   Layer 3  utility  Tailwind @theme mapping + component primitives
+
+   Dark mode is a token swap: every semantic token gets a second value in
+   `:root[data-theme='noc']`. No component-level theme overrides exist.
+   ========================================================================== */
+
 @import 'tailwindcss';
 
+/* --------------------------------------------------------------------------
+   Layer 3a — Tailwind theme bridge
+   Tailwind v4 resolves these utilities against the runtime CSS variables, so
+   a theme swap needs no component change and opacity modifiers (bg-rp-raised/60)
+   keep working.
+   -------------------------------------------------------------------------- */
 @theme {
-  --color-rp-base: var(--rp-base);
-  --color-rp-surface: var(--rp-surface);
+  /* surfaces */
+  --color-rp-canvas: var(--rp-canvas);
+  --color-rp-panel: var(--rp-panel);
+  --color-rp-raised: var(--rp-raised);
   --color-rp-overlay: var(--rp-overlay);
-  --color-rp-muted: var(--rp-muted);
-  --color-rp-subtle: var(--rp-subtle);
+  --color-rp-sunken: var(--rp-sunken);
+
+  /* text tiers */
   --color-rp-text: var(--rp-text);
-  --color-rp-love: var(--rp-love);
-  --color-rp-gold: var(--rp-gold);
-  --color-rp-rose: var(--rp-rose);
-  --color-rp-pine: var(--rp-pine);
-  --color-rp-foam: var(--rp-foam);
-  --color-rp-iris: var(--rp-iris);
-  --color-rp-hl-low: var(--rp-hl-low);
-  --color-rp-hl-med: var(--rp-hl-med);
-  --color-rp-hl-high: var(--rp-hl-high);
-  --font-sans: Inter, ui-sans-serif, system-ui, sans-serif;
-  --font-display: "Manrope", Inter, ui-sans-serif, system-ui, sans-serif;
+  --color-rp-subtle: var(--rp-subtle);
+  --color-rp-muted: var(--rp-muted);
+
+  /* lines and fills */
+  --color-rp-line: var(--rp-line);
+  --color-rp-line-strong: var(--rp-line-strong);
+  --color-rp-fill: var(--rp-fill);
+
+  /* action */
+  --color-rp-accent: var(--rp-accent);
+  --color-rp-accent-hover: var(--rp-accent-hover);
+  --color-rp-accent-ink: var(--rp-accent-ink);
+
+  /* status */
+  --color-rp-warn: var(--rp-warn);
+  --color-rp-danger: var(--rp-danger);
+  --color-rp-success: var(--rp-success);
+  --color-rp-info: var(--rp-info);
+
+  /* subject hues (data colours — literal by nature) */
+  --color-rp-subject-1: var(--rp-subject-1);
+  --color-rp-subject-2: var(--rp-subject-2);
+  --color-rp-subject-3: var(--rp-subject-3);
+  --color-rp-subject-4: var(--rp-subject-4);
+  --color-rp-subject-5: var(--rp-subject-5);
+  --color-rp-subject-6: var(--rp-subject-6);
+  --color-rp-subject-7: var(--rp-subject-7);
+  --color-rp-subject-8: var(--rp-subject-8);
+  --color-rp-subject-9: var(--rp-subject-9);
+  --color-rp-subject-10: var(--rp-subject-10);
+
+  /* type families */
+  --font-display: 'Space Grotesk', 'DM Sans', ui-sans-serif, system-ui, sans-serif;
+  --font-sans: 'DM Sans', ui-sans-serif, system-ui, sans-serif;
+
+  /* type scale — role names, fluid where it matters */
+  --text-display: clamp(2.5rem, 1.35rem + 4.8vw, 4.25rem);
+  --text-display--line-height: 1.03;
+  --text-display--letter-spacing: -0.035em;
+  --text-display--font-weight: 700;
+
+  --text-hero: clamp(2.125rem, 1.3rem + 3.4vw, 3.25rem);
+  --text-hero--line-height: 1.06;
+  --text-hero--letter-spacing: -0.032em;
+  --text-hero--font-weight: 700;
+
+  --text-page: clamp(1.75rem, 1.5rem + 1.1vw, 2.25rem);
+  --text-page--line-height: 1.14;
+  --text-page--letter-spacing: -0.028em;
+  --text-page--font-weight: 700;
+
+  --text-title: 1.375rem;
+  --text-title--line-height: 1.25;
+  --text-title--letter-spacing: -0.018em;
+  --text-title--font-weight: 600;
+
+  --text-subtitle: 1.0625rem;
+  --text-subtitle--line-height: 1.4;
+  --text-subtitle--letter-spacing: -0.008em;
+  --text-subtitle--font-weight: 600;
+
+  --text-body: 0.9375rem;
+  --text-body--line-height: 1.6;
+  --text-body--font-weight: 400;
+
+  --text-small: 0.8125rem;
+  --text-small--line-height: 1.55;
+  --text-small--font-weight: 400;
+
+  --text-label: 0.75rem;
+  --text-label--line-height: 1.35;
+  --text-label--letter-spacing: 0.01em;
+  --text-label--font-weight: 600;
+
+  /* radius scale — deliberate variety, not one value for everything */
+  --radius: 0.5rem;
+  --radius-xs: 0.375rem;
+  --radius-sm: 0.625rem;
+  --radius-md: 0.75rem;
+  --radius-lg: 1rem;
+  --radius-xl: 1.25rem;
+  --radius-2xl: 1.5rem;
 }
 
-/* Svetla učilnica: papir, črnilo, petrol */
+/* --------------------------------------------------------------------------
+   Layer 1 — light theme "Dnevnik" (default fallback before the app boots)
+   -------------------------------------------------------------------------- */
 :root {
-  font-family: Inter, ui-sans-serif, system-ui, sans-serif;
-  color: #101e18;
-  background: #f2f4f1;
+  color-scheme: light;
+
+  --rp-canvas: #f4f6fb;
+  --rp-panel: #ffffff;
+  --rp-raised: #ffffff;
+  --rp-overlay: #edf0f9;
+  --rp-sunken: #fafbfe;
+
+  --rp-text: #0e1226;
+  --rp-subtle: #414a6b;
+  --rp-muted: #5c6485;
+
+  --rp-line: #e2e7f3;
+  --rp-line-strong: #cbd3e6;
+  --rp-fill: #edf0f9;
+
+  --rp-accent: #0e7490;
+  --rp-accent-hover: #0a5f76;
+  --rp-accent-ink: #ffffff;
+
+  --rp-warn: #8f5806;
+  --rp-danger: #b03149;
+  --rp-success: #0a6b54;
+  --rp-info: #1d4ed8;
+
+  --rp-aurora-1: #12b5ce;
+  --rp-aurora-2: #5b5be0;
+  --rp-aurora-3: #b44be0;
+  --rp-aurora: linear-gradient(100deg, var(--rp-aurora-1), var(--rp-aurora-2) 52%, var(--rp-aurora-3));
+
+  --rp-subject-1: #7a3fb5;
+  --rp-subject-2: #b03483;
+  --rp-subject-3: #b03149;
+  --rp-subject-4: #8f5806;
+  --rp-subject-5: #0a6b54;
+  --rp-subject-6: #1668a8;
+  --rp-subject-7: #4f46e5;
+  --rp-subject-8: #42700c;
+  --rp-subject-9: #b23a0b;
+  --rp-subject-10: #475569;
+
+  --rp-shadow-1: 0 1px 2px rgb(14 18 38 / 0.06);
+  --rp-shadow-2: 0 10px 28px -14px rgb(14 18 38 / 0.28);
+  --rp-shadow-3: 0 28px 60px -26px rgb(14 18 38 / 0.34);
+
+  --rp-duration-fast: 120ms;
+  --rp-duration-base: 200ms;
+  --rp-duration-slow: 340ms;
+  --rp-ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --rp-ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* --------------------------------------------------------------------------
+   Layer 1 — dark theme "Noč" (the default the app boots into)
+   -------------------------------------------------------------------------- */
+:root[data-theme='noc'] {
+  color-scheme: dark;
+
+  --rp-canvas: #0a0d1f;
+  --rp-panel: #111530;
+  --rp-raised: #191e42;
+  --rp-overlay: #232a56;
+  --rp-sunken: #0e1228;
+
+  --rp-text: #f2f4ff;
+  --rp-subtle: #c3c9e8;
+  --rp-muted: #98a0cb;
+
+  --rp-line: rgb(139 147 190 / 0.22);
+  --rp-line-strong: rgb(139 147 190 / 0.4);
+  --rp-fill: #151a38;
+
+  --rp-accent: #2bd9e8;
+  --rp-accent-hover: #5fe4f0;
+  --rp-accent-ink: #04121a;
+
+  --rp-warn: #f0a868;
+  --rp-danger: #f87d92;
+  --rp-success: #3fd9a4;
+  --rp-info: #6fa8ff;
+
+  --rp-aurora-1: #3bc9d9;
+  --rp-aurora-2: #5e6bf2;
+  --rp-aurora-3: #b45cf0;
+  --rp-aurora: linear-gradient(100deg, var(--rp-aurora-1), var(--rp-aurora-2) 52%, var(--rp-aurora-3));
+
+  --rp-subject-1: #a692ff;
+  --rp-subject-2: #f58cc0;
+  --rp-subject-3: #ff8fa0;
+  --rp-subject-4: #f5c86b;
+  --rp-subject-5: #5adcb4;
+  --rp-subject-6: #5cd2f2;
+  --rp-subject-7: #8fa5ff;
+  --rp-subject-8: #c3de72;
+  --rp-subject-9: #ffa26b;
+  --rp-subject-10: #a9b6ce;
+
+  --rp-shadow-1: 0 1px 0 rgb(255 255 255 / 0.03);
+  --rp-shadow-2: 0 12px 30px -18px rgb(0 0 0 / 0.9);
+  --rp-shadow-3: 0 30px 70px -24px rgb(0 0 0 / 0.8);
+}
+
+/* High contrast: stronger lines, brighter secondary text. Same tokens.
+   The text tiers are theme-scoped — a dark value would fail on the light
+   canvas, and a light value would vanish on the dark one. */
+:root[data-contrast='high'] {
+  --rp-line: rgb(71 84 119 / 0.38);
+  --rp-line-strong: rgb(45 55 85 / 0.6);
+}
+
+:root[data-theme='noc'][data-contrast='high'] {
+  --rp-line: rgb(168 176 220 / 0.55);
+  --rp-line-strong: rgb(190 198 235 / 0.8);
+  --rp-subtle: #e4e8fb;
+  --rp-muted: #b3bbdd;
+}
+
+:root[data-theme='dnevnik'][data-contrast='high'] {
+  --rp-subtle: #2a3357;
+  --rp-muted: #474f70;
+}
+
+/* --------------------------------------------------------------------------
+   Base
+   -------------------------------------------------------------------------- */
+* {
+  box-sizing: border-box;
+}
+
+html {
+  min-width: 320px;
+  min-height: 100%;
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  min-width: 320px;
+  min-height: 100vh;
+  margin: 0;
+  background: var(--rp-canvas);
+  color: var(--rp-text);
+  font-family: 'DM Sans', ui-sans-serif, system-ui, sans-serif;
+  font-size: 0.9375rem;
+  line-height: 1.6;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
-  color-scheme: light;
-  --rp-base: #f2f4f1;
-  --rp-surface: #ffffff;
-  --rp-overlay: #e7ece7;
-  --rp-muted: #5c6b61;
-  --rp-subtle: #33413a;
-  --rp-text: #101e18;
-  --rp-love: #cf3a52;
-  --rp-gold: #8a6100;
-  --rp-rose: #bd5478;
-  --rp-pine: #0c7c72;
-  --rp-foam: #0f7d6c;
-  --rp-iris: #0c7c72;
-  --rp-hl-low: #f4f6f2;
-  --rp-hl-med: #dfe6e0;
-  --rp-hl-high: #bcc8bd;
 }
 
-/* Nočna učilnica: ista tema, temni videz */
-:root[data-theme='tabla-temna'] {
-  color-scheme: dark;
-  --rp-base: #0a120f;
-  --rp-surface: #121d18;
-  --rp-overlay: #1e2e25;
-  --rp-muted: #8fa098;
-  --rp-subtle: #c3cfc6;
-  --rp-text: #eaf3ed;
-  --rp-love: #f0728c;
-  --rp-gold: #e3c26a;
-  --rp-rose: #de9db6;
-  --rp-pine: #43c6a5;
-  --rp-foam: #5fc4b2;
-  --rp-iris: #43c6a5;
-  --rp-hl-low: #15211b;
-  --rp-hl-med: #26382f;
-  --rp-hl-high: #3f544a;
-}
-:root[data-theme='tabla-temna'] .btn-primary { color: #0a120f; }
-:root[data-theme='tabla-temna'] .skel::after {
-  background: linear-gradient(100deg, transparent 20%, rgba(255, 255, 255, 0.12) 50%, transparent 80%);
+button,
+input,
+select,
+textarea {
+  font: inherit;
 }
 
-* { box-sizing: border-box; }
-html { min-width: 320px; min-height: 100%; scroll-behavior: smooth; }
-body {
-  min-width: 320px; min-height: 100vh; margin: 0;
-  background: var(--rp-base);
-  color: var(--rp-text);
-  line-height: 1.6;
+button {
+  cursor: pointer;
 }
-button, input, select, textarea { font: inherit; }
-button { cursor: pointer; }
-button:disabled { cursor: not-allowed; }
-:focus-visible { outline: 2px solid var(--rp-iris); outline-offset: 3px; border-radius: 8px; }
-::selection { background: var(--rp-iris); color: #fff; }
-::-webkit-scrollbar { width: 10px; height: 10px; }
-::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { border: 3px solid transparent; border-radius: 99px; background: var(--rp-hl-high); background-clip: padding-box; }
 
-/* Manrope za naslove in številke, Inter za vmesnik */
-.font-display { font-family: "Manrope", Inter, ui-sans-serif, system-ui, sans-serif; }
-.page-title {
-  font-family: "Manrope", Inter, ui-sans-serif, system-ui, sans-serif;
-  font-weight: 800; letter-spacing: -0.03em;
-  font-size: 1.9rem; line-height: 1.12;
+button:disabled {
+  cursor: not-allowed;
 }
-@media (min-width: 640px) { .page-title { font-size: 2.4rem; } }
-.section-title {
-  font-family: "Manrope", Inter, ui-sans-serif, system-ui, sans-serif;
-  font-weight: 700; letter-spacing: -0.02em;
-  font-size: 1.15rem; line-height: 1.3;
+
+:focus-visible {
+  outline: 2px solid var(--rp-accent);
+  outline-offset: 3px;
+  border-radius: var(--radius-xs);
 }
-.display-number {
-  font-family: "Manrope", Inter, ui-sans-serif, system-ui, sans-serif;
-  font-weight: 800; letter-spacing: -0.02em;
+
+::selection {
+  background: var(--rp-accent);
+  color: var(--rp-accent-ink);
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  border: 3px solid transparent;
+  border-radius: 99px;
+  background: var(--rp-line-strong);
+  background-clip: padding-box;
+}
+
+/* --------------------------------------------------------------------------
+   Typography helpers
+   -------------------------------------------------------------------------- */
+.font-display {
+  font-family: 'Space Grotesk', 'DM Sans', ui-sans-serif, system-ui, sans-serif;
+}
+
+.tnum {
   font-variant-numeric: tabular-nums;
+  font-family: 'Space Grotesk', 'DM Sans', ui-sans-serif, system-ui, sans-serif;
 }
-.body-quiet { color: var(--rp-muted); font-size: 0.93rem; line-height: 1.65; max-width: 62ch; }
+
+.body-quiet {
+  color: var(--rp-muted);
+  font-size: 0.9375rem;
+  line-height: 1.62;
+  max-width: 62ch;
+}
+
+/* --------------------------------------------------------------------------
+   Surfaces
+   -------------------------------------------------------------------------- */
+.panel {
+  background: var(--rp-panel);
+  border: 1px solid var(--rp-line);
+  border-radius: var(--radius-lg);
+}
 
 .card {
-  background: var(--rp-surface);
-  border: 1px solid var(--rp-hl-med);
-  border-radius: 20px;
+  background: var(--rp-raised);
+  border: 1px solid var(--rp-line);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--rp-shadow-1);
 }
-.card-hover { transition: border-color 0.2s ease, transform 0.2s ease; }
-.card-hover:hover { border-color: var(--rp-hl-high); transform: translateY(-1px); }
+
+.card-hover {
+  transition:
+    border-color var(--rp-duration-base) var(--rp-ease),
+    background-color var(--rp-duration-base) var(--rp-ease),
+    transform var(--rp-duration-base) var(--rp-ease);
+}
+
+.card-hover:hover {
+  border-color: var(--rp-line-strong);
+  background: var(--rp-overlay);
+}
 
 .row-item {
-  background: var(--rp-surface);
-  border: 1px solid var(--rp-hl-med);
-  border-radius: 14px;
-  transition: border-color 0.18s ease, background 0.18s ease;
+  background: var(--rp-raised);
+  border: 1px solid var(--rp-line);
+  border-radius: var(--radius-md);
+  transition:
+    border-color var(--rp-duration-base) var(--rp-ease),
+    background-color var(--rp-duration-base) var(--rp-ease);
 }
-.row-item:hover { border-color: var(--rp-hl-high); }
-.row-item + .row-item { margin-top: 10px; }
 
+.row-item:hover {
+  border-color: var(--rp-line-strong);
+}
+
+.row-item + .row-item {
+  margin-top: 0.5rem;
+}
+
+/* The one surface that carries the aurora — used once per view, never twice. */
+.aurora-wash {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(70% 90% at 12% 0%, color-mix(in srgb, var(--rp-aurora-3) 34%, transparent) 0%, transparent 62%),
+    radial-gradient(60% 80% at 92% 8%, color-mix(in srgb, var(--rp-aurora-1) 28%, transparent) 0%, transparent 60%),
+    radial-gradient(90% 120% at 50% 110%, color-mix(in srgb, var(--rp-aurora-2) 22%, transparent) 0%, transparent 68%);
+}
+
+.aurora-text {
+  background: var(--rp-aurora);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* --------------------------------------------------------------------------
+   The study rail — the app's structural device. A rail is a horizontal run
+   of time segments; the aurora fill is how much of that time is claimed.
+   -------------------------------------------------------------------------- */
+.rail {
+  display: flex;
+  gap: 3px;
+  height: 0.5rem;
+  width: 100%;
+}
+
+.rail-seg {
+  flex: 1 1 0;
+  border-radius: 3px;
+  background: var(--rp-fill);
+  overflow: hidden;
+  position: relative;
+}
+
+.rail-seg > span {
+  position: absolute;
+  inset: 0 auto 0 0;
+  border-radius: 3px;
+  background: var(--rp-aurora);
+  transform-origin: left center;
+  animation: rail-fill 620ms var(--rp-ease-out) both;
+}
+
+.rail-seg[data-tone='muted'] > span {
+  background: var(--rp-line-strong);
+}
+
+.rail-seg[data-tone='warn'] > span {
+  background: var(--rp-warn);
+}
+
+.rail-seg[data-tone='danger'] > span {
+  background: var(--rp-danger);
+}
+
+.rail-seg[data-tone='empty'] > span {
+  display: none;
+}
+
+@keyframes rail-fill {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Controls
+   -------------------------------------------------------------------------- */
 .btn-primary {
-  display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
-  background: var(--rp-iris); color: #fff;
-  border: 1px solid var(--rp-iris);
-  border-radius: 14px; font-weight: 700; font-size: 0.875rem;
-  padding: 0.75rem 1.35rem;
-  transition: transform 0.15s ease, filter 0.18s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background: var(--rp-accent);
+  color: var(--rp-accent-ink);
+  border: 1px solid var(--rp-accent);
+  border-radius: var(--radius-sm);
+  font-weight: 600;
+  font-size: 0.875rem;
+  line-height: 1.2;
+  padding: 0.7rem 1.15rem;
+  transition:
+    background-color var(--rp-duration-fast) var(--rp-ease),
+    border-color var(--rp-duration-fast) var(--rp-ease),
+    transform var(--rp-duration-fast) var(--rp-ease);
 }
-.btn-primary:hover { filter: brightness(1.07); }
-.btn-primary:active { transform: scale(0.97); }
+
+.btn-primary:hover {
+  background: var(--rp-accent-hover);
+  border-color: var(--rp-accent-hover);
+}
+
+.btn-primary:active {
+  transform: scale(0.97);
+}
+
+.btn-primary:disabled {
+  opacity: 0.55;
+}
+
 .btn-ghost {
-  display: inline-flex; align-items: center; justify-content: center; gap: 0.4rem;
-  background: transparent; color: var(--rp-subtle);
-  border: 1px solid var(--rp-hl-med); border-radius: 14px;
-  font-weight: 600; font-size: 0.83rem; padding: 0.65rem 1.1rem;
-  transition: border-color 0.18s ease, background 0.18s ease, transform 0.15s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  background: transparent;
+  color: var(--rp-subtle);
+  border: 1px solid var(--rp-line);
+  border-radius: var(--radius-sm);
+  font-weight: 600;
+  font-size: 0.8125rem;
+  line-height: 1.2;
+  padding: 0.62rem 1rem;
+  transition:
+    border-color var(--rp-duration-fast) var(--rp-ease),
+    background-color var(--rp-duration-fast) var(--rp-ease),
+    color var(--rp-duration-fast) var(--rp-ease),
+    transform var(--rp-duration-fast) var(--rp-ease);
 }
-.btn-ghost:hover { border-color: var(--rp-hl-high); background: var(--rp-hl-low); }
-.btn-ghost:active { transform: scale(0.97); }
-.link-signal { color: var(--rp-iris); font-weight: 700; font-size: 0.85rem; border-radius: 8px; padding: 0.25rem 0.5rem; }
-.link-signal:hover { text-decoration: underline; text-underline-offset: 3px; }
+
+.btn-ghost:hover {
+  border-color: var(--rp-line-strong);
+  background: var(--rp-overlay);
+  color: var(--rp-text);
+}
+
+.btn-ghost:active {
+  transform: scale(0.97);
+}
+
+.btn-quiet {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: var(--rp-muted);
+  border-radius: var(--radius-xs);
+  font-weight: 600;
+  font-size: 0.8125rem;
+  transition:
+    color var(--rp-duration-fast) var(--rp-ease),
+    background-color var(--rp-duration-fast) var(--rp-ease);
+}
+
+.btn-quiet:hover {
+  color: var(--rp-text);
+  background: var(--rp-overlay);
+}
+
+.link-signal {
+  color: var(--rp-accent);
+  font-weight: 600;
+  font-size: 0.8125rem;
+  border-radius: var(--radius-xs);
+  padding: 0.25rem 0.4rem;
+  transition: background-color var(--rp-duration-fast) var(--rp-ease);
+}
+
+.link-signal:hover {
+  background: color-mix(in srgb, var(--rp-accent) 14%, transparent);
+}
 
 .field {
-  width: 100%; border-radius: 12px; padding: 0.75rem 1rem;
-  background: var(--rp-surface); border: 1px solid var(--rp-hl-med);
-  color: var(--rp-text); outline: none;
-  transition: border-color 0.18s ease, box-shadow 0.18s ease;
+  width: 100%;
+  border-radius: var(--radius-sm);
+  padding: 0.68rem 0.9rem;
+  background: var(--rp-sunken);
+  border: 1px solid var(--rp-line);
+  color: var(--rp-text);
+  outline: none;
+  font-size: 0.875rem;
+  transition:
+    border-color var(--rp-duration-base) var(--rp-ease),
+    box-shadow var(--rp-duration-base) var(--rp-ease);
 }
-.field::placeholder { color: var(--rp-muted); }
-.field:focus { border-color: var(--rp-iris); box-shadow: 0 0 0 3px color-mix(in srgb, var(--rp-iris) 15%, transparent); }
 
-/* Barvni spekter predmetov */
-.spectrum { display: flex; height: 8px; border-radius: 99px; overflow: hidden; background: var(--rp-overlay); }
-.spectrum > span { height: 100%; }
+.field::placeholder {
+  color: var(--rp-muted);
+}
 
-/* Enojni vstop strani */
-.rise { animation: rise-in 0.5s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
-.stagger > :nth-child(1) { animation-delay: 0ms; }
-.stagger > :nth-child(2) { animation-delay: 55ms; }
-.stagger > :nth-child(3) { animation-delay: 110ms; }
-.stagger > :nth-child(4) { animation-delay: 165ms; }
-.stagger > :nth-child(5) { animation-delay: 220ms; }
-@keyframes rise-in { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+.field:focus {
+  border-color: var(--rp-accent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--rp-accent) 20%, transparent);
+}
 
-/* Povratne animacije na dejanje */
-.tick-pop { animation: tick-pop 0.28s cubic-bezier(0.34, 1.56, 0.64, 1) both; }
-@keyframes tick-pop { 0% { transform: scale(0.6); } 100% { transform: scale(1); } }
-.bar-grow { transform-origin: left center; animation: grow-x 0.8s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
-@keyframes grow-x { from { transform: scaleX(0); } to { transform: scaleX(1); } }
-.flip-inner { transform-style: preserve-3d; transition: transform 0.45s cubic-bezier(0.2, 0.7, 0.2, 1); }
-.flip-inner.flipped { transform: rotateY(180deg); }
-.flip-face { backface-visibility: hidden; -webkit-backface-visibility: hidden; }
-.flip-back { transform: rotateY(180deg); }
+.field-label {
+  display: block;
+  margin-bottom: 0.4rem;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--rp-subtle);
+}
 
-/* Modali: zatemnitev + pojav plošče */
-.overlay-fade { animation: overlay-fade 0.22s ease-out both; }
-@keyframes overlay-fade { from { opacity: 0; } to { opacity: 1; } }
-.modal-pop { animation: modal-pop 0.32s cubic-bezier(0.2, 0.9, 0.25, 1.2) both; }
-@keyframes modal-pop { from { opacity: 0; transform: translateY(14px) scale(0.97); } to { opacity: 1; transform: translateY(0) scale(1); } }
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  border-radius: 99px;
+  border: 1px solid var(--rp-line);
+  background: var(--rp-raised);
+  padding: 0.25rem 0.65rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--rp-subtle);
+}
 
-/* Okostnjaki nalaganja */
+.chip-accent {
+  border-color: color-mix(in srgb, var(--rp-accent) 40%, transparent);
+  background: color-mix(in srgb, var(--rp-accent) 12%, transparent);
+  color: var(--rp-accent);
+}
+
+/* --------------------------------------------------------------------------
+   Motion — one orchestrated moment, everything else answers an action
+   -------------------------------------------------------------------------- */
+.rise {
+  animation: rise-in 420ms var(--rp-ease-out) both;
+}
+
+@keyframes rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.tick-pop {
+  animation: tick-pop 240ms cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+@keyframes tick-pop {
+  0% {
+    transform: scale(0.6);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.flip-inner {
+  transform-style: preserve-3d;
+  transition: transform 420ms var(--rp-ease);
+}
+
+.flip-inner.flipped {
+  transform: rotateY(180deg);
+}
+
+.flip-face {
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+.flip-back {
+  transform: rotateY(180deg);
+}
+
+.overlay-fade {
+  animation: overlay-fade 200ms ease-out both;
+}
+
+@keyframes overlay-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.modal-pop {
+  animation: modal-pop 260ms var(--rp-ease-out) both;
+}
+
+@keyframes modal-pop {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.985);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Loading skeletons */
 .skel {
-  position: relative; overflow: hidden;
-  background: var(--rp-overlay); border-radius: 10px;
+  position: relative;
+  overflow: hidden;
+  background: var(--rp-fill);
+  border-radius: var(--radius-xs);
 }
+
 .skel::after {
-  content: ""; position: absolute; inset: 0;
-  background: linear-gradient(100deg, transparent 20%, rgba(255, 255, 255, 0.65) 50%, transparent 80%);
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(100deg, transparent 20%, color-mix(in srgb, var(--rp-text) 12%, transparent) 50%, transparent 80%);
   animation: skel-sheen 1.4s ease-in-out infinite;
 }
-@keyframes skel-sheen { from { transform: translateX(-100%); } to { transform: translateX(100%); } }
 
-:root[data-motion='reduced'] *, :root[data-motion='reduced'] *::before, :root[data-motion='reduced'] *::after {
-  scroll-behavior: auto !important; animation-duration: 0.01ms !important;
-  animation-iteration-count: 1 !important; transition-duration: 0.01ms !important;
+@keyframes skel-sheen {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(100%);
+  }
 }
+
+/* --------------------------------------------------------------------------
+   Reduced motion — system preference and the in-app switch both apply
+   -------------------------------------------------------------------------- */
+:root[data-motion='reduced'] *,
+:root[data-motion='reduced'] *::before,
+:root[data-motion='reduced'] *::after {
+  scroll-behavior: auto !important;
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+}
+
 @media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after { scroll-behavior: auto !important; animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
-  .skel::after { animation: none; }
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .skel::after {
+    animation: none;
+  }
 }

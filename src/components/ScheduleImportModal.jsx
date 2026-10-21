@@ -141,11 +141,11 @@ export default function ScheduleImportModal({ isOpen, onClose, subjects, onImpor
         <div className="mt-4 grid gap-4 overflow-y-auto pr-1 sm:grid-cols-[minmax(0,.9fr)_minmax(0,1.1fr)]">
           <div>
             <input ref={fileRef} type="file" accept="image/*" onChange={handleFile} className="field" aria-label="Izberi sliko urnika" />
-            {imageUrl && <img src={imageUrl} alt="Predogled urnika" className="mt-3 max-h-56 w-full rounded-xl border border-rp-hl-med object-contain" />}
+            {imageUrl && <img src={imageUrl} alt="Predogled urnika" className="mt-3 max-h-56 w-full rounded-xl border border-rp-line object-contain" />}
             <button type="button" onClick={runOcr} disabled={!imageUrl || ocrLoading} className="btn-ghost mt-3 w-full disabled:opacity-50">
               {ocrLoading ? 'Berem sliko…' : 'Preberi besedilo s slike'}
             </button>
-            {ocrError && <p className="mt-2 text-[13px] leading-5 text-rp-love" role="alert">{ocrError}</p>}
+            {ocrError && <p className="mt-2 text-[13px] leading-5 text-rp-danger" role="alert">{ocrError}</p>}
             <label className="mb-1.5 mt-4 block text-[13px] font-semibold text-rp-subtle" htmlFor="import-text">Besedilo (lahko urediš ali prilepiš)</label>
             <textarea id="import-text" className="field min-h-28" value={ocrText} onChange={(e) => setOcrText(e.target.value)} placeholder="Ponedeljek&#10;8:00 Matematika&#10;9:00 Slovenščina&#10;Torek&#10;…" />
             <button type="button" onClick={parseManual} disabled={!ocrText.trim()} className="btn-ghost mt-2 w-full disabled:opacity-50">Razčleni v vrstice</button>
@@ -157,14 +157,14 @@ export default function ScheduleImportModal({ isOpen, onClose, subjects, onImpor
               <button type="button" onClick={addRow} className="btn-ghost !px-3 !py-1.5 !text-xs">+ Dodaj vrstico</button>
             </div>
             {drafts.length === 0 ? (
-              <p className="rounded-xl border border-dashed border-rp-hl-med p-4 text-[13px] leading-5 text-rp-muted">Ni vrstic. Preberi sliko, prilepi besedilo ali dodaj vrstico ročno.</p>
+              <p className="rounded-xl border border-dashed border-rp-line p-4 text-[13px] leading-5 text-rp-muted">Ni vrstic. Preberi sliko, prilepi besedilo ali dodaj vrstico ročno.</p>
             ) : (
               <div className="space-y-2">
                 {drafts.map((d) => (
-                  <div key={d.key} className="rounded-xl border border-rp-hl-med p-2.5">
+                  <div key={d.key} className="rounded-xl border border-rp-line p-2.5">
                     <div className="flex items-center gap-2">
                       <input value={d.title} onChange={(e) => updateDraft(d.key, { title: e.target.value })} placeholder="Naziv naloge" maxLength={120} className="field !py-2 !text-[13px]" aria-label="Naziv naloge" />
-                      <button type="button" onClick={() => removeDraft(d.key)} aria-label="Odstrani vrstico" className="rounded-lg p-1.5 text-rp-muted transition-colors hover:bg-rp-love/10 hover:text-rp-love"><XIcon className="h-3.5 w-3.5" /></button>
+                      <button type="button" onClick={() => removeDraft(d.key)} aria-label="Odstrani vrstico" className="rounded-lg p-1.5 text-rp-muted transition-colors hover:bg-rp-danger/10 hover:text-rp-danger"><XIcon className="h-3.5 w-3.5" /></button>
                     </div>
                     <div className="mt-2 grid grid-cols-2 gap-2">
                       <select value={d.weekday} onChange={(e) => updateDraft(d.key, { weekday: Number(e.target.value) })} className="field !py-2 !text-[13px]" aria-label="Dan v tednu">
@@ -182,7 +182,7 @@ export default function ScheduleImportModal({ isOpen, onClose, subjects, onImpor
           </div>
         </div>
 
-        <div className="mt-4 border-t border-rp-hl-med pt-4">
+        <div className="mt-4 border-t border-rp-line pt-4">
           <h3 className="text-sm font-bold">Za katere tedne?</h3>
           <div className="mt-2 grid grid-cols-2 gap-1.5 sm:grid-cols-4" role="radiogroup" aria-label="Obdobje">
             {PERIODS.map((p) => (
@@ -193,7 +193,7 @@ export default function ScheduleImportModal({ isOpen, onClose, subjects, onImpor
                 aria-checked={period === p.id}
                 onClick={() => setPeriod(p.id)}
                 className={`rounded-xl border px-3 py-2 text-[13px] font-semibold transition-all active:scale-95 ${
-                  period === p.id ? 'border-rp-iris bg-rp-iris/[.08] text-rp-text' : 'border-rp-hl-med text-rp-muted hover:border-rp-hl-high hover:text-rp-text'
+                  period === p.id ? 'border-rp-accent bg-rp-accent/[.08] text-rp-text' : 'border-rp-line text-rp-muted hover:border-rp-line-strong hover:text-rp-text'
                 }`}
               >
                 {p.label}
@@ -209,9 +209,9 @@ export default function ScheduleImportModal({ isOpen, onClose, subjects, onImpor
           )}
 
           {period !== 'week' && (
-            <div className="mt-2 rounded-xl border border-rp-hl-med">
-              <label className="flex cursor-pointer items-center gap-2.5 border-b border-rp-hl-med px-3 py-2 text-[13px] font-bold">
-                <input type="checkbox" checked={allChecked} onChange={toggleAllWeeks} className="h-4 w-4 accent-[var(--rp-iris)]" />
+            <div className="mt-2 rounded-xl border border-rp-line">
+              <label className="flex cursor-pointer items-center gap-2.5 border-b border-rp-line px-3 py-2 text-[13px] font-bold">
+                <input type="checkbox" checked={allChecked} onChange={toggleAllWeeks} className="h-4 w-4 accent-[var(--rp-accent)]" />
                 Vsi tedni ({selectedWeeks.length}/{weeks.length})
               </label>
               {weeks.length === 0 ? (
@@ -226,7 +226,7 @@ export default function ScheduleImportModal({ isOpen, onClose, subjects, onImpor
                         type="checkbox"
                         checked={weekChecks[w] !== false}
                         onChange={() => setWeekChecks((prev) => ({ ...prev, [w]: prev[w] === false ? true : false }))}
-                        className="h-4 w-4 accent-[var(--rp-iris)]"
+                        className="h-4 w-4 accent-[var(--rp-accent)]"
                       />
                       <span className="font-medium">{weekLabel(w)}</span>
                       <span className="text-xs text-rp-muted">{valid.length} {nalogeWord(valid.length)}</span>
@@ -238,7 +238,7 @@ export default function ScheduleImportModal({ isOpen, onClose, subjects, onImpor
           )}
         </div>
 
-        <div className="mt-4 flex items-center justify-between gap-2 border-t border-rp-hl-med pt-4">
+        <div className="mt-4 flex items-center justify-between gap-2 border-t border-rp-line pt-4">
           <p className="text-[13px] text-rp-muted">
             {total > 0 ? `Skupaj ${total} ${nalogeWord(total)} v ${selectedWeeks.length} ${selectedWeeks.length === 1 ? 'tednu' : selectedWeeks.length === 2 ? 'tednih' : 'tednih'}` : 'Izberi vrstice in tedne.'}
           </p>

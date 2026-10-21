@@ -30,7 +30,7 @@ export default function TaskModal({ isOpen, onClose, onSave, subjects, task, def
 
   if (!isOpen) return null;
 
-  const inputClass = "w-full px-4 py-3 rounded-xl outline-none text-sm transition-all bg-rp-overlay/90 border border-rp-hl-med/70 text-rp-text placeholder:text-rp-muted";
+  const inputClass = "w-full px-4 py-3 rounded-xl outline-none text-sm transition-all bg-rp-overlay/90 border border-rp-line/70 text-rp-text placeholder:text-rp-muted";
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
@@ -41,7 +41,7 @@ export default function TaskModal({ isOpen, onClose, onSave, subjects, task, def
             {task ? 'Uredi nalogo' : 'Nova naloga'}
           </h2>
           <button onClick={onClose}
-            className="p-2 rounded-xl transition-all text-rp-muted hover:text-rp-text hover:bg-rp-hl-med/50"
+            className="p-2 rounded-xl transition-all text-rp-muted hover:text-rp-text hover:bg-rp-line/50"
           >
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -103,7 +103,7 @@ export default function TaskModal({ isOpen, onClose, onSave, subjects, task, def
 
           <div className="flex gap-3 pt-2">
             <button type="button" onClick={onClose}
-              className="flex-1 py-2.5 rounded-xl text-sm font-medium transition-all text-rp-subtle border border-rp-hl-med/50 hover:bg-rp-hl-med/35"
+              className="flex-1 py-2.5 rounded-xl text-sm font-medium transition-all text-rp-subtle border border-rp-line/50 hover:bg-rp-line/35"
             >
               Prekliči
             </button>

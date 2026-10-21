@@ -30,7 +30,7 @@ export default function RegisterPage() {
 
   return (
     <AuthShell title="Ustvari račun" subtitle="Brezplačno, v manj kot minuti." error={error}
-      footer={<>Že imaš račun? <Link to="/login" className="font-semibold text-rp-iris hover:underline">Prijavi se</Link></>}>
+      footer={<>Že imaš račun? <Link to="/login" className="font-semibold text-rp-accent hover:underline">Prijavi se</Link></>}>
       <form onSubmit={handleSubmit} className="space-y-3.5">
         <AuthField label="Ime" id="register-name" type="text" required maxLength={60} value={name} onChange={(e) => setName(e.target.value)} placeholder="Tia Novak" autoComplete="name" />
         <AuthField label="E-pošta" id="register-email" type="email" required value={email} onChange={(e) => setEmail(e.target.value)} placeholder="tia@sola.si" autoComplete="email" />

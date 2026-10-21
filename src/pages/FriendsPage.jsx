@@ -13,7 +13,7 @@ import {
 // ─── Tiny avatar ──────────────────────────────────────────────────────────────
 function MiniAvatar({
   name,
-  bgClass = 'bg-rp-iris',
+  bgClass = 'bg-rp-accent',
   size = 36,
 }) {
   return (
@@ -37,7 +37,7 @@ function Section({ title, badge, children }) {
       <div className="flex items-center gap-2">
         <h2 className="text-sm font-semibold text-rp-text">{title}</h2>
         {badge != null && (
-          <span className="px-1.5 py-0.5 rounded-full text-xs font-bold bg-rp-iris/20 text-rp-iris">
+          <span className="px-1.5 py-0.5 rounded-full text-xs font-bold bg-rp-accent/20 text-rp-accent">
             {badge}
           </span>
         )}
@@ -88,9 +88,9 @@ export default function FriendsPage() {
   return (
     <div className="max-w-2xl mx-auto space-y-6 animate-fade-in-up pb-8">
       <div className="flex items-center gap-4">
-        <div className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 bg-rp-iris/10 border border-rp-iris/20">
+        <div className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 bg-rp-accent/10 border border-rp-accent/20">
           <svg
-            className="w-5 h-5 text-rp-iris"
+            className="w-5 h-5 text-rp-accent"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
@@ -120,20 +120,20 @@ export default function FriendsPage() {
               <div className="flex items-center gap-3">
                 <MiniAvatar
                   name={req.fromName}
-                  bgClass="bg-rp-rose text-white"
+                  bgClass="bg-rp-subject-2 text-white"
                 />
                 <span className="text-sm font-medium text-rp-text">{req.fromName}</span>
               </div>
               <div className="flex gap-2">
                 <button
                   onClick={() => handleRespond(req.id, 'accepted')}
-                  className="px-3 py-1.5 rounded-lg text-xs font-semibold transition-all hover:opacity-90 bg-rp-pine text-white"
+                  className="px-3 py-1.5 rounded-lg text-xs font-semibold transition-all hover:opacity-90 bg-rp-success text-white"
                 >
                   Sprejmi
                 </button>
                 <button
                   onClick={() => handleRespond(req.id, 'rejected')}
-                  className="px-3 py-1.5 rounded-lg text-xs font-semibold transition-all border border-rp-love/30 text-rp-love hover:bg-rp-love/10"
+                  className="px-3 py-1.5 rounded-lg text-xs font-semibold transition-all border border-rp-danger/30 text-rp-danger hover:bg-rp-danger/10"
                 >
                   Zavrni
                 </button>
@@ -155,7 +155,7 @@ export default function FriendsPage() {
             {friends.map((f) => (
               <div
                 key={f.uid}
-                className="flex items-center justify-between gap-3 py-2 px-3 rounded-xl hover:bg-rp-overlay/70 transition-colors border border-transparent hover:border-rp-hl-med"
+                className="flex items-center justify-between gap-3 py-2 px-3 rounded-xl hover:bg-rp-overlay/70 transition-colors border border-transparent hover:border-rp-line"
               >
                 <div className="flex items-center gap-4">
                   <MiniAvatar name={f.displayName} />
@@ -163,7 +163,7 @@ export default function FriendsPage() {
                 </div>
                 <button
                   onClick={() => navigate(`/chat?dm=${f.uid}`)}
-                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all border border-rp-iris/30 text-rp-iris hover:bg-rp-iris/15"
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all border border-rp-accent/30 text-rp-accent hover:bg-rp-accent/15"
                 >
                   <svg
                     className="w-4 h-4"
@@ -193,7 +193,7 @@ export default function FriendsPage() {
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           placeholder="Išči po imenu … (vsaj 2 znaka)"
-          className="w-full px-4 py-2.5 rounded-xl text-sm outline-none bg-rp-overlay/85 border border-rp-hl-med/50 text-rp-text transition-colors focus:border-rp-iris/50"
+          className="w-full px-4 py-2.5 rounded-xl text-sm outline-none bg-rp-overlay/85 border border-rp-line/50 text-rp-text transition-colors focus:border-rp-accent/50"
         />
 
         {search.trim().length >= 2 && filteredUsers.length === 0 && (
@@ -211,7 +211,7 @@ export default function FriendsPage() {
               <div className="flex items-center gap-3">
                 <MiniAvatar
                   name={u.displayName}
-                  bgClass="bg-rp-gold text-white"
+                  bgClass="bg-rp-warn text-white"
                 />
                 <div>
                   <p className="text-sm font-medium text-rp-text">
@@ -221,7 +221,7 @@ export default function FriendsPage() {
               </div>
               <button
                 onClick={() => handleSendRequest(u)}
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all hover:opacity-90 bg-rp-iris text-white"
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all hover:opacity-90 bg-rp-accent text-white"
               >
                 <svg
                   className="w-4 h-4"
@@ -244,13 +244,13 @@ export default function FriendsPage() {
 
         {/* Pending sent */}
         {sent.length > 0 && (
-          <div className="space-y-2 border-t border-rp-hl-med pt-3">
+          <div className="space-y-2 border-t border-rp-line pt-3">
             <p className="text-xs font-semibold text-rp-muted">
               Čaka na odziv
             </p>
             {sent.map((req) => (
               <div key={req.id} className="flex items-center gap-3 py-1">
-                <div className="w-2 h-2 rounded-full flex-shrink-0 animate-pulse bg-rp-gold" />
+                <div className="w-2 h-2 rounded-full flex-shrink-0 animate-pulse bg-rp-warn" />
                 <span className="text-sm text-rp-subtle">{req.toName}</span>
               </div>
             ))}

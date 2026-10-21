@@ -91,7 +91,7 @@ export default function FlashcardsPage() {
             <span>{knownCount} od {deckCards.length} osvojenih</span>
           </div>
           <div className="mb-3 h-1.5 overflow-hidden rounded-full bg-rp-overlay" role="progressbar" aria-valuenow={index + 1} aria-valuemin={1} aria-valuemax={order.length}>
-            <div className="h-full rounded-full bg-rp-iris transition-[width]" style={{ width: `${((index + 1) / order.length) * 100}%` }} />
+            <div className="h-full rounded-full bg-rp-accent transition-[width]" style={{ width: `${((index + 1) / order.length) * 100}%` }} />
           </div>
           <button
             type="button"
@@ -139,14 +139,14 @@ export default function FlashcardsPage() {
                   <p className="text-[14.5px] font-bold leading-snug">{c.front}</p>
                   <p className="mt-1 line-clamp-2 text-[13px] text-rp-muted">{c.back}</p>
                   <div className="mt-3 flex items-center justify-between">
-                    <span className={`rounded-full px-2.5 py-1 text-[11px] font-bold ${c.known ? 'bg-rp-iris/10 text-rp-iris' : 'bg-rp-overlay text-rp-muted'}`}>
+                    <span className={`rounded-full px-2.5 py-1 text-[11px] font-bold ${c.known ? 'bg-rp-accent/10 text-rp-accent' : 'bg-rp-overlay text-rp-muted'}`}>
                       {c.known ? 'Osvojeno' : 'V učenju'}
                     </span>
                     <div className="flex items-center">
                       <button onClick={() => { setEditCard(c); setModalOpen(true); }} aria-label="Uredi kartico" className="rounded-lg p-2 text-rp-muted transition-colors hover:bg-rp-overlay hover:text-rp-text">
                         <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>
                       </button>
-                      <button onClick={() => { if (window.confirm('Izbrišem kartico?')) deleteCard(c.id); }} aria-label="Izbriši kartico" className="rounded-lg p-2 text-rp-muted transition-colors hover:bg-rp-love/10 hover:text-rp-love">
+                      <button onClick={() => { if (window.confirm('Izbrišem kartico?')) deleteCard(c.id); }} aria-label="Izbriši kartico" className="rounded-lg p-2 text-rp-muted transition-colors hover:bg-rp-danger/10 hover:text-rp-danger">
                         <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
                       </button>
                     </div>

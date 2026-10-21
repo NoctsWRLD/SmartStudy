@@ -24,7 +24,7 @@ function Avatar({ src, initial, size = 8 }) {
     );
   return (
     <div
-      className="rounded-full flex items-center justify-center font-bold flex-shrink-0 bg-rp-iris text-white"
+      className="rounded-full flex items-center justify-center font-bold flex-shrink-0 bg-rp-accent text-white"
       style={{
         width: px,
         height: px,
@@ -59,8 +59,8 @@ function FileBubble({ fileURL, fileName, fileType, fileSize, isOwn }) {
       rel="noreferrer"
       className={`flex items-center gap-2.5 px-4 py-3 rounded-2xl transition-all hover:opacity-80 shadow-md ${
         isOwn
-          ? 'bg-rp-iris text-white'
-          : 'bg-rp-overlay/90 text-rp-text border border-rp-hl-med/50'
+          ? 'bg-rp-accent text-white'
+          : 'bg-rp-overlay/90 text-rp-text border border-rp-line/50'
       }`}
     >
       <svg
@@ -111,7 +111,7 @@ function MessageBubble({ msg, isOwn, onDelete }) {
           <span className="text-xs font-medium text-rp-muted">
             {isOwn ? 'Ti' : msg.senderName}
           </span>
-          <span className="text-xs text-rp-hl-high">{time}</span>
+          <span className="text-xs text-rp-line-strong">{time}</span>
         </div>
 
         <div
@@ -122,8 +122,8 @@ function MessageBubble({ msg, isOwn, onDelete }) {
               <div
                 className={`px-3 py-2 md:px-4 md:py-2.5 rounded-2xl text-[13px] md:text-sm leading-relaxed break-words shadow-sm ${
                   isOwn
-                    ? 'bg-rp-iris text-white'
-                    : 'bg-rp-overlay/90 text-rp-text border border-rp-hl-med/50'
+                    ? 'bg-rp-accent text-white'
+                    : 'bg-rp-overlay/90 text-rp-text border border-rp-line/50'
                 }`}
               >
                 {msg.text}
@@ -142,7 +142,7 @@ function MessageBubble({ msg, isOwn, onDelete }) {
           {isOwn && hovered && (
             <button
               onClick={() => onDelete(msg.id)}
-              className="p-1.5 rounded-lg transition-all flex-shrink-0 text-rp-muted hover:text-rp-love hover:bg-rp-love/10"
+              className="p-1.5 rounded-lg transition-all flex-shrink-0 text-rp-muted hover:text-rp-danger hover:bg-rp-danger/10"
               title="Izbriši"
             >
               <svg
@@ -178,7 +178,7 @@ function MessageList({ chatId, currentUser }) {
     if (loading)
       return (
         <div className="flex-1 flex items-center justify-center">
-          <div className="w-7 h-7 rounded-full border-2 border-rp-iris border-t-transparent animate-spin" />
+          <div className="w-7 h-7 rounded-full border-2 border-rp-accent border-t-transparent animate-spin" />
         </div>
       );
   
@@ -234,7 +234,7 @@ function MessageInput({ chatId, currentUser }) {
 
   return (
     <div className="px-4 pb-4 pt-2 flex-shrink-0">
-      <div className="flex items-end gap-2 rounded-2xl px-4 py-3 bg-rp-overlay/85 border border-rp-hl-med/50">
+      <div className="flex items-end gap-2 rounded-2xl px-4 py-3 bg-rp-overlay/85 border border-rp-line/50">
         <textarea
           ref={inputRef}
           value={text}
@@ -248,7 +248,7 @@ function MessageInput({ chatId, currentUser }) {
         <button
           onClick={handleSend}
           disabled={!text.trim() || sending}
-          className="p-2 rounded-xl transition-all flex-shrink-0 disabled:opacity-30 bg-rp-iris text-white"
+          className="p-2 rounded-xl transition-all flex-shrink-0 disabled:opacity-30 bg-rp-accent text-white"
           title="Pošlji"
         >
           {sending ? (
@@ -281,8 +281,8 @@ function RoomItem({ label, icon, active, onClick }) {
       onClick={onClick}
       className={`w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-sm font-medium transition-all text-left group ${
         active
-          ? 'bg-rp-iris/10 border border-rp-iris/20 text-rp-text'
-          : 'text-rp-subtle hover:text-rp-text hover:bg-rp-hl-med/40'
+          ? 'bg-rp-accent/10 border border-rp-accent/20 text-rp-text'
+          : 'text-rp-subtle hover:text-rp-text hover:bg-rp-line/40'
       }`}
     >
       <span className="flex-shrink-0 opacity-80">{icon}</span>
@@ -408,7 +408,7 @@ function SidePanel({
                 active={activeChatId === dmId}
                 onClick={() => onSelect(dmId, f.displayName || 'Neznan')}
                 icon={
-                  <div className="w-5 h-5 rounded-full flex items-center justify-center text-white text-xs font-bold bg-rp-pine">
+                  <div className="w-5 h-5 rounded-full flex items-center justify-center text-white text-xs font-bold bg-rp-success">
                     {(f.displayName?.[0] || '?').toUpperCase()}
                   </div>
                 }
@@ -419,10 +419,10 @@ function SidePanel({
       </div>
 
       {/* Add friends button */}
-      <div className="px-3 mt-auto pt-2 border-t border-rp-hl-med/40">
+      <div className="px-3 mt-auto pt-2 border-t border-rp-line/40">
         <button
           onClick={() => navigate('/friends')}
-          className="w-full flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-semibold transition-all border border-rp-iris/25 text-rp-iris hover:text-rp-text hover:bg-rp-iris/10"
+          className="w-full flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-semibold transition-all border border-rp-accent/25 text-rp-accent hover:text-rp-text hover:bg-rp-accent/10"
         >
           <svg
             className="w-4 h-4"
@@ -497,9 +497,9 @@ export default function ChatPage() {
   return (
     <div className="h-full flex flex-col">
       {/* Main container */}
-      <div className="flex-1 flex overflow-hidden rounded-2xl min-h-0 border border-rp-hl-med/50 bg-rp-overlay/60">
+      <div className="flex-1 flex overflow-hidden rounded-2xl min-h-0 border border-rp-line/50 bg-rp-overlay/60">
         {/* ── Desktop sidebar ── */}
-        <aside className="hidden md:flex flex-col w-56 flex-shrink-0 overflow-hidden border-r border-rp-hl-med/40">
+        <aside className="hidden md:flex flex-col w-56 flex-shrink-0 overflow-hidden border-r border-rp-line/40">
           <div className="px-4 pt-4 pb-2">
             <p className="text-sm font-bold">
               Chat
@@ -522,7 +522,7 @@ export default function ChatPage() {
               className="absolute inset-0 bg-black/50 backdrop-blur-sm"
               onClick={() => setMobileOpen(false)}
             />
-            <aside className="absolute left-0 top-0 bottom-0 w-64 z-50 flex flex-col overflow-hidden bg-rp-base/98 border-r border-rp-hl-med/50">
+            <aside className="absolute left-0 top-0 bottom-0 w-64 z-50 flex flex-col overflow-hidden bg-rp-canvas/98 border-r border-rp-line/50">
               <div className="flex items-center justify-between px-4 pt-4 pb-2">
                 <p className="text-sm font-bold">
                   Chat
@@ -559,20 +559,20 @@ export default function ChatPage() {
         )}
 
         {/* ── Main chat area ── */}
-        <div className="flex-1 flex flex-col min-w-0 bg-rp-surface">
+        <div className="flex-1 flex flex-col min-w-0 bg-rp-raised">
           {/* Header */}
-          <div className="flex items-center gap-3 px-4 py-3 flex-shrink-0 border-b border-rp-hl-med/40">
+          <div className="flex items-center gap-3 px-4 py-3 flex-shrink-0 border-b border-rp-line/40">
             {/* Hamburger – mobile only, inside header (properly aligned) */}
             <button
-              className="md:hidden flex items-center justify-center w-8 h-8 rounded-lg transition-all flex-shrink-0 text-rp-subtle hover:text-rp-text hover:bg-rp-hl-med/50"
+              className="md:hidden flex items-center justify-center w-8 h-8 rounded-lg transition-all flex-shrink-0 text-rp-subtle hover:text-rp-text hover:bg-rp-line/50"
               onClick={() => setMobileOpen(true)}
             >
               <MenuIcon />
             </button>
 
-            <div className="w-8 h-8 rounded-xl flex items-center justify-center flex-shrink-0 bg-rp-iris/10 border border-rp-iris/20">
+            <div className="w-8 h-8 rounded-xl flex items-center justify-center flex-shrink-0 bg-rp-accent/10 border border-rp-accent/20">
               <svg
-                className="w-4 h-4 text-rp-iris"
+                className="w-4 h-4 text-rp-accent"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"

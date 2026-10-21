@@ -45,7 +45,7 @@ export default function ExamsPage() {
     const cd = countdown(exam.date, today);
     return (
       <div className="row-item rise flex items-center gap-4 px-4 py-3.5">
-        <div className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-rp-iris/[.1] text-center" aria-hidden="true">
+        <div className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-rp-accent/[.1] text-center" aria-hidden="true">
           <div>
             <p className="font-display text-lg font-extrabold leading-none tabular-nums">{exam.date.slice(8, 10)}</p>
             <p className="text-[10px] font-semibold text-rp-muted">{exam.date.slice(5, 7)}.</p>
@@ -57,14 +57,14 @@ export default function ExamsPage() {
             {subjectName(exam.subjectId)} · {formatSlovenianDate(exam.date, { day: 'numeric', month: 'long' })}
           </p>
         </div>
-        <span className={`shrink-0 rounded-full px-3 py-1.5 text-xs font-bold ${cd.urgent ? 'bg-rp-love/10 text-rp-love' : 'bg-rp-overlay text-rp-subtle'}`}>
+        <span className={`shrink-0 rounded-full px-3 py-1.5 text-xs font-bold ${cd.urgent ? 'bg-rp-danger/10 text-rp-danger' : 'bg-rp-overlay text-rp-subtle'}`}>
           {cd.label}
         </span>
         <div className="flex shrink-0 items-center">
           <button onClick={() => { setEditExam(exam); setModalOpen(true); }} aria-label="Uredi preverjanje" className="rounded-lg p-2 text-rp-muted transition-colors hover:bg-rp-overlay hover:text-rp-text">
             <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>
           </button>
-          <button onClick={() => { if (window.confirm(`Izbrišem preverjanje »${exam.title}«?`)) deleteExam(exam.id); }} aria-label="Izbriši preverjanje" className="rounded-lg p-2 text-rp-muted transition-colors hover:bg-rp-love/10 hover:text-rp-love">
+          <button onClick={() => { if (window.confirm(`Izbrišem preverjanje »${exam.title}«?`)) deleteExam(exam.id); }} aria-label="Izbriši preverjanje" className="rounded-lg p-2 text-rp-muted transition-colors hover:bg-rp-danger/10 hover:text-rp-danger">
             <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
           </button>
         </div>

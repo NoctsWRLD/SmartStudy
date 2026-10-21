@@ -37,10 +37,10 @@ function TodayPill() {
   return (
     <Link
       to="/tasks"
-      className="hidden items-center gap-2 rounded-full border border-rp-hl-med bg-rp-surface px-3.5 py-2 text-[13px] font-semibold text-rp-subtle transition-colors hover:border-rp-hl-high hover:text-rp-text sm:inline-flex"
+      className="hidden items-center gap-2 rounded-full border border-rp-line bg-rp-raised px-3.5 py-2 text-[13px] font-semibold text-rp-subtle transition-colors hover:border-rp-line-strong hover:text-rp-text sm:inline-flex"
       aria-label={`${total} ${total === 1 ? 'rok danes' : 'rokov danes'}, odpri naloge`}
     >
-      <span className={`h-2 w-2 animate-pulse rounded-full ${overdue > 0 ? 'bg-rp-love' : 'bg-rp-gold'}`} aria-hidden="true" />
+      <span className={`h-2 w-2 animate-pulse rounded-full ${overdue > 0 ? 'bg-rp-danger' : 'bg-rp-warn'}`} aria-hidden="true" />
       Danes {total}
     </Link>
   );
@@ -88,7 +88,7 @@ function NavDropdown({ group, pathname }) {
         <svg className={`h-3.5 w-3.5 transition-transform duration-200 ${open ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M19 9l-7 7-7-7" />
         </svg>
-        <span className={`absolute inset-x-4 -bottom-[1px] h-[2.5px] rounded-full bg-rp-iris transition-opacity ${active ? 'opacity-100' : 'opacity-0'}`} aria-hidden="true" />
+        <span className={`absolute inset-x-4 -bottom-[1px] h-[2.5px] rounded-full bg-rp-accent transition-opacity ${active ? 'opacity-100' : 'opacity-0'}`} aria-hidden="true" />
       </button>
 
       {open && (
@@ -97,7 +97,7 @@ function NavDropdown({ group, pathname }) {
           <div
             role="menu"
             aria-label={group.label}
-            className="rise absolute left-0 top-full z-50 mt-2 w-64 overflow-hidden rounded-2xl border border-rp-hl-med bg-rp-surface p-1.5"
+            className="rise absolute left-0 top-full z-50 mt-2 w-64 overflow-hidden rounded-2xl border border-rp-line bg-rp-raised p-1.5"
           >
             {group.items.map((item) => (
               <NavLink
@@ -108,7 +108,7 @@ function NavDropdown({ group, pathname }) {
                 onClick={() => setOpen(false)}
                 className={({ isActive }) =>
                   `group/item flex items-baseline justify-between gap-3 rounded-xl px-3.5 py-2.5 transition-colors ${
-                    isActive ? 'bg-rp-iris/[.1]' : 'hover:bg-rp-overlay'
+                    isActive ? 'bg-rp-accent/[.1]' : 'hover:bg-rp-overlay'
                   }`
                 }
               >
@@ -166,7 +166,7 @@ function SettingsMenu({ active }) {
         aria-expanded={open}
         onClick={() => setOpen((v) => !v)}
         className={`grid h-10 w-10 place-items-center rounded-xl transition-colors ${
-          active || open ? 'bg-rp-iris/[.12] text-rp-iris' : 'text-rp-muted hover:bg-rp-overlay hover:text-rp-text'
+          active || open ? 'bg-rp-accent/[.12] text-rp-accent' : 'text-rp-muted hover:bg-rp-overlay hover:text-rp-text'
         }`}
       >
         <GearIcon className="h-5 w-5" />
@@ -178,7 +178,7 @@ function SettingsMenu({ active }) {
           <div
             role="menu"
             aria-label="Nastavitve in račun"
-            className="rise absolute right-0 top-full z-50 mt-2 w-52 overflow-hidden rounded-2xl border border-rp-hl-med bg-rp-surface p-1.5"
+            className="rise absolute right-0 top-full z-50 mt-2 w-52 overflow-hidden rounded-2xl border border-rp-line bg-rp-raised p-1.5"
           >
             <NavLink
               to="/settings"
@@ -193,7 +193,7 @@ function SettingsMenu({ active }) {
               type="button"
               role="menuitem"
               onClick={handleLogout}
-              className="flex w-full items-center gap-3 rounded-xl px-3.5 py-2.5 text-left text-[14.5px] font-semibold text-rp-love transition-colors hover:bg-rp-love/10"
+              className="flex w-full items-center gap-3 rounded-xl px-3.5 py-2.5 text-left text-[14.5px] font-semibold text-rp-danger transition-colors hover:bg-rp-danger/10"
             >
               <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
@@ -225,12 +225,12 @@ export default function Layout({ children }) {
 
   return (
     <div className="flex min-h-dvh flex-col">
-      <a href="#main-content" className="sr-only z-[100] rounded-xl bg-rp-iris px-4 py-2 font-semibold text-white focus:not-sr-only focus:fixed focus:left-4 focus:top-4">
+      <a href="#main-content" className="sr-only z-[100] rounded-xl bg-rp-accent px-4 py-2 font-semibold text-white focus:not-sr-only focus:fixed focus:left-4 focus:top-4">
         Preskoči na vsebino
       </a>
 
       {/* Zgornji meni */}
-      <header className="sticky top-0 z-30 border-b border-rp-hl-med bg-rp-base/90 backdrop-blur">
+      <header className="sticky top-0 z-30 border-b border-rp-line bg-rp-canvas/90 backdrop-blur">
         <div className="mx-auto flex max-w-6xl items-center gap-1.5 px-4 py-2.5 md:px-8">
           <button
             type="button"
@@ -265,7 +265,7 @@ export default function Layout({ children }) {
         </div>
 
         {mobileMenu && (
-          <nav className="border-t border-rp-hl-med bg-rp-surface px-4 py-4 md:hidden" aria-label="Celoten meni">
+          <nav className="border-t border-rp-line bg-rp-raised px-4 py-4 md:hidden" aria-label="Celoten meni">
             <div className="rise mx-auto grid max-w-6xl gap-5" key={location.pathname}>
               {NAV_GROUPS.map((group) => (
                 <div key={group.label}>
@@ -279,7 +279,7 @@ export default function Layout({ children }) {
                         onClick={() => setMobileMenu(false)}
                         className={({ isActive }) =>
                           `flex items-baseline justify-between gap-3 rounded-xl px-4 py-2.5 transition-colors ${
-                            isActive ? 'bg-rp-iris/[.1]' : 'hover:bg-rp-overlay'
+                            isActive ? 'bg-rp-accent/[.1]' : 'hover:bg-rp-overlay'
                           }`
                         }
                       >
@@ -290,10 +290,10 @@ export default function Layout({ children }) {
                   </div>
                 </div>
               ))}
-              <div className="grid gap-1 border-t border-rp-hl-med pt-4">
+              <div className="grid gap-1 border-t border-rp-line pt-4">
                 <NavLink to="/profile" onClick={() => setMobileMenu(false)} className="rounded-xl px-4 py-2.5 text-[15px] font-medium text-rp-muted transition-colors hover:bg-rp-overlay hover:text-rp-text">Moj profil</NavLink>
                 <NavLink to="/settings" onClick={() => setMobileMenu(false)} className="rounded-xl px-4 py-2.5 text-[15px] font-medium text-rp-muted transition-colors hover:bg-rp-overlay hover:text-rp-text">Nastavitve</NavLink>
-                <button type="button" onClick={handleMobileLogout} className="rounded-xl px-4 py-2.5 text-left text-[15px] font-semibold text-rp-love transition-colors hover:bg-rp-love/10">Odjava</button>
+                <button type="button" onClick={handleMobileLogout} className="rounded-xl px-4 py-2.5 text-left text-[15px] font-semibold text-rp-danger transition-colors hover:bg-rp-danger/10">Odjava</button>
               </div>
             </div>
           </nav>
@@ -304,7 +304,7 @@ export default function Layout({ children }) {
         {children}
       </main>
 
-      <nav className="fixed inset-x-3 bottom-3 z-40 flex items-center justify-around rounded-2xl border border-rp-hl-med bg-rp-surface px-1 py-1.5 md:hidden" aria-label="Glavna navigacija">
+      <nav className="fixed inset-x-3 bottom-3 z-40 flex items-center justify-around rounded-2xl border border-rp-line bg-rp-raised px-1 py-1.5 md:hidden" aria-label="Glavna navigacija">
         {[
           { to: '/', label: 'Domov' },
           { to: '/tasks', label: 'Naloge' },
@@ -318,7 +318,7 @@ export default function Layout({ children }) {
             end={item.to === '/'}
             onClick={() => setMobileMenu(false)}
             className={({ isActive }) =>
-              `rounded-xl px-3 py-2 text-xs font-semibold transition-colors ${isActive ? 'bg-rp-iris/[.12] text-rp-iris' : 'text-rp-muted'}`
+              `rounded-xl px-3 py-2 text-xs font-semibold transition-colors ${isActive ? 'bg-rp-accent/[.12] text-rp-accent' : 'text-rp-muted'}`
             }
           >
             {item.label}

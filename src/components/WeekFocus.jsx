@@ -39,12 +39,12 @@ export default function WeekFocus() {
           <div key={d.key} className="flex flex-1 flex-col items-center gap-1.5">
             <div className="flex h-16 w-full items-end rounded-lg bg-rp-overlay">
               <div
-                className={`w-full rounded-lg ${d.isToday ? 'bg-rp-iris' : 'bg-rp-iris/45'}`}
+                className={`w-full rounded-lg ${d.isToday ? 'bg-rp-accent' : 'bg-rp-accent/45'}`}
                 style={{ height: `${Math.max(6, (d.minutes / max) * 100)}%` }}
                 title={`${d.minutes} min`}
               />
             </div>
-            <span className={`text-[10px] font-bold ${d.isToday ? 'text-rp-iris' : 'text-rp-muted'}`}>
+            <span className={`text-[10px] font-bold ${d.isToday ? 'text-rp-accent' : 'text-rp-muted'}`}>
               {['P', 'T', 'S', 'Č', 'P', 'S', 'N'][(new Date(`${d.key}T12:00:00Z`).getUTCDay() + 6) % 7]}
             </span>
           </div>

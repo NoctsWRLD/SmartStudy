@@ -8,7 +8,7 @@ export default function Logo({ size = 36 }) {
       role="img"
       aria-label="SmartStudy logotip"
     >
-      <rect width="48" height="48" rx="14" fill="var(--rp-iris)" />
+      <rect width="48" height="48" rx="14" fill="var(--rp-accent)" />
       <path
         d="M24 11c-3.6-2.2-8-2.6-12-1.6v22.4c4-1 8.4-.6 12 1.6 3.6-2.2 8-2.6 12-1.6V9.4c-4-1-8.4-.6-12 1.6Z"
         fill="none"

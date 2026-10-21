@@ -10,7 +10,7 @@ export default function ExamCountdown({ subjects }) {
   if (loading) {
     return (
       <section className="card rise grid min-h-28 place-items-center p-5" aria-label="Naslednje preverjanje">
-        <span className="h-6 w-6 animate-spin rounded-full border-2 border-rp-iris border-t-transparent" />
+        <span className="h-6 w-6 animate-spin rounded-full border-2 border-rp-accent border-t-transparent" />
       </section>
     );
   }
@@ -31,7 +31,7 @@ export default function ExamCountdown({ subjects }) {
 
   return (
     <section className="card rise overflow-hidden" aria-label="Naslednje preverjanje">
-      <div className="bg-rp-text px-5 pb-4 pt-5 text-[var(--rp-base)]">
+      <div className="bg-rp-text px-5 pb-4 pt-5 text-[var(--rp-canvas)]">
         <p className="text-xs font-semibold opacity-80">Naslednje preverjanje {label}</p>
         <p className="font-display mt-1 text-5xl font-extrabold tracking-tight tabular-nums">{diff === 0 ? '!' : diff}</p>
         <p className="mt-1 text-sm font-semibold">{diff <= 1 ? '' : diff === 1 ? 'dan do testa' : 'dni do testa'}</p>

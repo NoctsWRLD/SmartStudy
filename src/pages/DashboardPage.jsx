@@ -68,7 +68,7 @@ export default function DashboardPage() {
         {subjects.length > 0 && (
           <div className="spectrum mt-5 max-w-md" aria-hidden="true">
             {subjects.slice(0, 8).map((s) => (
-              <span key={s.id} style={{ width: `${100 / Math.min(subjects.length, 8)}%`, backgroundColor: (SUBJECT_COLORS[s.colorIndex] || SUBJECT_COLORS[0]).colorCode }} />
+              <span key={s.id} style={{ width: `${100 / Math.min(subjects.length, 8)}%`, backgroundColor: (SUBJECT_COLORS[s.colorIndex] || SUBJECT_COLORS[0]).colorVar }} />
             ))}
           </div>
         )}
@@ -81,7 +81,7 @@ export default function DashboardPage() {
         </div>
       </section>
 
-      <section className="rise grid grid-cols-3 gap-2 border-y border-rp-hl-med py-5" aria-label="Pregled napredka">
+      <section className="rise grid grid-cols-3 gap-2 border-y border-rp-line py-5" aria-label="Pregled napredka">
         {[
           { v: String(pending.length), l: 'odprtih nalog' },
           { v: String(dueToday), l: 'zapade danes' },
@@ -162,7 +162,7 @@ export default function DashboardPage() {
               return (
                 <Link key={subject.id} to="/subjects" className="card card-hover block p-4">
                   <div className="flex items-center gap-3">
-                    <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl text-sm font-bold text-white" style={{ backgroundColor: color.colorCode }} aria-hidden="true">
+                    <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl text-sm font-bold text-white" style={{ backgroundColor: color.colorVar }} aria-hidden="true">
                       {subject.name?.[0]?.toUpperCase() || '•'}
                     </span>
                     <div className="min-w-0 flex-1">
@@ -171,7 +171,7 @@ export default function DashboardPage() {
                     </div>
                   </div>
                   <div className="mt-3 h-1.5 overflow-hidden rounded-full bg-rp-overlay" role="progressbar" aria-valuenow={progress} aria-valuemin={0} aria-valuemax={100}>
-                    <div className="bar-grow h-full rounded-full bg-rp-iris" style={{ width: `${progress}%` }} />
+                    <div className="bar-grow h-full rounded-full bg-rp-accent" style={{ width: `${progress}%` }} />
                   </div>
                 </Link>
               );

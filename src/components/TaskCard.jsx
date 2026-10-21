@@ -6,8 +6,8 @@ function formatDate(dateStr) {
   const diff = daysBetweenDateKeys(dateStr, today);
   let label = formatSlovenianDate(dateStr, { day: 'numeric', month: 'short' });
   let tone = 'text-rp-muted';
-  if (diff < 0) { label = `Zamujeno ${label}`; tone = 'text-rp-love'; }
-  else if (diff === 0) { label = 'Danes'; tone = 'text-rp-iris'; }
+  if (diff < 0) { label = `Zamujeno ${label}`; tone = 'text-rp-danger'; }
+  else if (diff === 0) { label = 'Danes'; tone = 'text-rp-accent'; }
   else if (diff === 1) { label = 'Jutri'; tone = 'text-rp-subtle'; }
   return { label, tone };
 }
@@ -17,7 +17,7 @@ export default function TaskCard({ task, subject, onToggle, onEdit, onDelete, se
 
   return (
     <div
-      className={`row-item rise flex items-center gap-3 px-3.5 py-3 ${task.completed && !selectionMode ? 'opacity-55' : ''} ${selectionMode && selected ? 'border-rp-iris' : ''} ${selectionMode ? 'cursor-pointer' : ''}`}
+      className={`row-item rise flex items-center gap-3 px-3.5 py-3 ${task.completed && !selectionMode ? 'opacity-55' : ''} ${selectionMode && selected ? 'border-rp-accent' : ''} ${selectionMode ? 'cursor-pointer' : ''}`}
       onClick={selectionMode ? () => onSelect(task) : undefined}
     >
       {selectionMode ? (
@@ -27,7 +27,7 @@ export default function TaskCard({ task, subject, onToggle, onEdit, onDelete, se
           aria-checked={!!selected}
           aria-label={`Izberi nalogo ${task.title}`}
           className={`grid h-6 w-6 shrink-0 place-items-center rounded-lg border-[1.5px] transition-all active:scale-90 ${
-            selected ? 'border-rp-iris bg-rp-iris text-white' : 'border-rp-hl-high hover:border-rp-iris'
+            selected ? 'border-rp-accent bg-rp-accent text-white' : 'border-rp-line-strong hover:border-rp-accent'
           }`}
         >
           {selected && (
@@ -42,7 +42,7 @@ export default function TaskCard({ task, subject, onToggle, onEdit, onDelete, se
           aria-label={task.completed ? 'Označi kot neopravljeno' : 'Označi kot opravljeno'}
           aria-pressed={task.completed}
           className={`grid h-6 w-6 shrink-0 place-items-center rounded-full border-[1.5px] transition-all active:scale-90 ${
-            task.completed ? 'border-rp-iris bg-rp-iris text-white' : 'border-rp-hl-high hover:border-rp-iris'
+            task.completed ? 'border-rp-accent bg-rp-accent text-white' : 'border-rp-line-strong hover:border-rp-accent'
           }`}
         >
           {task.completed && (
@@ -67,7 +67,7 @@ export default function TaskCard({ task, subject, onToggle, onEdit, onDelete, se
           <button onClick={() => onEdit(task)} aria-label="Uredi nalogo" className="rounded-lg p-2 text-rp-muted transition-colors hover:bg-rp-overlay hover:text-rp-text">
             <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>
           </button>
-          <button onClick={() => onDelete(task)} aria-label="Izbriši nalogo" className="rounded-lg p-2 text-rp-muted transition-colors hover:bg-rp-love/10 hover:text-rp-love">
+          <button onClick={() => onDelete(task)} aria-label="Izbriši nalogo" className="rounded-lg p-2 text-rp-muted transition-colors hover:bg-rp-danger/10 hover:text-rp-danger">
             <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
           </button>
         </div>

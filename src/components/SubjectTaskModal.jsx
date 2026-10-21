@@ -45,8 +45,8 @@ export default function SubjectTaskModal({ isOpen, onClose, subject, tasks, onTo
             </p>
           </div>
           <div className="flex shrink-0 items-center gap-1">
-            {onAddTask && <button type="button" onClick={onAddTask} aria-label="Dodaj nalogo" className="flex items-center gap-1.5 rounded-lg bg-rp-iris px-3 py-2 text-xs font-semibold text-white transition hover:opacity-90"><PlusIcon /><span aria-hidden="true">Naloga</span></button>}
-            <button type="button" onClick={onClose} aria-label="Zapri predmet" className="rounded-xl p-2 text-rp-muted transition hover:bg-rp-hl-med/50 hover:text-rp-text focus:outline-none">
+            {onAddTask && <button type="button" onClick={onAddTask} aria-label="Dodaj nalogo" className="flex items-center gap-1.5 rounded-lg bg-rp-accent px-3 py-2 text-xs font-semibold text-white transition hover:opacity-90"><PlusIcon /><span aria-hidden="true">Naloga</span></button>}
+            <button type="button" onClick={onClose} aria-label="Zapri predmet" className="rounded-xl p-2 text-rp-muted transition hover:bg-rp-line/50 hover:text-rp-text focus:outline-none">
               <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
             </button>
           </div>
@@ -64,8 +64,8 @@ export default function SubjectTaskModal({ isOpen, onClose, subject, tasks, onTo
               onClick={() => setFilter(f.id)}
               className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all whitespace-nowrap outline-none ${
                 filter === f.id
-                  ? 'bg-rp-iris text-white shadow-[0_2px_10px_rgba(196,167,231,0.25)] border border-transparent'
-                  : 'bg-rp-overlay/70 text-rp-subtle border border-rp-hl-med/40 hover:bg-rp-hl-med/30'
+                  ? 'bg-rp-accent text-white shadow-[0_2px_10px_rgba(196,167,231,0.25)] border border-transparent'
+                  : 'bg-rp-overlay/70 text-rp-subtle border border-rp-line/40 hover:bg-rp-line/30'
               }`}>
               {f.label}
             </button>
@@ -87,8 +87,8 @@ export default function SubjectTaskModal({ isOpen, onClose, subject, tasks, onTo
                     onClick={() => onToggleTask(task)}
                     className={`mt-0.5 w-4 h-4 rounded-full border-2 flex-shrink-0 flex items-center justify-center transition-all focus:outline-none ${
                       task.completed 
-                        ? 'bg-rp-iris text-white border border-transparent'
-                        : 'border-rp-hl-high hover:border-rp-iris'
+                        ? 'bg-rp-accent text-white border border-transparent'
+                        : 'border-rp-line-strong hover:border-rp-accent'
                     }`}>
                     {task.completed && (
                       <svg className="w-2.5 h-2.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -103,7 +103,7 @@ export default function SubjectTaskModal({ isOpen, onClose, subject, tasks, onTo
                     {task.dueDate && (
                        <p className={`text-xs mt-1 ${
                          task.completed ? 'text-rp-muted' :
-                         task.dueDate < getSlovenianDateKey() ? 'text-rp-love' : 'text-rp-iris'
+                         task.dueDate < getSlovenianDateKey() ? 'text-rp-danger' : 'text-rp-accent'
                        }`}>
                          Rok: {task.dueDate.split('-').reverse().join('.')}
                        </p>
@@ -113,7 +113,7 @@ export default function SubjectTaskModal({ isOpen, onClose, subject, tasks, onTo
                     onClick={() => {
                         if (window.confirm(`Izbriši nalogo "${task.title}"?`)) onDeleteTask(task.id);
                     }}
-                    className="p-1.5 rounded-lg transition-all sm:opacity-100 focus:outline-none text-rp-muted hover:text-rp-love hover:bg-rp-love/10"
+                    className="p-1.5 rounded-lg transition-all sm:opacity-100 focus:outline-none text-rp-muted hover:text-rp-danger hover:bg-rp-danger/10"
                     title="Izbriši nalogo">
                     <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />

@@ -5,8 +5,8 @@ import { useAuth } from '../contexts/AuthContext';
 export function AuthShell({ title, subtitle, error, children, footer }) {
   return (
     <div className="grid min-h-screen md:grid-cols-2">
-      <div className="hidden flex-col justify-between bg-rp-text p-10 text-[var(--rp-base)] md:flex">
-        <span className="grid h-10 w-10 place-items-center rounded-xl bg-[var(--rp-base)] font-display text-lg font-bold text-rp-text" aria-hidden="true">S</span>
+      <div className="hidden flex-col justify-between bg-rp-text p-10 text-[var(--rp-canvas)] md:flex">
+        <span className="grid h-10 w-10 place-items-center rounded-xl bg-[var(--rp-canvas)] font-display text-lg font-bold text-rp-text" aria-hidden="true">S</span>
         <div>
           <p className="font-display text-4xl font-bold leading-[1.05] tracking-tight">Mirna glava.<br />Narejene naloge.</p>
           <p className="mt-4 max-w-sm text-[15px] leading-6 opacity-70">Predmeti, naloge, preverjanja in kartice na enem mestu — za osnovnošolce, dijake in študente.</p>
@@ -15,10 +15,10 @@ export function AuthShell({ title, subtitle, error, children, footer }) {
       </div>
       <div className="flex items-center justify-center p-4 sm:p-8">
         <div className="rise w-full max-w-md">
-          <span className="grid h-11 w-11 place-items-center rounded-2xl bg-rp-text font-display text-xl font-bold text-[var(--rp-base)] md:hidden" aria-hidden="true">S</span>
+          <span className="grid h-11 w-11 place-items-center rounded-2xl bg-rp-text font-display text-xl font-bold text-[var(--rp-canvas)] md:hidden" aria-hidden="true">S</span>
           <h1 className="page-title mt-4 md:mt-0">{title}</h1>
           <p className="body-quiet mt-2">{subtitle}</p>
-          {error && <div className="mt-5 rounded-2xl border border-rp-love/30 bg-rp-love/[.07] p-3 text-sm text-rp-love" role="alert">{error}</div>}
+          {error && <div className="mt-5 rounded-2xl border border-rp-danger/30 bg-rp-danger/[.07] p-3 text-sm text-rp-danger" role="alert">{error}</div>}
           <div className="mt-6">{children}</div>
           <p className="mt-6 text-sm text-rp-muted">{footer}</p>
         </div>
@@ -71,7 +71,7 @@ export default function LoginPage() {
 
   return (
     <AuthShell title="Prijava" subtitle="Tvoje naloge te že čakajo." error={error}
-      footer={<>Še nimaš računa? <Link to="/register" className="font-semibold text-rp-iris hover:underline">Ustvari ga</Link></>}>
+      footer={<>Še nimaš računa? <Link to="/register" className="font-semibold text-rp-accent hover:underline">Ustvari ga</Link></>}>
       <form onSubmit={handleSubmit} className="space-y-3.5">
         <AuthField label="E-pošta" id="login-email" type="email" required value={email} onChange={(e) => setEmail(e.target.value)} placeholder="tia@sola.si" autoComplete="email" />
         <AuthField label="Geslo" id="login-password" type="password" required value={password} onChange={(e) => setPassword(e.target.value)} placeholder="••••••••" autoComplete="current-password" />

@@ -53,7 +53,7 @@ export default function FocusTimer() {
         <div className="relative grid h-24 w-24 shrink-0 place-items-center" role="timer" aria-label={formatTime(secondsLeft)}>
           <svg className="absolute inset-0 -rotate-90" viewBox="0 0 100 100" aria-hidden="true">
             <circle cx="50" cy="50" r="43" fill="none" stroke="var(--rp-overlay)" strokeWidth="8" />
-            <circle cx="50" cy="50" r="43" fill="none" stroke="var(--rp-iris)" strokeWidth="8" strokeLinecap="round" strokeDasharray={circ} strokeDashoffset={circ * (1 - progress)} className="transition-[stroke-dashoffset] duration-700" />
+            <circle cx="50" cy="50" r="43" fill="none" stroke="var(--rp-accent)" strokeWidth="8" strokeLinecap="round" strokeDasharray={circ} strokeDashoffset={circ * (1 - progress)} className="transition-[stroke-dashoffset] duration-700" />
           </svg>
           <span className="font-display text-xl font-bold tabular-nums">{formatTime(secondsLeft)}</span>
         </div>

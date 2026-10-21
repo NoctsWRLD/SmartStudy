@@ -106,7 +106,7 @@ export default function SchedulePage() {
           </button>
           <button
             onClick={() => setWeekOffset((w) => w - 1)}
-            className="p-2 rounded-xl transition-all text-rp-subtle hover:text-rp-text hover:bg-rp-hl-med/35"
+            className="p-2 rounded-xl transition-all text-rp-subtle hover:text-rp-text hover:bg-rp-line/35"
           >
             <svg
               className="w-4 h-4"
@@ -124,7 +124,7 @@ export default function SchedulePage() {
           </button>
           <button
             onClick={() => setWeekOffset((w) => w + 1)}
-            className="p-2 rounded-xl transition-all text-rp-subtle hover:text-rp-text hover:bg-rp-hl-med/35"
+            className="p-2 rounded-xl transition-all text-rp-subtle hover:text-rp-text hover:bg-rp-line/35"
           >
             <svg
               className="w-4 h-4"
@@ -200,16 +200,16 @@ export default function SchedulePage() {
             <div key={dateStr} className="flex flex-col">
               {/* Day header */}
               <div
-                className={`text-center mb-2 pb-2 border-b ${isToday ? 'border-rp-iris/40' : 'border-rp-hl-med/30'}`}
+                className={`text-center mb-2 pb-2 border-b ${isToday ? 'border-rp-accent/40' : 'border-rp-line/30'}`}
               >
                 <p
-                  className={`text-xs font-medium ${isToday ? 'text-rp-iris' : 'text-rp-muted'}`}
+                  className={`text-xs font-medium ${isToday ? 'text-rp-accent' : 'text-rp-muted'}`}
                 >
                   {DAYS_SL[i]}
                 </p>
                 <div
                   className={`w-7 h-7 rounded-full flex items-center justify-center mx-auto mt-1 text-sm font-bold transition-all ${
-                    isToday ? 'bg-rp-iris text-white' : 'text-rp-subtle'
+                    isToday ? 'bg-rp-accent text-white' : 'text-rp-subtle'
                   }`}
                 >
                   {getDayOfMonth(day)}
@@ -218,7 +218,7 @@ export default function SchedulePage() {
 
               {/* Tasks column */}
               <div
-                className="flex-1 min-h-[7rem] rounded-xl p-1.5 space-y-1.5 cursor-pointer hover:bg-rp-hl-med/20 transition-all"
+                className="flex-1 min-h-[7rem] rounded-xl p-1.5 space-y-1.5 cursor-pointer hover:bg-rp-line/20 transition-all"
                 onClick={() => handleDayClick(dateStr)}
                 title={`Dodaj nalogo – ${DAYS_FULL[i]}`}
               >
@@ -235,7 +235,7 @@ export default function SchedulePage() {
                         handleEdit(task);
                       }}
                       className={`px-2.5 py-2 rounded-lg text-xs leading-tight cursor-pointer hover:opacity-90 transition-all shadow-sm ${task.completed ? 'opacity-40 line-through' : ''} ${
-                        color ? `${color.bg} border ${color.border} ${color.text}` : 'bg-rp-iris/15 border border-rp-iris/30 text-rp-iris'
+                        color ? `${color.bg} border ${color.border} ${color.text}` : 'bg-rp-accent/15 border border-rp-accent/30 text-rp-accent'
                       }`}
                     >
                       <p className="font-medium truncate">{task.title}</p>
@@ -267,17 +267,17 @@ export default function SchedulePage() {
           return (
             <div key={dateStr}>
               <div className="flex items-center gap-2 mb-2">
-                <span className={`text-sm font-semibold ${isToday ? 'text-rp-iris' : 'text-rp-subtle'}`}>
+                <span className={`text-sm font-semibold ${isToday ? 'text-rp-accent' : 'text-rp-subtle'}`}>
               {DAYS_FULL[i]}, {formatSlovenianDate(day, { day: 'numeric', month: 'long' })}
                 </span>
                 {isToday && (
-                  <span className="text-xs px-2 py-0.5 rounded-full text-rp-iris bg-rp-iris/20 border border-rp-iris/30">
+                  <span className="text-xs px-2 py-0.5 rounded-full text-rp-accent bg-rp-accent/20 border border-rp-accent/30">
                     Danes
                   </span>
                 )}
               </div>
               {dayTasks.length === 0 ? (
-                <p className="text-xs pl-2 text-rp-hl-high">Ni nalog</p>
+                <p className="text-xs pl-2 text-rp-line-strong">Ni nalog</p>
               ) : (
                 <div className="space-y-2">
                   {dayTasks.map((task) => {
@@ -294,12 +294,12 @@ export default function SchedulePage() {
                             toggleTask(task);
                           }}
                           className={`mt-0.5 w-5 h-5 rounded-full border-2 flex-shrink-0 flex items-center justify-center transition-all ${
-                            task.completed ? 'bg-rp-iris border-transparent' : 'border-rp-hl-high'
+                            task.completed ? 'bg-rp-accent border-transparent' : 'border-rp-line-strong'
                           }`}
                         >
                           {task.completed && (
                             <svg
-                              className="w-3 h-3 text-rp-base"
+                              className="w-3 h-3 text-rp-accent-ink"
                               fill="none"
                               viewBox="0 0 24 24"
                               stroke="currentColor"
