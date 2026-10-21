@@ -1,8 +1,12 @@
-import { Routes, Route, Navigate } from 'react-router-dom';
+import { Navigate, Route, Routes } from 'react-router-dom';
 import { BaseRouter } from './components/BaseRouter.jsx';
-import { AuthProvider } from './contexts/AuthContext';
+import { AuthProvider, useAuth } from './contexts/AuthContext';
 import ProtectedRoute from './components/ProtectedRoute';
 import AppShell from './components/AppShell';
+import LandingPage from './pages/LandingPage';
+import PrivacyPage from './pages/PrivacyPage';
+import ImprintPage from './pages/ImprintPage';
+import AccessibilityPage from './pages/AccessibilityPage';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import DashboardPage from './pages/DashboardPage';
@@ -25,6 +29,13 @@ function Protected({ children }) {
   );
 }
 
+/** A signed-in visitor lands straight in the app instead of the marketing page. */
+function Landing() {
+  const { currentUser } = useAuth();
+  if (currentUser) return <Navigate to="/dashboard" replace />;
+  return <LandingPage />;
+}
+
 export default function App() {
   return (
     <BaseRouter>
@@ -32,7 +43,10 @@ export default function App() {
         <SettingsProvider>
           <Routes>
             {/* Javne poti */}
-            <Route path="/" element={<Navigate to="/dashboard" replace />} />
+            <Route path="/" element={<Landing />} />
+            <Route path="/pravilnik-o-zasebnosti" element={<PrivacyPage />} />
+            <Route path="/impressum" element={<ImprintPage />} />
+            <Route path="/dostopnost" element={<AccessibilityPage />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/register" element={<RegisterPage />} />
 
@@ -48,7 +62,7 @@ export default function App() {
             <Route path="/settings" element={<Protected><SettingsPage /></Protected>} />
             <Route path="/friends" element={<Protected><FriendsPage /></Protected>} />
 
-            <Route path="*" element={<Navigate to="/dashboard" replace />} />
+            <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </SettingsProvider>
       </AuthProvider>

@@ -1,0 +1,82 @@
+import LegalProse from '../components/LegalProse';
+import SiteShell from '../components/SiteShell';
+
+export default function PrivacyPage() {
+  return (
+    <SiteShell>
+      <LegalProse
+        title="Pravilnik o zasebnosti"
+        intro="Ta pravilnik pojasnjuje, katere podatke SmartStudy zbira, zakaj jih zbira in kakšne pravice imaš do njih."
+        updated="21. oktober 2026"
+        note="TODO(vsebina): Manjkajo podatki o operaterju, kontaktni e-pošti in regiji hrambe podatkov. Besedilo je pripravljeno, a še ni pravno pregledano."
+      >
+        <h2>Katere podatke zbiram</h2>
+        <p>
+          Ob registraciji SmartStudy od tebe prebere e-poštni naslov, geslo in ime, ki ju
+          vpišeš. V svoj profil lahko dodaš tudi šolo. Ko začneš uporabljati aplikacijo,
+          shranjuješ predmete, naloge, preverjanja, kartice, zapise fokus sej in nastavitve
+          videza.
+        </p>
+        <p>
+          Gesla se nikoli ne shranjujejo v oblaku v čitljivi obliki — za njih skrbi ponudnik
+          prijave.
+        </p>
+
+        <h2>Zakaj jih zbiram</h2>
+        <p>
+          E-poštni naslov in geslo sta potrebna za prijavo. Ime, šola, predmeti in naloge so
+          tvoji učni podatki — brez njih aplikacija ne bi znala prikazati tvojega pregleda.
+          Zapisi fokus sej omogočajo, da vidiš, koliko časa si res učil.
+        </p>
+
+        <h2>Kdo obdeluje tvoje podatke</h2>
+        <p>
+          Podatke obdeluje Google Firebase (Firebase Authentication in Cloud Firestore),
+          ponudnik storitve v oblaku, ki ga uporablja ta aplikacija. Več o ponudniku:
+          <a href="https://firebase.google.com/privacy" target="_blank" rel="noreferrer" className="text-rp-accent hover:underline">
+            firebase.google.com/privacy
+          </a>.
+        </p>
+
+        <h2>Komu podatkov ne posredujem</h2>
+        <ul>
+          <li>SmartStudy tvojih podatkov ne prodaja in jih ne deli z oglaševalci.</li>
+          <li>Podatke ne pošiljamo tretjim osebam za namen trženja ali profiliranja.</li>
+          <li>Uporabniške podatke v klepetu vidijo le udeleženci istega kanala ali pogovora.</li>
+        </ul>
+
+        <h2>Analytics in piškotki</h2>
+        <p>
+          SmartStudy ne uporablja analitičnih orodij tretjih oseb in ne postavlja tržnih
+          piškotkov. Prijava uporablja piškotke, ki jih postavi Firebase Authentication —
+          brez njih se računa ne more vzdrževati.
+        </p>
+
+        <h2>Hramba in brisanje</h2>
+        <p>
+          Podatki ostanejo v tvojem računu, dokler jih ne izbrišeš. Predmete, naloge,
+          preverjanja in kartice izbrišeš v aplikaciji, svoj račun pa lahko odpraviš tako, da
+          izbrišeš svojo uporabniško podatkovno bazo v Firebase.
+        </p>
+
+        <h2>Vaše pravice</h2>
+        <p>
+          Imaš pravico do dostopa do svojih podatkov, do njihove poprave in do brisanja.
+          Vse podatke lahko tudi izvoziš v obliki JSON — v Nastavitvah je gumb »Izvozi podatke«.
+        </p>
+
+        <h2>Piškotki in sledenje</h2>
+        <p>
+          Ker aplikacija ne uporablja analitike in ne trženih piškotkov, posebnega soglasja
+          za piškotke ne zahtevamo. Obvestilo o spremembi te politike bomo objavili na tej
+          strani.
+        </p>
+
+        <h2>Kontakt</h2>
+        <p>
+          TODO(vsebina): Kontaktna e-pošta za vprašanja o zasebnosti še ni določena.
+        </p>
+      </LegalProse>
+    </SiteShell>
+  );
+}
