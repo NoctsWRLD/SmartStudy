@@ -1,26 +1,13 @@
-import { useEffect, useRef, useState } from 'react';
+import { lazy, Suspense, useEffect, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { useSettings } from '../contexts/SettingsContext';
-import { useTasks } from '../hooks/useFirestore';
 import { formatSlovenianDate, getSlovenianDateKey } from '../utils/dates';
-import { countedNoun } from '../utils/slovenian';
 import Logo from './Logo';
-import { GearIcon, LogOutIcon, MenuIcon, MoonIcon, SunIcon, UserIcon } from './icons';
 
-function TodayCount() {
-  const { tasks } = useTasks();
-  const today = getSlovenianDateKey();
-  const open = tasks.filter((task) => !task.completed && task.dueDate === today).length;
-  if (open === 0) return null;
-  return (
-    <span className="chip chip-accent whitespace-nowrap">
-      <span className="h-1.5 w-1.5 rounded-full bg-rp-accent" aria-hidden="true" />
-      <span className="hidden sm:inline">{countedNoun(open, 'naloga danes', 'nalogi danes', 'naloge danes', 'nalog danes')}</span>
-      <span className="sm:hidden">{countedNoun(open, 'danes', 'danes', 'dani', 'dani')}</span>
-    </span>
-  );
-}
+// Loaded after the first paint so the database SDK never blocks the public page.
+const TodayCount = lazy(() => import('./TodayCount'));
+import { GearIcon, LogOutIcon, MenuIcon, MoonIcon, SunIcon, UserIcon } from './icons';
 
 function AccountMenu() {
   const [open, setOpen] = useState(false);
@@ -149,7 +136,9 @@ export default function TopBar({ onOpenMenu }) {
         </div>
 
         <div className="ml-auto flex items-center gap-2">
-          <TodayCount />
+          <Suspense fallback={null}>
+            <TodayCount />
+          </Suspense>
           <ThemeToggle />
           <AccountMenu />
         </div>
