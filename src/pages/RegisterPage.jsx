@@ -6,7 +6,7 @@ import { AuthShell, AuthField, AuthSubmit } from './LoginPage';
 export default function RegisterPage() {
   const { register, currentUser } = useAuth();
   const navigate = useNavigate();
-  useEffect(() => { if (currentUser) navigate('/', { replace: true }); }, [currentUser, navigate]);
+  useEffect(() => { if (currentUser) navigate('/dashboard', { replace: true }); }, [currentUser, navigate]);
 
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -20,7 +20,7 @@ export default function RegisterPage() {
     if (password !== confirm) return setError('Gesli se ne ujemata.');
     if (password.length < 6) return setError('Geslo naj ima vsaj 6 znakov.');
     setError(''); setLoading(true);
-    try { await register(email, password, name); navigate('/'); }
+    try { await register(email, password, name); navigate('/dashboard'); }
     catch (err) {
       if (err.code === 'auth/email-already-in-use') setError('Ta e-pošta je že v uporabi.');
       else setError('Registracija ni uspela. Preveri podatke in poskusi znova.');

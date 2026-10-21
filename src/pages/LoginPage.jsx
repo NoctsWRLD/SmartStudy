@@ -55,7 +55,7 @@ export function AuthSubmit({ loading, idle, busy }) {
 export default function LoginPage() {
   const { login, currentUser } = useAuth();
   const navigate = useNavigate();
-  useEffect(() => { if (currentUser) navigate('/', { replace: true }); }, [currentUser, navigate]);
+  useEffect(() => { if (currentUser) navigate('/dashboard', { replace: true }); }, [currentUser, navigate]);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -64,7 +64,7 @@ export default function LoginPage() {
   async function handleSubmit(e) {
     e.preventDefault();
     setError(''); setLoading(true);
-    try { await login(email, password); navigate('/'); }
+    try { await login(email, password); navigate('/dashboard'); }
     catch { setError('Napačen e-poštni naslov ali geslo. Poskusi znova.'); }
     setLoading(false);
   }

@@ -19,7 +19,11 @@ export function useAuth() {
 export function AuthProvider({ children }) {
   const [currentUser, setCurrentUser] = useState(null);
   const [userProfile, setUserProfile] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [sessionResolved, setSessionResolved] = useState(false);
+
+  // Without a Firebase configuration there is no session to wait for, so the
+  // public pages render straight away.
+  const loading = Boolean(auth) && !sessionResolved;
 
   async function register(email, password, displayName) {
     const result = await createUserWithEmailAndPassword(auth, email, password);
@@ -72,7 +76,7 @@ export function AuthProvider({ children }) {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       setCurrentUser(user);
       setUserProfile(null);
-      setLoading(false);
+      setSessionResolved(true);
       if (!user) return;
 
       // Backfill a minimal public profile for accounts created before profile privacy was added.
