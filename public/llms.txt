@@ -1,0 +1,29 @@
+# SmartStudy
+
+> SmartStudy je aplikacija za dijake, dijakinje in študente: predmeti, naloge,
+> preverjanja, urnik, kartice, klepet in fokus v enem pregledu. Uporabniški vmesnik
+> je v slovenščini.
+
+## Javne strani
+
+- [Predstavitvena stran](https://smartstudy.vercel.app/): kaj SmartStudy ponuja, kako deluje in za koga je.
+- [Pravilnik o zasebnosti](https://smartstudy.vercel.app/pravilnik-o-zasebnosti): katere podatke zbira, zakaj in kdo jih obdeluje.
+- [Impressum](https://smartstudy.vercel.app/impressum): podatki o operaterju spletnega mesta.
+- [Dostopnost](https://smartstudy.vercel.app/dostopnost): cilj dostopnosti in kako sporočiti težavo.
+
+## Prijava
+
+- [Prijava](https://smartstudy.vercel.app/login): vstop v obstoječi račun.
+- [Ustvari račun](https://smartstudy.vercel.app/register): nov račun za dijake in študente.
+
+## Aplikacija
+
+Aplikacija je zaščitena in zahteva prijavo. Ob prijavi so na voljo:
+
+- **Domov** — pregled dneva, učni pas tedna, današnje naloge, fokus in odštevanje do preverjanja.
+- **Naloge** — naloge s predmetom in rokom, filtri, iskanjem ter množičnim označevanjem.
+- **Predmeti** — predmeti z lastno barvo in napredkom.
+- **Preverjanja** — testi in izpiti z odštevanjem.
+- **Kartice** — učenje s karticami, ki si zapise, kaj znaš.
+- **Urnik** — teden po dnevih, z možnostjo uvoza urnika iz fotografije.
+- **Klepet** — kanali, predmetni kanali in neposredna sporočila.

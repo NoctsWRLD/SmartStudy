@@ -1,7 +1,5 @@
 import { createContext, useCallback, useContext, useLayoutEffect, useMemo, useState } from 'react';
-import { doc, updateDoc } from 'firebase/firestore';
 import { useAuth } from './AuthContext';
-import { db } from '../firebase';
 import { DEFAULT_THEME, normalizeThemeId } from '../utils/themes';
 
 const STORAGE_KEY = 'smartstudy.settings.v1';
@@ -49,9 +47,14 @@ export function SettingsProvider({ children }) {
 
   const setTheme = useCallback(async (nextTheme) => {
     if (!THEME_IDS.includes(nextTheme)) return;
-    if (!currentUid || !db) return;
+    if (!currentUid) return;
 
     try {
+      // The database SDK is loaded only when a theme is actually saved.
+      const [{ doc, updateDoc }, { db }] = await Promise.all([
+        import('firebase/firestore'),
+        import('../firebaseDb'),
+      ]);
       await updateDoc(doc(db, 'users', currentUid), { theme: nextTheme });
     } catch (error) {
       console.error('Saving theme failed:', error);

@@ -6,8 +6,7 @@ import {
   onAuthStateChanged,
   updateProfile,
 } from 'firebase/auth';
-import { doc, getDoc, setDoc, updateDoc, serverTimestamp, onSnapshot } from 'firebase/firestore';
-import { auth, db } from '../firebase';
+import { auth } from '../firebase';
 
 const AuthContext = createContext(null);
 
@@ -28,19 +27,8 @@ export function AuthProvider({ children }) {
   async function register(email, password, displayName) {
     const result = await createUserWithEmailAndPassword(auth, email, password);
     await updateProfile(result.user, { displayName });
-    await setDoc(doc(db, 'users', result.user.uid), {
-      displayName,
-      email,
-      school: '',
-      photoURL: '',
-      createdAt: serverTimestamp(),
-    });
-    await setDoc(doc(db, 'publicProfiles', result.user.uid), {
-      displayName,
-      searchName: displayName.toLocaleLowerCase('sl-SI'),
-      photoURL: '',
-      createdAt: serverTimestamp(),
-    });
+    const { createUserProfile } = await import('../services/profileService');
+    await createUserProfile(result.uid, { displayName, email });
     return result;
   }
 
@@ -56,16 +44,8 @@ export function AuthProvider({ children }) {
   async function updateUserProfile({ displayName, school }) {
     const user = auth.currentUser;
     if (displayName) await updateProfile(user, { displayName });
-    await updateDoc(doc(db, 'users', user.uid), {
-      ...(displayName ? { displayName } : {}),
-      ...(school !== undefined ? { school } : {}),
-    });
-    if (displayName) {
-      await setDoc(doc(db, 'publicProfiles', user.uid), {
-        displayName,
-        searchName: displayName.toLocaleLowerCase('sl-SI'),
-      }, { merge: true });
-    }
+    const { updateProfileDocuments } = await import('../services/profileService');
+    await updateProfileDocuments(user.uid, { displayName, school });
     setCurrentUser({ ...user, displayName: displayName || user.displayName });
   }
 
@@ -81,16 +61,8 @@ export function AuthProvider({ children }) {
 
       // Backfill a minimal public profile for accounts created before profile privacy was added.
       try {
-        const publicProfileRef = doc(db, 'publicProfiles', user.uid);
-        const publicProfile = await getDoc(publicProfileRef);
-        if (!publicProfile.exists()) {
-          await setDoc(publicProfileRef, {
-            displayName: user.displayName || 'Učenec',
-            searchName: (user.displayName || 'Učenec').toLocaleLowerCase('sl-SI'),
-            photoURL: user.photoURL || '',
-            createdAt: serverTimestamp(),
-          });
-        }
+        const { ensurePublicProfile } = await import('../services/profileService');
+        await ensurePublicProfile(user.uid, user.displayName);
       } catch (error) {
         console.error('Public profile initialization failed:', error);
       }
@@ -101,11 +73,19 @@ export function AuthProvider({ children }) {
   // Real-time Firestore profile listener
   const currentUid = currentUser?.uid;
   useEffect(() => {
-    if (!currentUid || !db) return undefined;
-    const unsub = onSnapshot(doc(db, 'users', currentUid), (snap) => {
-      if (snap.exists()) setUserProfile({ uid: snap.id, ...snap.data() });
+    if (!currentUid) return undefined;
+    let unsubscribe;
+    let cancelled = false;
+    import('../services/profileService').then(({ watchUserProfile }) => {
+      if (cancelled) return;
+      unsubscribe = watchUserProfile(currentUid, setUserProfile);
+    }).catch((error) => {
+      console.error('Profile listener failed:', error);
     });
-    return unsub;
+    return () => {
+      cancelled = true;
+      if (unsubscribe) unsubscribe();
+    };
   }, [currentUid]);
 
   const value = { currentUser, userProfile, register, login, logout, updateUserProfile };

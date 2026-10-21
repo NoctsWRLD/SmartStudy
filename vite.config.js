@@ -60,6 +60,35 @@ export default defineConfig({
     tailwindcss(),
     githubPagesSpaFallback(),
   ],
+  build: {
+    rollupOptions: {
+      output: {
+        // The database SDK is only needed by the signed-in screens. Without an
+        // explicit split, Rollup hoists it into the main chunk and the public
+        // landing page pays for it.
+        manualChunks(id) {
+          if (!id.includes('node_modules')) return undefined
+          if (id.includes('@firebase/firestore') || id.includes('firebase/firestore')) {
+            return 'firebase-firestore'
+          }
+          if (id.includes('@firebase/auth') || id.includes('firebase/auth')) {
+            return 'firebase-auth'
+          }
+          if (id.includes('@firebase/app') || id.includes('firebase/app')) {
+            return 'firebase-app'
+          }
+          if (id.includes('node_modules/react-dom') || id.includes('node_modules/react/')
+            || id.includes('node_modules/scheduler')) {
+            return 'react'
+          }
+          if (id.includes('node_modules/react-router') || id.includes('node_modules/@remix-run')) {
+            return 'router'
+          }
+          return undefined
+        },
+      },
+    },
+  },
   test: {
     environment: 'jsdom',
     globals: true,

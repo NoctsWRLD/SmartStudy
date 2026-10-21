@@ -4,7 +4,7 @@ import {
   onSnapshot, addDoc, deleteDoc, doc, updateDoc,
   serverTimestamp,
 } from 'firebase/firestore';
-import { db } from '../firebase';
+import { db } from '../firebaseDb';
 import { useAuth } from '../contexts/AuthContext';
 
 // ─── User profile (Firestore) ─────────────────────────────────────────────────
