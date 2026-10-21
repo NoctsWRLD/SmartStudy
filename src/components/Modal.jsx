@@ -1,0 +1,75 @@
+import { useEffect, useId, useRef } from 'react';
+
+const FOCUSABLE = 'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
+
+/**
+ * One modal for the whole app: escape closes it, focus is trapped while it
+ * is open and returned to the trigger when it closes.
+ */
+export default function Modal({ isOpen, onClose, title, description, children, footer, size = 'md' }) {
+  const panelRef = useRef(null);
+  const previouslyFocused = useRef(null);
+  const titleId = useId();
+
+  useEffect(() => {
+    if (!isOpen) return undefined;
+
+    previouslyFocused.current = document.activeElement;
+    const panel = panelRef.current;
+    const first = panel?.querySelector(FOCUSABLE);
+    (first || panel)?.focus();
+
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+
+    function onKey(event) {
+      if (event.key === 'Escape') {
+        event.stopPropagation();
+        onClose();
+        return;
+      }
+      if (event.key !== 'Tab') return;
+      const focusable = panelRef.current?.querySelectorAll(FOCUSABLE);
+      if (!focusable?.length) return;
+      const firstItem = focusable[0];
+      const lastItem = focusable[focusable.length - 1];
+      if (event.shiftKey && document.activeElement === firstItem) {
+        event.preventDefault();
+        lastItem.focus();
+      } else if (!event.shiftKey && document.activeElement === lastItem) {
+        event.preventDefault();
+        firstItem.focus();
+      }
+    }
+
+    document.addEventListener('keydown', onKey);
+    return () => {
+      document.removeEventListener('keydown', onKey);
+      document.body.style.overflow = previousOverflow;
+      if (previouslyFocused.current instanceof HTMLElement) previouslyFocused.current.focus();
+    };
+  }, [isOpen, onClose]);
+
+  if (!isOpen) return null;
+
+  const widths = { sm: 'max-w-sm', md: 'max-w-md', lg: 'max-w-2xl' };
+
+  return (
+    <div className="fixed inset-0 z-50 grid place-items-center p-4">
+      <div className="overlay-fade absolute inset-0 bg-rp-canvas/70 backdrop-blur-sm" onClick={onClose} aria-hidden="true" />
+      <div
+        ref={panelRef}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby={titleId}
+        tabIndex={-1}
+        className={`modal-pop relative w-full ${widths[size]} rounded-xl border border-rp-line bg-rp-raised p-6 shadow-[var(--rp-shadow-3)]`}
+      >
+        <h2 id={titleId} className="text-title text-rp-text">{title}</h2>
+        {description && <p className="mt-1.5 text-body text-rp-muted">{description}</p>}
+        <div className="mt-4">{children}</div>
+        {footer && <div className="mt-5 flex flex-wrap justify-end gap-2">{footer}</div>}
+      </div>
+    </div>
+  );
+}

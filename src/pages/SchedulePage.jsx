@@ -1,19 +1,20 @@
-import { useState, useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { useSubjects, useTasks } from '../hooks/useFirestore';
 import TaskModal from '../components/TaskModal';
 import ScheduleImportModal from '../components/ScheduleImportModal';
-import Badge from '../components/Badge';
-import SUBJECT_COLORS from '../utils/colors';
+import EmptyState from '../components/EmptyState';
+import { getSubjectColor } from '../utils/colors';
+import { ChevronLeftIcon, ChevronRightIcon, ImageIcon, PlusIcon } from '../components/icons';
+import { getWeekStart } from '../utils/rail';
 import {
   addDaysToDateKey,
   formatSlovenianDate,
-  getDateKeyDayOfWeek,
   getDayOfMonth,
   getSlovenianDateKey,
   getYearFromDateKey,
 } from '../utils/dates';
 
-const DAYS_SL = ['Pon', 'Tor', 'Sre', 'Čet', 'Pet', 'Sob', 'Ned'];
+const DAYS_SHORT = ['Pon', 'Tor', 'Sre', 'Čet', 'Pet', 'Sob', 'Ned'];
 const DAYS_FULL = [
   'Ponedeljek',
   'Torek',
@@ -23,10 +24,6 @@ const DAYS_FULL = [
   'Sobota',
   'Nedelja',
 ];
-function getWeekStart(dateKey) {
-  const day = getDateKeyDayOfWeek(dateKey);
-  return addDaysToDateKey(dateKey, day === 0 ? -6 : 1 - day);
-}
 
 export default function SchedulePage() {
   const { subjects } = useSubjects();
@@ -41,19 +38,18 @@ export default function SchedulePage() {
     () => addDaysToDateKey(getWeekStart(getSlovenianDateKey()), weekOffset * 7),
     [weekOffset],
   );
-
-  const weekDays = useMemo(() => {
-    return Array.from({ length: 7 }, (_, i) => addDaysToDateKey(weekStart, i));
-  }, [weekStart]);
-
+  const weekDays = useMemo(
+    () => Array.from({ length: 7 }, (_, index) => addDaysToDateKey(weekStart, index)),
+    [weekStart],
+  );
   const todayStr = getSlovenianDateKey();
 
   function getSubject(task) {
-    return subjects.find((s) => s.id === task.subjectId) || null;
+    return subjects.find((subject) => subject.id === task.subjectId) || null;
   }
 
   function getTasksForDay(dateStr) {
-    return tasks.filter((t) => t.dueDate === dateStr && !t.completed);
+    return tasks.filter((task) => task.dueDate === dateStr && !task.completed);
   }
 
   function handleDayClick(dateStr) {
@@ -63,10 +59,7 @@ export default function SchedulePage() {
   }
 
   function handleSave(data) {
-    const finalData =
-      preselectedDate && !data.dueDate
-        ? { ...data, dueDate: preselectedDate }
-        : data;
+    const finalData = preselectedDate && !data.dueDate ? { ...data, dueDate: preselectedDate } : data;
     if (editTask) updateTask(editTask.id, finalData);
     else addTask(finalData);
     setEditTask(null);
@@ -84,256 +77,189 @@ export default function SchedulePage() {
   }
 
   const weekLabel = `${formatSlovenianDate(weekDays[0], { day: 'numeric', month: 'short' })} – ${formatSlovenianDate(weekDays[6], { day: 'numeric', month: 'short' })} ${getYearFromDateKey(weekDays[6])}`;
+  const weekTotal = weekDays.reduce((sum, day) => sum + getTasksForDay(day).length, 0);
 
   return (
-    <div className="space-y-5">
-      {/* Header */}
-      <div className="flex flex-wrap items-center justify-between gap-3 animate-fade-in-up">
+    <div className="space-y-6">
+      <section className="rise flex flex-wrap items-end justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-rp-text">
-            Urnik
-          </h1>
-          <p className="text-sm mt-0.5 text-rp-muted">
-            {weekLabel}
-          </p>
+          <h1 className="text-page text-rp-text">Urnik</h1>
+          <p className="mt-1 text-small text-rp-muted">{weekLabel}</p>
         </div>
         <div className="flex flex-wrap items-center gap-2">
-          <button
-            onClick={() => setWeekOffset(0)}
-            className="btn-ghost !py-1.5 !text-xs"
-          >
+          <button type="button" onClick={() => setWeekOffset(0)} className="btn-ghost !py-2 !text-small">
             Ta teden
           </button>
           <button
-            onClick={() => setWeekOffset((w) => w - 1)}
-            className="p-2 rounded-xl transition-all text-rp-subtle hover:text-rp-text hover:bg-rp-line/35"
+            type="button"
+            onClick={() => setWeekOffset((value) => value - 1)}
+            aria-label="Prejšnji teden"
+            className="grid h-9 w-9 place-items-center rounded-md text-rp-subtle transition-colors hover:bg-rp-overlay hover:text-rp-text"
           >
-            <svg
-              className="w-4 h-4"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2.5}
-                d="M15 19l-7-7 7-7"
-              />
-            </svg>
-          </button>
-          <button
-            onClick={() => setWeekOffset((w) => w + 1)}
-            className="p-2 rounded-xl transition-all text-rp-subtle hover:text-rp-text hover:bg-rp-line/35"
-          >
-            <svg
-              className="w-4 h-4"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2.5}
-                d="M9 5l7 7-7 7"
-              />
-            </svg>
+            <ChevronLeftIcon className="h-4 w-4" />
           </button>
           <button
             type="button"
-            onClick={() => setImportOpen(true)}
-            className="btn-ghost !py-2 !text-xs"
+            onClick={() => setWeekOffset((value) => value + 1)}
+            aria-label="Naslednji teden"
+            className="grid h-9 w-9 place-items-center rounded-md text-rp-subtle transition-colors hover:bg-rp-overlay hover:text-rp-text"
           >
-            <svg
-              className="w-3.5 h-3.5"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              aria-hidden="true"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M4 16l4.5-4.5 3.5 3.5 2.5-2.5L20 17M4 20h16M6 4h12a2 2 0 012 2v12a2 2 0 01-2 2H6a2 2 0 01-2-2V6a2 2 0 012-2z"
-              />
-              <circle cx="9" cy="9" r="1.5" />
-            </svg>
+            <ChevronRightIcon className="h-4 w-4" />
+          </button>
+          <button type="button" onClick={() => setImportOpen(true)} className="btn-ghost !py-2 !text-small">
+            <ImageIcon className="h-4 w-4" />
             Urnik iz slike
           </button>
           <button
             id="schedule-add-task"
-            onClick={() => {
-              setEditTask(null);
-              setPreselectedDate(todayStr);
-              setModalOpen(true);
-            }}
-            className="btn-primary !py-2 !text-xs"
+            type="button"
+            onClick={() => { setEditTask(null); setPreselectedDate(todayStr); setModalOpen(true); }}
+            className="btn-primary !py-2 !text-small"
           >
-            <svg
-              className="w-3.5 h-3.5"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2.5}
-                d="M12 4v16m8-8H4"
-              />
-            </svg>
+            <PlusIcon className="h-4 w-4" />
             Nova naloga
           </button>
         </div>
-      </div>
+      </section>
 
-      {/* Weekly grid */}
-      <div className="grid grid-cols-7 gap-2 animate-fade-in-up">
-        {weekDays.map((day, i) => {
-          const dateStr = day;
-          const dayTasks = getTasksForDay(dateStr);
-          const isToday = dateStr === todayStr;
+      <section className="rise" aria-label="Teden">
+        <div className="grid grid-cols-7 gap-2">
+          {weekDays.map((day, index) => {
+            const dayTasks = getTasksForDay(day);
+            const isToday = day === todayStr;
 
-          return (
-            <div key={dateStr} className="flex flex-col">
-              {/* Day header */}
-              <div
-                className={`text-center mb-2 pb-2 border-b ${isToday ? 'border-rp-accent/40' : 'border-rp-line/30'}`}
-              >
-                <p
-                  className={`text-xs font-medium ${isToday ? 'text-rp-accent' : 'text-rp-muted'}`}
-                >
-                  {DAYS_SL[i]}
-                </p>
-                <div
-                  className={`w-7 h-7 rounded-full flex items-center justify-center mx-auto mt-1 text-sm font-bold transition-all ${
-                    isToday ? 'bg-rp-accent text-white' : 'text-rp-subtle'
-                  }`}
-                >
-                  {getDayOfMonth(day)}
+            return (
+              <div key={day} className="flex min-w-0 flex-col">
+                <div className={`mb-2 border-b pb-2 text-center ${isToday ? 'border-rp-accent/45' : 'border-rp-line'}`}>
+                  <p className={`text-[11px] font-semibold ${isToday ? 'text-rp-accent' : 'text-rp-muted'}`}>
+                    {DAYS_SHORT[index]}
+                  </p>
+                  <div
+                    className={`mx-auto mt-1 grid h-7 w-7 place-items-center rounded-full text-small font-bold transition-colors ${
+                      isToday ? 'bg-rp-accent text-rp-accent-ink' : 'text-rp-subtle'
+                    }`}
+                  >
+                    {getDayOfMonth(day)}
+                  </div>
                 </div>
-              </div>
 
-              {/* Tasks column */}
-              <div
-                className="flex-1 min-h-[7rem] rounded-xl p-1.5 space-y-1.5 cursor-pointer hover:bg-rp-line/20 transition-all"
-                onClick={() => handleDayClick(dateStr)}
-                title={`Dodaj nalogo – ${DAYS_FULL[i]}`}
-              >
-                {dayTasks.map((task) => {
-                  const subj = getSubject(task);
-                  const color = subj
-                    ? SUBJECT_COLORS[subj.colorIndex ?? 0]
-                    : null;
-                  return (
-                    <div
-                      key={task.id}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleEdit(task);
-                      }}
-                      className={`px-2.5 py-2 rounded-lg text-xs leading-tight cursor-pointer hover:opacity-90 transition-all shadow-sm ${task.completed ? 'opacity-40 line-through' : ''} ${
-                        color ? `${color.bg} border ${color.border} ${color.text}` : 'bg-rp-accent/15 border border-rp-accent/30 text-rp-accent'
-                      }`}
-                    >
-                      <p className="font-medium truncate">{task.title}</p>
-                      {subj && (
-                        <p className="opacity-70 truncate mt-0.5">
-                          {subj.name}
-                        </p>
-                      )}
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-          );
-        })}
-      </div>
-
-      {/* Mobile: day list */}
-      <div className="block lg:hidden space-y-4 mt-4">
-        <h2 className="text-base font-semibold text-rp-text">
-          Ta teden po dnevih
-        </h2>
-        {weekDays.map((day, i) => {
-          const dateStr = day;
-          const dayTasks = getTasksForDay(dateStr);
-          const isToday = dateStr === todayStr;
-          if (dayTasks.length === 0 && !isToday) return null;
-
-          return (
-            <div key={dateStr}>
-              <div className="flex items-center gap-2 mb-2">
-                <span className={`text-sm font-semibold ${isToday ? 'text-rp-accent' : 'text-rp-subtle'}`}>
-              {DAYS_FULL[i]}, {formatSlovenianDate(day, { day: 'numeric', month: 'long' })}
-                </span>
-                {isToday && (
-                  <span className="text-xs px-2 py-0.5 rounded-full text-rp-accent bg-rp-accent/20 border border-rp-accent/30">
-                    Danes
-                  </span>
-                )}
-              </div>
-              {dayTasks.length === 0 ? (
-                <p className="text-xs pl-2 text-rp-line-strong">Ni nalog</p>
-              ) : (
-                <div className="space-y-2">
+                <button
+                  type="button"
+                  onClick={() => handleDayClick(day)}
+                  title={`Dodaj nalogo – ${DAYS_FULL[index]}`}
+                  aria-label={`Dodaj nalogo – ${DAYS_FULL[index]}, ${formatSlovenianDate(day, { day: 'numeric', month: 'long' })}`}
+                  className="flex min-h-28 flex-1 flex-col gap-1.5 rounded-md p-1.5 text-left transition-colors hover:bg-rp-overlay"
+                >
                   {dayTasks.map((task) => {
-                    const subj = getSubject(task);
+                    const subject = getSubject(task);
+                    const color = subject ? getSubjectColor(subject.colorIndex) : null;
                     return (
-                      <div
+                      <span
                         key={task.id}
-                        className="flex items-start gap-3 card px-4 py-3 cursor-pointer"
-                        onClick={() => handleEdit(task)}
+                        onClick={(event) => { event.stopPropagation(); handleEdit(task); }}
+                        role="button"
+                        tabIndex={0}
+                        onKeyDown={(event) => {
+                          if (event.key === 'Enter' || event.key === ' ') {
+                            event.preventDefault();
+                            handleEdit(task);
+                          }
+                        }}
+                        className={`block cursor-pointer rounded-xs border px-2 py-1.5 text-left text-[11px] leading-tight transition-opacity hover:opacity-80 ${
+                          color ? `${color.bg} ${color.border} ${color.text}` : 'bg-rp-accent/12 border-rp-accent/30 text-rp-accent'
+                        }`}
                       >
-                        <button
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            toggleTask(task);
-                          }}
-                          className={`mt-0.5 w-5 h-5 rounded-full border-2 flex-shrink-0 flex items-center justify-center transition-all ${
-                            task.completed ? 'bg-rp-accent border-transparent' : 'border-rp-line-strong'
-                          }`}
-                        >
-                          {task.completed && (
-                            <svg
-                              className="w-3 h-3 text-rp-accent-ink"
-                              fill="none"
-                              viewBox="0 0 24 24"
-                              stroke="currentColor"
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={3}
-                                d="M5 13l4 4L19 7"
-                              />
-                            </svg>
-                          )}
-                        </button>
-                        <div className="flex-1 min-w-0">
-                          <p className={`text-sm font-medium ${task.completed ? 'line-through text-rp-muted' : 'text-rp-text'}`}>
-                            {task.title}
-                          </p>
-                          {subj && (
-                            <div className="mt-1">
-                              <Badge colorIndex={subj.colorIndex}>
-                                {subj.name}
-                              </Badge>
-                            </div>
-                          )}
-                        </div>
-                      </div>
+                        <span className="block truncate font-semibold">{task.title}</span>
+                        {subject && <span className="mt-0.5 block truncate opacity-75">{subject.name}</span>}
+                      </span>
                     );
                   })}
+                </button>
+              </div>
+            );
+          })}
+        </div>
+        <p className="mt-3 text-small text-rp-muted">
+          {weekTotal === 0
+            ? 'Ta teden je prazen. Klikni dan, da dodaš prvo nalogo.'
+            : `V tem tednu je ${weekTotal} odprtih nalog.`}
+        </p>
+      </section>
+
+      <section className="lg:hidden" aria-label="Ta teden po dnevih">
+        <h2 className="text-title text-rp-text">Ta teden po dnevih</h2>
+        <div className="mt-3 grid gap-4">
+          {weekDays.map((day, index) => {
+            const dayTasks = getTasksForDay(day);
+            const isToday = day === todayStr;
+            if (dayTasks.length === 0 && !isToday) return null;
+
+            return (
+              <div key={day}>
+                <div className="mb-2 flex items-center gap-2">
+                  <span className={`text-body font-semibold ${isToday ? 'text-rp-accent' : 'text-rp-subtle'}`}>
+                    {DAYS_FULL[index]}, {formatSlovenianDate(day, { day: 'numeric', month: 'long' })}
+                  </span>
+                  {isToday && <span className="chip chip-accent">Danes</span>}
                 </div>
-              )}
-            </div>
-          );
-        })}
-      </div>
+                {dayTasks.length === 0 ? (
+                  <p className="pl-2 text-small text-rp-muted">Ni nalog</p>
+                ) : (
+                  <div className="grid gap-2">
+                    {dayTasks.map((task) => {
+                      const subject = getSubject(task);
+                      return (
+                        <div key={task.id} className="row-item flex items-start gap-3 px-4 py-3">
+                          <button
+                            type="button"
+                            onClick={() => toggleTask(task)}
+                            aria-label={task.completed ? 'Označi kot neopravljeno' : 'Označi kot opravljeno'}
+                            className={`mt-0.5 grid h-5 w-5 shrink-0 place-items-center rounded-full border-2 transition-colors ${
+                              task.completed ? 'border-rp-accent bg-rp-accent text-rp-accent-ink' : 'border-rp-line-strong'
+                            }`}
+                          >
+                            {task.completed && (
+                              <svg className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                              </svg>
+                            )}
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => handleEdit(task)}
+                            className="min-w-0 flex-1 text-left"
+                          >
+                            <p className={`text-body font-medium ${task.completed ? 'text-rp-muted line-through' : 'text-rp-text'}`}>
+                              {task.title}
+                            </p>
+                            {subject && (
+                              <p className="mt-1 flex items-center gap-1.5 text-small text-rp-muted">
+                                <span
+                                  className="h-1.5 w-1.5 rounded-full"
+                                  style={{ backgroundColor: getSubjectColor(subject.colorIndex).colorVar }}
+                                  aria-hidden="true"
+                                />
+                                {subject.name}
+                              </p>
+                            )}
+                          </button>
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
+            );
+          })}
+          {weekTotal === 0 && (
+            <EmptyState
+              compact
+              title="Ta teden je prazen"
+              description="Klikni dan v mreži ali dodaj nalogo z gumbom zgoraj."
+            />
+          )}
+        </div>
+      </section>
 
       <ScheduleImportModal
         key={importOpen ? 'open' : 'closed'}
@@ -345,20 +271,10 @@ export default function SchedulePage() {
 
       <TaskModal
         isOpen={modalOpen}
-        onClose={() => {
-          setModalOpen(false);
-          setEditTask(null);
-          setPreselectedDate('');
-        }}
+        onClose={() => { setModalOpen(false); setEditTask(null); setPreselectedDate(''); }}
         onSave={handleSave}
         subjects={subjects}
-        task={
-          editTask
-            ? { ...editTask }
-            : preselectedDate
-              ? { dueDate: preselectedDate }
-              : null
-        }
+        task={editTask ? { ...editTask } : preselectedDate ? { dueDate: preselectedDate } : null}
       />
     </div>
   );

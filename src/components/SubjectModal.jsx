@@ -1,111 +1,98 @@
-/* eslint-disable react-hooks/set-state-in-effect */
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
+import Modal from './Modal';
 import SUBJECT_COLORS from '../utils/colors';
 
-export default function SubjectModal({ isOpen, onClose, onSave, subject }) {
-  const [name, setName] = useState('');
-  const [colorIndex, setColorIndex] = useState(0);
+function SubjectForm({ onClose, onSave, subject }) {
+  const [name, setName] = useState(subject?.name || '');
+  const [colorIndex, setColorIndex] = useState(subject?.colorIndex ?? 0);
+  const selected = SUBJECT_COLORS[colorIndex] || SUBJECT_COLORS[0];
 
-  useEffect(() => {
-    if (subject) {
-      setName(subject.name || '');
-      setColorIndex(subject.colorIndex ?? 0);
-    } else {
-      setName('');
-      setColorIndex(0);
-    }
-  }, [subject, isOpen]);
-
-  function handleSubmit(e) {
-    e.preventDefault();
+  function handleSubmit(event) {
+    event.preventDefault();
     if (!name.trim()) return;
     onSave({ name: name.trim(), colorIndex });
     onClose();
   }
 
-  if (!isOpen) return null;
-
-  const inputClass = "w-full px-4 py-3 rounded-xl outline-none text-sm transition-all bg-rp-overlay/90 border border-rp-line/70 text-rp-text placeholder:text-rp-muted";
-
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-      <div className="absolute inset-0 bg-black/60 backdrop-blur-sm overlay-fade" onClick={onClose} />
-      <div className="relative card p-6 w-full max-w-sm modal-pop">
-        <div className="flex items-center justify-between mb-6">
-          <h2 className="text-lg font-semibold text-rp-text">
-            {subject ? 'Uredi predmet' : 'Nov predmet'}
-          </h2>
-          <button onClick={onClose}
-            className="p-2 rounded-xl transition-all text-rp-muted hover:text-rp-text hover:bg-rp-line/50"
-          >
-            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-            </svg>
+    <Modal
+      isOpen
+      onClose={onClose}
+      title={subject ? 'Uredi predmet' : 'Nov predmet'}
+      size="sm"
+      footer={
+        <>
+          <button type="button" onClick={onClose} className="btn-ghost">Prekliči</button>
+          <button type="submit" form="subject-form" className="btn-primary">
+            {subject ? 'Shrani spremembe' : 'Dodaj predmet'}
           </button>
+        </>
+      }
+    >
+      <form id="subject-form" onSubmit={handleSubmit} className="grid gap-4">
+        <div>
+          <label className="field-label" htmlFor="subject-name">Ime predmeta</label>
+          <input
+            id="subject-name"
+            type="text"
+            required
+            maxLength={80}
+            value={name}
+            onChange={(event) => setName(event.target.value)}
+            placeholder="npr. Matematika"
+            className="field"
+          />
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-5">
-          <div>
-            <label className="block text-xs font-medium mb-1 text-rp-muted">Ime predmeta *</label>
-            <input
-              id="subject-name"
-              type="text"
-              required
-              maxLength={80}
-              value={name}
-              onChange={e => setName(e.target.value)}
-              placeholder="npr. Matematika"
-              autoFocus
-              className={inputClass}
-            />
-          </div>
-
-          <div>
-            <label className="block text-xs font-medium mb-2 text-rp-muted">Barva</label>
-            <div className="flex flex-wrap gap-2">
-              {SUBJECT_COLORS.map((color, idx) => (
+        <div>
+          <span className="field-label" id="subject-color-label">Barva</span>
+          <div className="flex flex-wrap gap-2" role="radiogroup" aria-labelledby="subject-color-label">
+            {SUBJECT_COLORS.map((color, index) => {
+              const active = colorIndex === index;
+              return (
                 <button
-                  key={idx}
+                  key={index}
                   type="button"
-                  onClick={() => setColorIndex(idx)}
-                  className="w-7 h-7 rounded-full transition-all hover:scale-110 flex items-center justify-center"
-                  style={{
-                    backgroundColor: color.colorVar,
-                    boxShadow: colorIndex === idx ? `0 0 0 3px rgba(224,222,244,0.15), 0 0 0 2px ${color.colorVar}` : 'none',
-                    transform: colorIndex === idx ? 'scale(1.2)' : 'scale(1)',
-                  }}>
-                  {colorIndex === idx && (
-                    <svg className="w-3.5 h-3.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  role="radio"
+                  aria-checked={active}
+                  aria-label={color.label}
+                  title={color.label}
+                  onClick={() => setColorIndex(index)}
+                  className={`grid h-8 w-8 place-items-center rounded-full border transition-transform ${
+                    active ? 'scale-110 border-rp-text' : 'border-transparent hover:scale-105'
+                  }`}
+                  style={{ backgroundColor: color.colorVar }}
+                >
+                  {active && (
+                    <svg className="h-3.5 w-3.5 text-rp-canvas" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
                     </svg>
                   )}
                 </button>
-              ))}
-            </div>
+              );
+            })}
           </div>
+        </div>
 
-          {/* Preview */}
-          {name && (
-            <div className={`flex items-center gap-2 px-3 py-2 rounded-lg ${SUBJECT_COLORS[colorIndex].bg} border ${SUBJECT_COLORS[colorIndex].border}`}>
-              <div className="w-2 h-2 rounded-full" style={{ backgroundColor: SUBJECT_COLORS[colorIndex].colorVar }} />
-              <span className={`text-sm font-medium ${SUBJECT_COLORS[colorIndex].text}`}>{name}</span>
-            </div>
-          )}
-
-          <div className="flex gap-3 pt-1">
-            <button type="button" onClick={onClose}
-              className="flex-1 py-2.5 rounded-xl text-sm font-medium transition-all text-rp-subtle border border-rp-line/50 hover:bg-rp-line/35"
-            >
-              Prekliči
-            </button>
-            <button type="submit"
-              className="btn-primary flex-1 !py-2.5 !text-sm"
-            >
-              {subject ? 'Shrani' : 'Dodaj predmet'}
-            </button>
+        {name && (
+          <div className={`flex items-center gap-2 rounded-md border px-3 py-2 ${selected.bg} ${selected.border}`}>
+            <span className="h-2 w-2 rounded-full" style={{ backgroundColor: selected.colorVar }} aria-hidden="true" />
+            <span className={`text-body font-medium ${selected.text}`}>{name}</span>
           </div>
-        </form>
-      </div>
-    </div>
+        )}
+      </form>
+    </Modal>
+  );
+}
+
+export default function SubjectModal({ isOpen, onClose, onSave, subject }) {
+  if (!isOpen) return null;
+  return (
+    <SubjectForm
+      key={subject?.id || 'new'}
+      onClose={onClose}
+      onSave={onSave}
+      subject={subject}
+    />
   );
 }
