@@ -3,6 +3,7 @@ import { useAuth } from './AuthContext';
 import { DEFAULT_THEME, normalizeThemeId } from '../utils/themes';
 
 const STORAGE_KEY = 'smartstudy.settings.v1';
+const THEME_KEY = 'smartstudy.theme';
 
 const THEME_IDS = ['noc', 'dnevnik'];
 
@@ -21,6 +22,22 @@ function readSettings() {
   }
 }
 
+function readLocalTheme() {
+  try {
+    return normalizeThemeId(localStorage.getItem(THEME_KEY));
+  } catch {
+    return null;
+  }
+}
+
+function writeLocalTheme(theme) {
+  try {
+    localStorage.setItem(THEME_KEY, theme);
+  } catch {
+    // The choice still applies for this session even without storage.
+  }
+}
+
 // eslint-disable-next-line react-refresh/only-export-components
 export function useSettings() {
   return useContext(SettingsContext);
@@ -30,8 +47,11 @@ export function SettingsProvider({ children }) {
   const { currentUser, userProfile } = useAuth();
   const currentUid = currentUser?.uid;
   const [settings, setSettings] = useState(readSettings);
-  // Signed-out visitors use the default theme; signed-in users use their Firestore profile.
-  const theme = normalizeThemeId(userProfile?.theme) || DEFAULT_THEME;
+  const [localTheme, setLocalTheme] = useState(readLocalTheme);
+
+  // The profile in Firestore wins when it has one; otherwise the choice made
+  // in this browser applies. The theme never depends on a successful write.
+  const theme = normalizeThemeId(userProfile?.theme) || localTheme || DEFAULT_THEME;
 
   useLayoutEffect(() => {
     const root = document.documentElement;
@@ -47,6 +67,12 @@ export function SettingsProvider({ children }) {
 
   const setTheme = useCallback(async (nextTheme) => {
     if (!THEME_IDS.includes(nextTheme)) return;
+
+    // Apply it here and now; the account copy is a convenience, not a
+    // precondition for the change to take effect.
+    setLocalTheme(nextTheme);
+    writeLocalTheme(nextTheme);
+
     if (!currentUid) return;
 
     try {
@@ -58,7 +84,6 @@ export function SettingsProvider({ children }) {
       await updateDoc(doc(db, 'users', currentUid), { theme: nextTheme });
     } catch (error) {
       console.error('Saving theme failed:', error);
-      window.alert('Shranjevanje teme ni uspelo. Preveri povezavo in poskusi znova.');
     }
   }, [currentUid]);
 

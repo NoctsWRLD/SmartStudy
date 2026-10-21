@@ -98,12 +98,14 @@ function AccountMenu() {
 function ThemeToggle() {
   const { theme, setTheme } = useSettings();
   const next = theme === 'noc' ? 'dnevnik' : 'noc';
+  // The label names the theme the button switches *to*, not the current one.
+  const label = next === 'noc' ? 'Preklopi na temni videz' : 'Preklopi na svetli videz';
   return (
     <button
       type="button"
       onClick={() => setTheme(next)}
-      title={next === 'noc' ? 'Preklopi na svetlo' : 'Preklopi na temno'}
-      aria-label={next === 'noc' ? 'Preklopi na svetli videz' : 'Preklopi na temni videz'}
+      title={label}
+      aria-label={label}
       className="grid h-9 w-9 place-items-center rounded-md text-rp-muted transition-colors hover:bg-rp-overlay hover:text-rp-text"
     >
       {theme === 'noc' ? <SunIcon className="h-[18px] w-[18px]" /> : <MoonIcon className="h-[18px] w-[18px]" />}

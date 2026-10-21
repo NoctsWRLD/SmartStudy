@@ -14,8 +14,10 @@ service cloud.firestore {
       return value == '' || value.matches('https://.*');
     }
 
+    // The current themes are 'noc' and 'dnevnik'. The two legacy ids stay
+    // valid so a profile written by an earlier version can still be updated.
     function validTheme(value) {
-      return value in ['tabla', 'tabla-temna'];
+      return value in ['noc', 'dnevnik', 'tabla', 'tabla-temna'];
     }
 
     function isOwnSubject(subjectId) {

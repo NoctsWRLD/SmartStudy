@@ -177,6 +177,7 @@
   --rp-accent-ink: #ffffff;
 
   --rp-warn: #8f5806;
+  --rp-warn-fill: #dd9a4e;
   --rp-danger: #b03149;
   --rp-success: #0a6b54;
   --rp-info: #1d4ed8;
@@ -233,6 +234,7 @@
   --rp-accent-ink: #04121a;
 
   --rp-warn: #f0a868;
+  --rp-warn-fill: #f0a868;
   --rp-danger: #f87d92;
   --rp-success: #3fd9a4;
   --rp-info: #6fa8ff;
@@ -463,7 +465,7 @@ button:disabled {
 }
 
 .rail-seg[data-tone='warn'] > span {
-  background: var(--rp-warn);
+  background: var(--rp-warn-fill);
 }
 
 .rail-seg[data-tone='danger'] > span {
