@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useSubjects, useTasks } from '../hooks/useFirestore';
 import TaskCard from '../components/TaskCard';
@@ -24,7 +24,7 @@ export default function TasksPage() {
   const { subjects, loading: subjectsLoading } = useSubjects();
   const { tasks, loading, error, addTask, updateTask, toggleTask, deleteTask } = useTasks();
   const initialSubjectId = searchParams.get('subject') || '';
-  const [modalOpen, setModalOpen] = useState(searchParams.get('new') === '1' && Boolean(initialSubjectId));
+  const [modalOpen, setModalOpen] = useState(false);
   const [editTask, setEditTask] = useState(null);
   const [statusFilter, setStatusFilter] = useState('pending');
   const [subjectFilter, setSubjectFilter] = useState('');
@@ -32,6 +32,17 @@ export default function TasksPage() {
   const [search, setSearch] = useState('');
   const [selecting, setSelecting] = useState(false);
   const [selected, setSelected] = useState([]);
+
+  // The side rail links here with ?new=1. The form can only open once the
+  // subjects are known, because a task always belongs to one.
+  const wantsNewTask = searchParams.get('new') === '1';
+  const subjectsReady = !subjectsLoading;
+  const formOpen = modalOpen || (wantsNewTask && subjectsReady && subjects.length > 0);
+
+  useEffect(() => {
+    if (!wantsNewTask || !subjectsReady) return;
+    if (!subjects.length) navigate('/subjects?create=1&from=task', { replace: true });
+  }, [wantsNewTask, subjectsReady, subjects.length, navigate]);
 
   const today = getSlovenianDateKey();
   const threeDaysFromNow = addDaysToDateKey(today, 3);
@@ -59,7 +70,7 @@ export default function TasksPage() {
     if (editTask) updateTask(editTask.id, data);
     else addTask(data);
     setEditTask(null);
-    if (searchParams.get('new') === '1') navigate('/tasks', { replace: true });
+    if (wantsNewTask) navigate('/tasks', { replace: true });
   }
 
   function toggleSelect(task) {
@@ -95,7 +106,7 @@ export default function TasksPage() {
   function closeTaskModal() {
     setModalOpen(false);
     setEditTask(null);
-    if (searchParams.get('new') === '1') navigate('/tasks', { replace: true });
+    if (wantsNewTask) navigate('/tasks', { replace: true });
   }
 
   return (
@@ -286,12 +297,12 @@ export default function TasksPage() {
       </section>
 
       <TaskModal
-        isOpen={modalOpen}
+        isOpen={formOpen}
         onClose={closeTaskModal}
         onSave={handleSave}
         subjects={subjects}
         task={editTask}
-        defaultSubjectId={initialSubjectId}
+        defaultSubjectId={initialSubjectId || subjects[0]?.id || ''}
       />
     </div>
   );

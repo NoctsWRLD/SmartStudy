@@ -56,3 +56,21 @@ export function useSeo({ title, description = SITE_DESCRIPTION, path = '/', type
     upsertMeta('meta[name="twitter:image"]', { name: 'twitter:image', content: OG_IMAGE });
   }, [title, description, path, type]);
 }
+
+/**
+ * Structured data belongs in the head, where a crawler looks for it first.
+ * React renders the page body, so the script tag is placed explicitly.
+ */
+export function useJsonLd(data) {
+  useEffect(() => {
+    if (!data) return undefined;
+    let element = document.head.querySelector('script[type="application/ld+json"]');
+    if (!element) {
+      element = document.createElement('script');
+      element.setAttribute('type', 'application/ld+json');
+      document.head.appendChild(element);
+    }
+    element.textContent = JSON.stringify(data);
+    return () => element.remove();
+  }, [data]);
+}

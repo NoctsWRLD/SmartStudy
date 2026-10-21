@@ -11,7 +11,7 @@ import {
   ExamIcon,
   TaskIcon,
 } from '../components/icons';
-import { useSeo } from '../hooks/useSeo';
+import { useSeo, useJsonLd } from '../hooks/useSeo';
 
 const CAPABILITIES = [
   {
@@ -180,9 +180,10 @@ export default function LandingPage() {
     [],
   );
 
+  useJsonLd(structuredData);
+
   return (
     <div className="relative min-h-dvh bg-rp-canvas">
-      <script type="application/ld+json">{JSON.stringify(structuredData)}</script>
       <div className="aurora-wash" aria-hidden="true" />
 
       <SiteHeader />
