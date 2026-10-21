@@ -1,7 +1,7 @@
 import { getDayOfYear, getSlovenianDateKey } from '../utils/dates';
 
 const TIPS = [
-  { title: 'Preverjaj spomin', copy: 'Zapri zapiske in si z lastnimi besedami razloži tri glavne ideje.' },
+  { title: 'Preverjaj spomin', copy: 'Zapri zapiske in si z lastnimi besedimi razloži tri glavne ideje.' },
   { title: 'Uči se v rundah', copy: 'Razdeli snov na manjše sklope in vmes naredi kratek odmor.' },
   { title: 'Povej na glas', copy: 'Razloži snov, kot da jo učiš prijatelja.' },
   { title: 'Začni z vprašanjem', copy: 'Zapiši si, kaj želiš razumeti, preden začneš.' },
@@ -13,10 +13,10 @@ const TIPS = [
 export default function StudyTipCard() {
   const tip = TIPS[getDayOfYear(getSlovenianDateKey()) % TIPS.length];
   return (
-    <section className="card rise p-5" aria-labelledby="study-tip-title">
-      <h2 id="study-tip-title" className="section-title">{tip.title}</h2>
-      <p className="body-quiet mt-2 text-sm">{tip.copy}</p>
-      <p className="mt-3 text-xs text-rp-muted">Namig za danes</p>
+    <section className="card p-5" aria-labelledby="study-tip-title">
+      <p className="text-label text-rp-muted">Namig za danes</p>
+      <h2 id="study-tip-title" className="mt-1.5 text-title text-rp-text">{tip.title}</h2>
+      <p className="mt-2 text-body text-rp-muted">{tip.copy}</p>
     </section>
   );
 }

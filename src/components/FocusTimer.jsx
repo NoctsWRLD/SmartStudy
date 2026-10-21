@@ -35,41 +35,78 @@ export default function FocusTimer() {
 
   const total = (isBreak ? BREAK_MINUTES : FOCUS_MINUTES) * 60;
   const progress = (total - secondsLeft) / total;
-  const circ = 2 * Math.PI * 43;
+  const circumference = 2 * Math.PI * 42;
+
+  const message = finished
+    ? isBreak ? 'Odmor je končan.' : 'Seja je zabeležena. Vzemi si odmor.'
+    : running ? 'Ena stvar naenkrat.' : 'Začni, ko si pripravljen.';
+
+  function switchMode() {
+    setRunning(false);
+    setFinished(false);
+    const next = !isBreak;
+    setIsBreak(next);
+    setSecondsLeft((next ? BREAK_MINUTES : FOCUS_MINUTES) * 60);
+    loggedRef.current = false;
+  }
 
   return (
-    <section className="card rise p-5" aria-label="Časovnik za osredotočeno učenje">
+    <section className="card p-5" aria-label="Časovnik za osredotočeno učenje">
       <div className="flex items-baseline justify-between gap-3">
-        <h2 className="section-title">{isBreak ? 'Odmor' : 'Fokus'}</h2>
-        <button
-          type="button"
-          onClick={() => { setRunning(false); setFinished(false); const n = !isBreak; setIsBreak(n); setSecondsLeft((n ? BREAK_MINUTES : FOCUS_MINUTES) * 60); loggedRef.current = false; }}
-          className="link-signal"
-        >
+        <h2 className="text-title text-rp-text">{isBreak ? 'Odmor' : 'Fokus'}</h2>
+        <button type="button" onClick={switchMode} className="link-signal">
           {isBreak ? 'Na fokus' : 'Na odmor'}
         </button>
       </div>
+
       <div className="mt-4 flex items-center gap-4">
-        <div className="relative grid h-24 w-24 shrink-0 place-items-center" role="timer" aria-label={formatTime(secondsLeft)}>
+        <div className="relative grid h-24 w-24 shrink-0 place-items-center" role="timer" aria-label={`Preostalo ${formatTime(secondsLeft)}`}>
           <svg className="absolute inset-0 -rotate-90" viewBox="0 0 100 100" aria-hidden="true">
-            <circle cx="50" cy="50" r="43" fill="none" stroke="var(--rp-overlay)" strokeWidth="8" />
-            <circle cx="50" cy="50" r="43" fill="none" stroke="var(--rp-accent)" strokeWidth="8" strokeLinecap="round" strokeDasharray={circ} strokeDashoffset={circ * (1 - progress)} className="transition-[stroke-dashoffset] duration-700" />
+            <defs>
+              <linearGradient id="focus-arc" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stopColor="var(--rp-aurora-1)" />
+                <stop offset="52%" stopColor="var(--rp-aurora-2)" />
+                <stop offset="100%" stopColor="var(--rp-aurora-3)" />
+              </linearGradient>
+            </defs>
+            <circle cx="50" cy="50" r="42" fill="none" stroke="var(--rp-fill)" strokeWidth="7" />
+            <circle
+              cx="50"
+              cy="50"
+              r="42"
+              fill="none"
+              stroke="url(#focus-arc)"
+              strokeWidth="7"
+              strokeLinecap="round"
+              strokeDasharray={circumference}
+              strokeDashoffset={circumference * (1 - progress)}
+              className="transition-[stroke-dashoffset] duration-700"
+            />
           </svg>
-          <span className="font-display text-xl font-bold tabular-nums">{formatTime(secondsLeft)}</span>
+          <span className="tnum text-xl font-bold text-rp-text">{formatTime(secondsLeft)}</span>
         </div>
+
         <div className="min-w-0 flex-1">
-          <p className="text-[13px] leading-5 text-rp-muted" aria-live="polite">
-            {finished ? (isBreak ? 'Odmor je končan.' : 'Seja je zabeležena. Vzemi si odmor.') : running ? 'Ena stvar naenkrat.' : 'Začni, ko si pripravljen.'}
-          </p>
+          <p className="text-small leading-5 text-rp-muted" aria-live="polite">{message}</p>
           <div className="mt-3 flex gap-2">
             <button
               type="button"
-              onClick={() => { setFinished(false); if (secondsLeft === 0) setSecondsLeft(total); loggedRef.current = false; setRunning((v) => (secondsLeft === 0 ? true : !v)); }}
-              className="btn-primary !px-4 !py-2 !text-[13px]"
+              onClick={() => {
+                setFinished(false);
+                if (secondsLeft === 0) setSecondsLeft(total);
+                loggedRef.current = false;
+                setRunning((value) => (secondsLeft === 0 ? true : !value));
+              }}
+              className="btn-primary !px-3.5 !py-2 !text-small"
             >
               {running ? 'Pavza' : 'Začni'}
             </button>
-            <button type="button" onClick={() => { setRunning(false); setFinished(false); setSecondsLeft(total); loggedRef.current = false; }} className="btn-ghost !px-3 !py-2 !text-xs" aria-label="Ponastavi časovnik">
+            <button
+              type="button"
+              onClick={() => { setRunning(false); setFinished(false); setSecondsLeft(total); loggedRef.current = false; }}
+              className="btn-ghost !px-3 !py-2 !text-small"
+              aria-label="Ponastavi časovnik"
+            >
               Ponastavi
             </button>
           </div>
