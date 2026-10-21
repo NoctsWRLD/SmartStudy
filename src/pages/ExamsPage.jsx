@@ -4,15 +4,10 @@ import { useSubjects } from '../hooks/useFirestore';
 import { useExams } from '../hooks/useStudy';
 import ExamModal from '../components/ExamModal';
 import Skeleton from '../components/Skeleton';
-import { daysBetweenDateKeys, formatSlovenianDate, getSlovenianDateKey } from '../utils/dates';
-
-function countdown(dateStr, today) {
-  const diff = daysBetweenDateKeys(dateStr, today);
-  if (diff < 0) return { label: `Zamujeno ${formatSlovenianDate(dateStr, { day: 'numeric', month: 'short' })}`, urgent: true };
-  if (diff === 0) return { label: 'Danes', urgent: true };
-  if (diff === 1) return { label: 'Jutri', urgent: true };
-  return { label: `Čez ${diff} dni`, urgent: diff <= 7 };
-}
+import EmptyState from '../components/EmptyState';
+import { EditIcon, TrashIcon } from '../components/icons';
+import { countdown } from '../utils/countdown';
+import { formatSlovenianDate, getSlovenianDateKey } from '../utils/dates';
 
 export default function ExamsPage() {
   const navigate = useNavigate();
@@ -24,48 +19,66 @@ export default function ExamsPage() {
 
   const today = getSlovenianDateKey();
   const filtered = useMemo(
-    () => exams.filter((e) => !subjectFilter || e.subjectId === subjectFilter),
+    () => exams.filter((exam) => !subjectFilter || exam.subjectId === subjectFilter),
     [exams, subjectFilter],
   );
-  const upcoming = filtered.filter((e) => e.date >= today);
-  const past = filtered.filter((e) => e.date < today).reverse();
+  const upcoming = filtered.filter((exam) => exam.date >= today);
+  const past = filtered.filter((exam) => exam.date < today).reverse();
 
   function subjectName(id) {
-    return subjects.find((s) => s.id === id)?.name || 'Predmet';
+    return subjects.find((subject) => subject.id === id)?.name || 'Predmet';
   }
 
   function openNew() {
     if (subjectsLoading) return;
-    if (!subjects.length) { navigate('/subjects?create=1&from=task'); return; }
+    if (!subjects.length) {
+      navigate('/subjects?create=1&from=task');
+      return;
+    }
     setEditExam(null);
     setModalOpen(true);
   }
 
   function ExamRow({ exam }) {
-    const cd = countdown(exam.date, today);
+    const info = countdown(exam.date, today);
     return (
-      <div className="row-item rise flex items-center gap-4 px-4 py-3.5">
-        <div className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-rp-accent/[.1] text-center" aria-hidden="true">
+      <div className="row-item flex items-center gap-4 px-4 py-3.5">
+        <div
+          className="grid h-11 w-11 shrink-0 place-items-center rounded-md bg-rp-accent/[.1] text-center"
+          aria-hidden="true"
+        >
           <div>
-            <p className="font-display text-lg font-extrabold leading-none tabular-nums">{exam.date.slice(8, 10)}</p>
-            <p className="text-[10px] font-semibold text-rp-muted">{exam.date.slice(5, 7)}.</p>
+            <p className="tnum text-base font-bold leading-none text-rp-accent">{exam.date.slice(8, 10)}</p>
+            <p className="mt-0.5 text-[10px] font-semibold text-rp-muted">{exam.date.slice(5, 7)}.</p>
           </div>
         </div>
         <div className="min-w-0 flex-1">
-          <h3 className="truncate text-[15px] font-bold">{exam.title}</h3>
-          <p className="mt-0.5 truncate text-xs text-rp-muted">
+          <h3 className="truncate text-body font-semibold text-rp-text">{exam.title}</h3>
+          <p className="mt-0.5 truncate text-small text-rp-muted">
             {subjectName(exam.subjectId)} · {formatSlovenianDate(exam.date, { day: 'numeric', month: 'long' })}
           </p>
         </div>
-        <span className={`shrink-0 rounded-full px-3 py-1.5 text-xs font-bold ${cd.urgent ? 'bg-rp-danger/10 text-rp-danger' : 'bg-rp-overlay text-rp-subtle'}`}>
-          {cd.label}
+        <span
+          className={`shrink-0 rounded-full px-3 py-1 text-small font-semibold ${
+            info.urgent ? 'bg-rp-danger/10 text-rp-danger' : 'bg-rp-overlay text-rp-subtle'
+          }`}
+        >
+          {info.label}
         </span>
         <div className="flex shrink-0 items-center">
-          <button onClick={() => { setEditExam(exam); setModalOpen(true); }} aria-label="Uredi preverjanje" className="rounded-lg p-2 text-rp-muted transition-colors hover:bg-rp-overlay hover:text-rp-text">
-            <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>
+          <button
+            onClick={() => { setEditExam(exam); setModalOpen(true); }}
+            aria-label={`Uredi preverjanje ${exam.title}`}
+            className="rounded-md p-2 text-rp-muted transition-colors hover:bg-rp-overlay hover:text-rp-text"
+          >
+            <EditIcon className="h-4 w-4" />
           </button>
-          <button onClick={() => { if (window.confirm(`Izbrišem preverjanje »${exam.title}«?`)) deleteExam(exam.id); }} aria-label="Izbriši preverjanje" className="rounded-lg p-2 text-rp-muted transition-colors hover:bg-rp-danger/10 hover:text-rp-danger">
-            <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+          <button
+            onClick={() => { if (window.confirm(`Izbrišem preverjanje »${exam.title}«?`)) deleteExam(exam.id); }}
+            aria-label={`Izbriši preverjanje ${exam.title}`}
+            className="rounded-md p-2 text-rp-muted transition-colors hover:bg-rp-danger/10 hover:text-rp-danger"
+          >
+            <TrashIcon className="h-4 w-4" />
           </button>
         </div>
       </div>
@@ -75,40 +88,51 @@ export default function ExamsPage() {
   return (
     <div className="space-y-7">
       <section className="rise">
-        <h1 className="page-title">Preverjanja</h1>
-        <p className="body-quiet mt-2">Vsi testi, spraševanja in izpiti na enem mestu — z odštevanjem, da se pravočasno začneš učiti.</p>
+        <h1 className="text-page text-rp-text">Preverjanja</h1>
+        <p className="mt-2 max-w-xl text-body text-rp-muted">
+          Vsi testi, spraševanja in izpiti na enem mestu — z odštevanjem, da se pravočasno
+          začneš učiti.
+        </p>
         <div className="mt-4 flex flex-wrap items-center gap-2">
           <button type="button" onClick={openNew} className="btn-primary">Novo preverjanje</button>
-          <select value={subjectFilter} onChange={(e) => setSubjectFilter(e.target.value)} className="field !w-auto" aria-label="Filtriraj po predmetu">
+          <select
+            value={subjectFilter}
+            onChange={(event) => setSubjectFilter(event.target.value)}
+            className="field !w-auto"
+            aria-label="Filtriraj po predmetu"
+          >
             <option value="">Vsi predmeti</option>
-            {subjects.map((s) => <option key={s.id} value={s.id}>{s.name}</option>)}
+            {subjects.map((subject) => (
+              <option key={subject.id} value={subject.id}>{subject.name}</option>
+            ))}
           </select>
         </div>
       </section>
 
       {loading ? (
-        <div className="card p-4">
-          <Skeleton lines={4} />
-        </div>
+        <div className="card p-4"><Skeleton lines={4} /></div>
       ) : filtered.length === 0 ? (
-        <div className="card rise p-6">
-          <h2 className="section-title">Ni zapisanih preverjanj.</h2>
-          <p className="body-quiet mt-2 text-sm">Dodaj prvo — že samo zapis datuma zmanjša stres pred testom.</p>
-          <button type="button" onClick={openNew} className="btn-ghost mt-4">Dodaj preverjanje</button>
-        </div>
+        <EmptyState
+          title="Ni zapisanih preverjanj"
+          description="Dodaj prvo — že samo zapis datuma zmanjša stres pred testom."
+          action={<button type="button" onClick={openNew} className="btn-primary">Dodaj preverjanje</button>}
+        />
       ) : (
         <>
           <section aria-label="Prihajajoča preverjanja">
-            <h2 className="section-title mb-3">Prihaja ({upcoming.length})</h2>
-            <div className="stagger">
-              {upcoming.map((exam) => <ExamRow key={exam.id} exam={exam} />)}
-            </div>
-            {upcoming.length === 0 && <p className="body-quiet text-sm">Trenutno nič prihajajočega. Uživaj mir.</p>}
+            <h2 className="text-title mb-3 text-rp-text">Prihaja ({upcoming.length})</h2>
+            {upcoming.length ? (
+              <div className="grid gap-2">
+                {upcoming.map((exam) => <ExamRow key={exam.id} exam={exam} />)}
+              </div>
+            ) : (
+              <p className="text-body text-rp-muted">Trenutno nič prihajajočega. Uživaj mir.</p>
+            )}
           </section>
           {past.length > 0 && (
-            <section aria-label="Pretekla preverjanja" className="opacity-75">
-              <h2 className="section-title mb-3">Preteklo ({past.length})</h2>
-              <div className="stagger">
+            <section aria-label="Pretekla preverjanja" className="opacity-70">
+              <h2 className="text-title mb-3 text-rp-text">Preteklo ({past.length})</h2>
+              <div className="grid gap-2">
                 {past.map((exam) => <ExamRow key={exam.id} exam={exam} />)}
               </div>
             </section>
