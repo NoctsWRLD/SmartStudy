@@ -14,7 +14,7 @@ const KEY = '__spa_redirect'
  *
  * `import.meta.env.BASE_URL` is whatever Vite resolved for this build
  * ('/' locally and on Vercel, '/SmartStudy/' on GitHub Pages), so the same
- * code works on every target.
+ * code works on every target. It always carries a trailing slash.
  */
 export function BaseRouter({ children }) {
   const base = import.meta.env.BASE_URL
@@ -22,6 +22,8 @@ export function BaseRouter({ children }) {
   const stored = sessionStorage.getItem(KEY)
   if (stored) {
     sessionStorage.removeItem(KEY)
+    // base ends with '/', so strip any leading slash from the stored path
+    // before joining to avoid a double slash.
     window.history.replaceState(null, '', base + stored.replace(/^\//, ''))
   }
 
