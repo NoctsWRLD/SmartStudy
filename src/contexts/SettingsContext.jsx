@@ -83,7 +83,9 @@ export function SettingsProvider({ children }) {
       ]);
       await updateDoc(doc(db, 'users', currentUid), { theme: nextTheme });
     } catch (error) {
-      console.error('Saving theme failed:', error);
+      // The theme is already applied and stored in this browser; only the copy
+      // on the account is missing, so this is not a failure of the page.
+      console.warn('Shranjevanje teme v račun ni uspelo — tema ostane shranjena v tem brskalniku.', error);
     }
   }, [currentUid]);
 
