@@ -1,74 +1,56 @@
 import { useState, useEffect, useRef } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
-import {
-  useMessages,
-  useFriends,
-  sendMessage,
-  deleteMessage,
-  getDmChatId,
-} from '../hooks/useChat';
+import { useMessages, useFriends, sendMessage, deleteMessage, getDmChatId } from '../hooks/useChat';
 import { useSubjects } from '../hooks/useFirestore';
 import { useAuth } from '../contexts/AuthContext';
+import { ChatIcon, MenuIcon, PlusIcon, TrashIcon, XIcon } from '../components/icons';
 
-// ─── Avatar ───────────────────────────────────────────────────────────────────
 function Avatar({ src, initial, size = 8 }) {
-  const px = size * 4;
-  if (src)
+  const pixels = size * 4;
+  if (src) {
     return (
       <img
         src={src}
         alt={initial}
-        className="rounded-full object-cover flex-shrink-0"
-        style={{ width: px, height: px }}
+        className="shrink-0 rounded-full object-cover"
+        style={{ width: pixels, height: pixels }}
       />
     );
+  }
   return (
     <div
-      className="rounded-full flex items-center justify-center font-bold flex-shrink-0 bg-rp-accent text-white"
-      style={{
-        width: px,
-        height: px,
-        fontSize: px <= 32 ? '0.75rem' : '1rem',
-      }}
+      className="grid shrink-0 place-items-center rounded-full bg-rp-accent font-bold text-rp-accent-ink"
+      style={{ width: pixels, height: pixels, fontSize: pixels <= 32 ? '0.75rem' : '0.9rem' }}
     >
       {initial}
     </div>
   );
 }
 
-// ─── File bubble ──────────────────────────────────────────────────────────────
 function FileBubble({ fileURL, fileName, fileType, fileSize, isOwn }) {
   const isImage = fileType?.startsWith('image/');
-  const kb = fileSize ? Math.round(fileSize / 1024) : null;
+  const kilobytes = fileSize ? Math.round(fileSize / 1024) : null;
 
-  if (isImage)
+  if (isImage) {
     return (
-      <a href={fileURL} target="_blank" rel="noreferrer">
-        <img
-          src={fileURL}
-          alt={fileName}
-          className="max-w-[220px] rounded-xl mt-1"
-        />
+      <a href={fileURL} target="_blank" rel="noreferrer" className="mt-1 block">
+        <img src={fileURL} alt={fileName} className="max-w-[220px] rounded-md" />
       </a>
     );
+  }
 
   return (
     <a
       href={fileURL}
       target="_blank"
       rel="noreferrer"
-      className={`flex items-center gap-2.5 px-4 py-3 rounded-2xl transition-all hover:opacity-80 shadow-md ${
+      className={`mt-1 flex items-center gap-2.5 rounded-md border px-3.5 py-2.5 transition-opacity hover:opacity-80 ${
         isOwn
-          ? 'bg-rp-accent text-white'
-          : 'bg-rp-overlay/90 text-rp-text border border-rp-line/50'
+          ? 'border-transparent bg-rp-accent text-rp-accent-ink'
+          : 'border-rp-line bg-rp-raised text-rp-text'
       }`}
     >
-      <svg
-        className="w-5 h-5 flex-shrink-0"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke="currentColor"
-      >
+      <svg className="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
         <path
           strokeLinecap="round"
           strokeLinejoin="round"
@@ -76,17 +58,14 @@ function FileBubble({ fileURL, fileName, fileType, fileSize, isOwn }) {
           d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"
         />
       </svg>
-      <div>
-        <p className="text-xs font-medium leading-tight truncate max-w-[140px]">
-          {fileName}
-        </p>
-        {kb && <p className="text-xs opacity-60">{kb} KB</p>}
+      <div className="min-w-0">
+        <p className="truncate text-small font-medium">{fileName}</p>
+        {kilobytes && <p className="text-[11px] opacity-70">{kilobytes} KB</p>}
       </div>
     </a>
   );
 }
 
-// ─── Single message bubble ────────────────────────────────────────────────────
 function MessageBubble({ msg, isOwn, onDelete }) {
   const [hovered, setHovered] = useState(false);
   const time = msg.timestamp?.toDate
@@ -102,28 +81,20 @@ function MessageBubble({ msg, isOwn, onDelete }) {
       onMouseLeave={() => setHovered(false)}
     >
       <Avatar initial={msg.senderInitial || '?'} size={8} />
-      <div
-        className={`max-w-[85%] md:max-w-[70%] min-w-0 flex flex-col gap-0.5 ${isOwn ? 'items-end' : 'items-start'}`}
-      >
-        <div
-          className={`flex items-center gap-2 ${isOwn ? 'flex-row-reverse' : ''}`}
-        >
-          <span className="text-xs font-medium text-rp-muted">
-            {isOwn ? 'Ti' : msg.senderName}
-          </span>
-          <span className="text-xs text-rp-line-strong">{time}</span>
+      <div className={`flex min-w-0 max-w-[85%] flex-col gap-0.5 md:max-w-[70%] ${isOwn ? 'items-end' : 'items-start'}`}>
+        <div className={`flex items-center gap-2 ${isOwn ? 'flex-row-reverse' : ''}`}>
+          <span className="text-small font-medium text-rp-muted">{isOwn ? 'Ti' : msg.senderName}</span>
+          <span className="text-[11px] text-rp-muted">{time}</span>
         </div>
 
-        <div
-          className={`flex items-center gap-2 ${isOwn ? 'flex-row-reverse' : ''} max-w-full`}
-        >
+        <div className={`flex max-w-full items-center gap-2 ${isOwn ? 'flex-row-reverse' : ''}`}>
           <div className="min-w-0 max-w-full">
             {msg.text && (
               <div
-                className={`px-3 py-2 md:px-4 md:py-2.5 rounded-2xl text-[13px] md:text-sm leading-relaxed break-words shadow-sm ${
+                className={`break-words rounded-lg px-3.5 py-2 text-body leading-relaxed ${
                   isOwn
-                    ? 'bg-rp-accent text-white'
-                    : 'bg-rp-overlay/90 text-rp-text border border-rp-line/50'
+                    ? 'bg-rp-accent text-rp-accent-ink'
+                    : 'border border-rp-line bg-rp-raised text-rp-text'
                 }`}
               >
                 {msg.text}
@@ -141,23 +112,13 @@ function MessageBubble({ msg, isOwn, onDelete }) {
           </div>
           {isOwn && hovered && (
             <button
+              type="button"
               onClick={() => onDelete(msg.id)}
-              className="p-1.5 rounded-lg transition-all flex-shrink-0 text-rp-muted hover:text-rp-danger hover:bg-rp-danger/10"
+              className="shrink-0 rounded-md p-1.5 text-rp-muted transition-colors hover:bg-rp-danger/10 hover:text-rp-danger"
+              aria-label="Izbriši sporočilo"
               title="Izbriši"
             >
-              <svg
-                className="w-3.5 h-3.5"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                />
-              </svg>
+              <TrashIcon className="h-3.5 w-3.5" />
             </button>
           )}
         </div>
@@ -166,7 +127,6 @@ function MessageBubble({ msg, isOwn, onDelete }) {
   );
 }
 
-// ─── Message list ─────────────────────────────────────────────────────────────
 function MessageList({ chatId, currentUser }) {
   const { messages, loading } = useMessages(chatId);
   const bottomRef = useRef(null);
@@ -175,23 +135,27 @@ function MessageList({ chatId, currentUser }) {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
 
-    if (loading)
-      return (
-        <div className="flex-1 flex items-center justify-center">
-          <div className="w-7 h-7 rounded-full border-2 border-rp-accent border-t-transparent animate-spin" />
-        </div>
-      );
-  
-    if (!messages.length)
-      return (
-        <div className="flex-1 flex flex-col items-center justify-center gap-3 text-rp-muted">
-          <div className="text-5xl">💬</div>
-          <p className="text-sm">Začni pogovor!</p>
-        </div>
-      );
+  if (loading) {
+    return (
+      <div className="flex flex-1 items-center justify-center">
+        <span className="h-6 w-6 animate-spin rounded-full border-2 border-rp-accent border-t-transparent" />
+      </div>
+    );
+  }
+
+  if (!messages.length) {
+    return (
+      <div className="flex flex-1 flex-col items-center justify-center gap-3 px-6 text-center">
+        <span className="grid h-12 w-12 place-items-center rounded-lg border border-rp-line bg-rp-overlay text-rp-muted" aria-hidden="true">
+          <ChatIcon className="h-6 w-6" />
+        </span>
+        <p className="text-body text-rp-muted">Klepet je prazen. Povabi sošolca ali začni pogovor.</p>
+      </div>
+    );
+  }
 
   return (
-    <div className="flex-1 overflow-y-auto px-2 md:px-4 py-4 space-y-4 overflow-x-hidden">
+    <div className="flex-1 space-y-4 overflow-x-hidden overflow-y-auto px-4 py-4">
       {messages.map((msg) => (
         <MessageBubble
           key={msg.id}
@@ -205,7 +169,6 @@ function MessageList({ chatId, currentUser }) {
   );
 }
 
-// ─── Message input ────────────────────────────────────────────────────────────
 function MessageInput({ chatId, currentUser }) {
   const [text, setText] = useState('');
   const [sending, setSending] = useState(false);
@@ -217,55 +180,47 @@ function MessageInput({ chatId, currentUser }) {
     try {
       await sendMessage(chatId, currentUser, text);
       setText('');
-    } catch (e) {
-      console.error('Send error:', e);
+    } catch (error) {
+      console.error('Send error:', error);
     } finally {
       setSending(false);
       inputRef.current?.focus();
     }
   }
 
-  function handleKey(e) {
-    if (e.key === 'Enter' && !e.shiftKey) {
-      e.preventDefault();
+  function handleKey(event) {
+    if (event.key === 'Enter' && !event.shiftKey) {
+      event.preventDefault();
       handleSend();
     }
   }
 
   return (
-    <div className="px-4 pb-4 pt-2 flex-shrink-0">
-      <div className="flex items-end gap-2 rounded-2xl px-4 py-3 bg-rp-overlay/85 border border-rp-line/50">
+    <div className="shrink-0 px-4 pb-4 pt-2">
+      <div className="flex items-end gap-2 rounded-lg border border-rp-line bg-rp-raised px-3.5 py-2.5">
         <textarea
           ref={inputRef}
           value={text}
-          onChange={(e) => setText(e.target.value)}
+          onChange={(event) => setText(event.target.value)}
           onKeyDown={handleKey}
           placeholder="Napiši sporočilo…"
           rows={1}
           disabled={sending}
-          className="flex-1 bg-transparent text-sm placeholder-slate-500 resize-none outline-none leading-relaxed max-h-[120px] text-rp-text"
+          className="max-h-[120px] flex-1 resize-none bg-transparent text-body leading-relaxed text-rp-text outline-none placeholder:text-rp-muted"
         />
         <button
+          type="button"
           onClick={handleSend}
           disabled={!text.trim() || sending}
-          className="p-2 rounded-xl transition-all flex-shrink-0 disabled:opacity-30 bg-rp-accent text-white"
+          className="grid h-9 w-9 shrink-0 place-items-center rounded-md bg-rp-accent text-rp-accent-ink transition-opacity disabled:opacity-30"
+          aria-label="Pošlji sporočilo"
           title="Pošlji"
         >
           {sending ? (
-            <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+            <span className="h-4 w-4 animate-spin rounded-full border-2 border-rp-accent-ink border-t-transparent" />
           ) : (
-            <svg
-              className="w-4 h-4"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
-              />
+            <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
             </svg>
           )}
         </button>
@@ -274,143 +229,88 @@ function MessageInput({ chatId, currentUser }) {
   );
 }
 
-// ─── Room list item ───────────────────────────────────────────────────────────
 function RoomItem({ label, icon, active, onClick }) {
   return (
     <button
+      type="button"
       onClick={onClick}
-      className={`w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-sm font-medium transition-all text-left group ${
-        active
-          ? 'bg-rp-accent/10 border border-rp-accent/20 text-rp-text'
-          : 'text-rp-subtle hover:text-rp-text hover:bg-rp-line/40'
+      aria-current={active ? 'true' : undefined}
+      className={`flex w-full items-center gap-2.5 rounded-md px-3 py-2 text-left text-body font-medium transition-colors ${
+        active ? 'bg-rp-accent/[.12] text-rp-accent' : 'text-rp-subtle hover:bg-rp-overlay hover:text-rp-text'
       }`}
     >
-      <span className="flex-shrink-0 opacity-80">{icon}</span>
+      <span className="shrink-0 opacity-80">{icon}</span>
       <span className="truncate">{label}</span>
     </button>
   );
 }
 
-// ─── Sidebar (room list) ──────────────────────────────────────────────────────
-function SidePanel({
-  activeChatId,
-  subjects,
-  friends,
-  currentUser,
-  userProfile,
-  onSelect,
-}) {
+function SidePanel({ activeChatId, subjects, friends, currentUser, userProfile, onSelect }) {
   const navigate = useNavigate();
   const school = userProfile?.school?.trim();
-  const schoolChatId = school
-    ? `school_${school.toLowerCase().replace(/\s+/g, '_')}`
-    : null;
+  const schoolChatId = school ? `school_${school.toLowerCase().replace(/\s+/g, '_')}` : null;
 
   return (
-    <div className="flex flex-col h-full overflow-y-auto py-3 space-y-4">
-      {/* Channels */}
+    <div className="flex h-full flex-col space-y-4 overflow-y-auto py-3">
       <div>
-        <p className="text-xs font-medium px-3 mb-1 text-rp-muted">
-          Kanali
-        </p>
+        <p className="mb-1 px-3 text-label text-rp-muted">Kanali</p>
         <RoomItem
           label="Splošni"
           active={activeChatId === 'general'}
           onClick={() => onSelect('general', 'Splošni')}
-          icon={
-            <svg
-              className="w-4 h-4"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z"
-              />
-            </svg>
-          }
+          icon={<ChatIcon className="h-4 w-4" />}
         />
-        {subjects.map((subj) => {
-          const subjChatId = `subject_${subj.name.toLowerCase().replace(/\s+/g, '_')}`;
+        {subjects.map((subject) => {
+          const chatId = `subject_${subject.name.toLowerCase().replace(/\s+/g, '_')}`;
           return (
-          <RoomItem
-            key={subj.id}
-            label={subj.name}
-            active={activeChatId === subjChatId}
-            onClick={() => onSelect(subjChatId, subj.name)}
-            icon={
-              <svg
-                className="w-4 h-4"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M7 20l4-16m2 16l4-16M6 9h14M4 15h14"
-                />
-              </svg>
-            }
-          />
-        )})}
+            <RoomItem
+              key={subject.id}
+              label={subject.name}
+              active={activeChatId === chatId}
+              onClick={() => onSelect(chatId, subject.name)}
+              icon={
+                <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 20l4-16m2 16l4-16M6 9h14M4 15h14" />
+                </svg>
+              }
+            />
+          );
+        })}
       </div>
 
-      {/* School channel */}
       {schoolChatId && (
         <div>
-          <p className="text-xs font-medium px-3 mb-1 text-rp-muted">
-            Moja šola
-          </p>
+          <p className="mb-1 px-3 text-label text-rp-muted">Moja šola</p>
           <RoomItem
             label={school}
             active={activeChatId === schoolChatId}
             onClick={() => onSelect(schoolChatId, school)}
             icon={
-              <svg
-                className="w-4 h-4"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-2 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
-                />
+              <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-2 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
               </svg>
             }
           />
         </div>
       )}
 
-      {/* Direct messages */}
       <div>
-        <p className="text-xs font-medium px-3 mb-1 text-rp-muted">
-          Direktna sporočila
-        </p>
+        <p className="mb-1 px-3 text-label text-rp-muted">Direktna sporočila</p>
         {friends.length === 0 ? (
-          <p className="text-xs px-3 text-rp-muted">
-            Dodaj prijatelje v Prijateljih.
-          </p>
+          <p className="px-3 text-small text-rp-muted">Dodaj prijatelje v Prijateljih.</p>
         ) : (
-          friends.map((f) => {
-            const dmId = getDmChatId(currentUser.uid, f.uid);
+          friends.map((friend) => {
+            const dmId = getDmChatId(currentUser.uid, friend.uid);
             return (
               <RoomItem
-                key={f.uid}
-                label={f.displayName || 'Neznan'}
+                key={friend.uid}
+                label={friend.displayName || 'Neznan'}
                 active={activeChatId === dmId}
-                onClick={() => onSelect(dmId, f.displayName || 'Neznan')}
+                onClick={() => onSelect(dmId, friend.displayName || 'Neznan')}
                 icon={
-                  <div className="w-5 h-5 rounded-full flex items-center justify-center text-white text-xs font-bold bg-rp-success">
-                    {(f.displayName?.[0] || '?').toUpperCase()}
-                  </div>
+                  <span className="grid h-5 w-5 place-items-center rounded-full bg-rp-success text-[10px] font-bold text-rp-canvas">
+                    {(friend.displayName?.[0] || '?').toUpperCase()}
+                  </span>
                 }
               />
             );
@@ -418,25 +318,13 @@ function SidePanel({
         )}
       </div>
 
-      {/* Add friends button */}
-      <div className="px-3 mt-auto pt-2 border-t border-rp-line/40">
+      <div className="mt-auto border-t border-rp-line px-3 pt-3">
         <button
+          type="button"
           onClick={() => navigate('/friends')}
-          className="w-full flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-semibold transition-all border border-rp-accent/25 text-rp-accent hover:text-rp-text hover:bg-rp-accent/10"
+          className="flex w-full items-center gap-2 rounded-md border border-rp-accent/30 px-3 py-2 text-small font-semibold text-rp-accent transition-colors hover:bg-rp-accent/10"
         >
-          <svg
-            className="w-4 h-4"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"
-            />
-          </svg>
+          <PlusIcon className="h-4 w-4" />
           Prijatelji
         </button>
       </div>
@@ -444,24 +332,6 @@ function SidePanel({
   );
 }
 
-// ─── Chat icons helpers ───────────────────────────────────────────────────────
-const MenuIcon = () => (
-  <svg
-    className="w-5 h-5"
-    fill="none"
-    viewBox="0 0 24 24"
-    stroke="currentColor"
-  >
-    <path
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      strokeWidth={2}
-      d="M4 6h16M4 12h16M4 18h16"
-    />
-  </svg>
-);
-
-// ─── Main ChatPage ────────────────────────────────────────────────────────────
 export default function ChatPage() {
   const { currentUser, userProfile } = useAuth();
   const { subjects } = useSubjects();
@@ -473,9 +343,7 @@ export default function ChatPage() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const dmUid = searchParams.get('dm');
   const dmFriend = friends.find((friend) => friend.uid === dmUid);
-  const activeChatId = dmFriend && currentUser
-    ? getDmChatId(currentUser.uid, dmFriend.uid)
-    : selectedChatId;
+  const activeChatId = dmFriend && currentUser ? getDmChatId(currentUser.uid, dmFriend.uid) : selectedChatId;
   const activeName = dmFriend?.displayName || selectedName;
 
   function selectRoom(id, name) {
@@ -485,109 +353,72 @@ export default function ChatPage() {
     setMobileOpen(false);
   }
 
-  const isChatType =
-    activeChatId === 'general'
-      ? 'Skupni kanal'
-      : activeChatId.startsWith('subject_')
-        ? 'Kanal predmeta'
-        : activeChatId.startsWith('school_')
-          ? 'Šolski kanal'
-          : 'Zasebni pogovor';
+  const chatType = activeChatId === 'general'
+    ? 'Skupni kanal'
+    : activeChatId.startsWith('subject_')
+      ? 'Kanal predmeta'
+      : activeChatId.startsWith('school_')
+        ? 'Šolski kanal'
+        : 'Zasebni pogovor';
+
+  const sidePanel = (
+    <SidePanel
+      activeChatId={activeChatId}
+      subjects={subjects}
+      friends={friends}
+      currentUser={currentUser}
+      userProfile={userProfile}
+      onSelect={selectRoom}
+    />
+  );
 
   return (
-    <div className="h-full flex flex-col">
-      {/* Main container */}
-      <div className="flex-1 flex overflow-hidden rounded-2xl min-h-0 border border-rp-line/50 bg-rp-overlay/60">
-        {/* ── Desktop sidebar ── */}
-        <aside className="hidden md:flex flex-col w-56 flex-shrink-0 overflow-hidden border-r border-rp-line/40">
-          <div className="px-4 pt-4 pb-2">
-            <p className="text-sm font-bold">
-              Chat
-            </p>
-          </div>
-          <SidePanel
-            activeChatId={activeChatId}
-            subjects={subjects}
-            friends={friends}
-            currentUser={currentUser}
-            userProfile={userProfile}
-            onSelect={selectRoom}
-          />
+    <div className="flex h-full min-h-0 flex-col">
+      <div className="flex min-h-0 flex-1 overflow-hidden rounded-lg border border-rp-line bg-rp-panel">
+        <aside className="hidden w-56 shrink-0 flex-col overflow-hidden border-r border-rp-line md:flex">
+          {sidePanel}
         </aside>
 
-        {/* ── Mobile drawer ── */}
         {mobileOpen && (
           <div className="fixed inset-0 z-40 md:hidden">
-            <div
-              className="absolute inset-0 bg-black/50 backdrop-blur-sm"
-              onClick={() => setMobileOpen(false)}
-            />
-            <aside className="absolute left-0 top-0 bottom-0 w-64 z-50 flex flex-col overflow-hidden bg-rp-canvas/98 border-r border-rp-line/50">
-              <div className="flex items-center justify-between px-4 pt-4 pb-2">
-                <p className="text-sm font-bold">
-                  Chat
-                </p>
+            <div className="absolute inset-0 bg-rp-canvas/70 backdrop-blur-sm" onClick={() => setMobileOpen(false)} />
+            <aside className="absolute inset-y-0 left-0 z-50 flex w-64 flex-col overflow-hidden border-r border-rp-line bg-rp-panel">
+              <div className="flex items-center justify-between border-b border-rp-line px-4 py-3">
+                <p className="text-body font-semibold text-rp-text">Klepet</p>
                 <button
+                  type="button"
                   onClick={() => setMobileOpen(false)}
-                  className="transition-all text-rp-muted hover:text-rp-text"
+                  aria-label="Zapri meni"
+                  className="grid h-8 w-8 place-items-center rounded-md text-rp-muted transition-colors hover:bg-rp-overlay hover:text-rp-text"
                 >
-                  <svg
-                    className="w-4 h-4"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M6 18L18 6M6 6l12 12"
-                    />
-                  </svg>
+                  <XIcon className="h-4 w-4" />
                 </button>
               </div>
-              <SidePanel
-                activeChatId={activeChatId}
-                subjects={subjects}
-                friends={friends}
-                currentUser={currentUser}
-                userProfile={userProfile}
-                onSelect={selectRoom}
-              />
+              {sidePanel}
             </aside>
           </div>
         )}
 
-        {/* ── Main chat area ── */}
-        <div className="flex-1 flex flex-col min-w-0 bg-rp-raised">
-          {/* Header */}
-          <div className="flex items-center gap-3 px-4 py-3 flex-shrink-0 border-b border-rp-line/40">
-            {/* Hamburger – mobile only, inside header (properly aligned) */}
+        <div className="flex min-w-0 flex-1 flex-col bg-rp-raised">
+          <div className="flex shrink-0 items-center gap-3 border-b border-rp-line px-4 py-3">
             <button
-              className="md:hidden flex items-center justify-center w-8 h-8 rounded-lg transition-all flex-shrink-0 text-rp-subtle hover:text-rp-text hover:bg-rp-line/50"
+              type="button"
               onClick={() => setMobileOpen(true)}
+              aria-label="Odpri seznam klepetov"
+              className="grid h-8 w-8 shrink-0 place-items-center rounded-md text-rp-subtle transition-colors hover:bg-rp-overlay hover:text-rp-text md:hidden"
             >
-              <MenuIcon />
+              <MenuIcon className="h-5 w-5" />
             </button>
 
-            <div className="w-8 h-8 rounded-xl flex items-center justify-center flex-shrink-0 bg-rp-accent/10 border border-rp-accent/20">
-              <svg
-                className="w-4 h-4 text-rp-accent"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z"
-                />
-              </svg>
-            </div>
-            <div>
-              <p className="text-sm font-semibold text-rp-text">{activeName}</p>
-              <p className="text-xs text-rp-muted">{isChatType}</p>
+            <span
+              className="grid h-8 w-8 shrink-0 place-items-center rounded-md border border-rp-accent/25 bg-rp-accent/10 text-rp-accent"
+              aria-hidden="true"
+            >
+              <ChatIcon className="h-4 w-4" />
+            </span>
+            <div className="min-w-0">
+              <p className="truncate text-body font-semibold text-rp-text">{activeName}</p>
+              <p className="text-small text-rp-muted">{chatType}</p>
             </div>
           </div>
 

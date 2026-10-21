@@ -9,45 +9,38 @@ import {
   sendFriendRequest,
   respondToRequest,
 } from '../hooks/useChat';
+import { ChatIcon, PlusIcon, SearchIcon, UsersIcon } from '../components/icons';
+import { countedNoun } from '../utils/slovenian';
 
-// ─── Tiny avatar ──────────────────────────────────────────────────────────────
-function MiniAvatar({
-  name,
-  bgClass = 'bg-rp-accent',
-  size = 36,
-}) {
+function MiniAvatar({ name, tone = 'accent', size = 36 }) {
+  const tones = {
+    accent: 'bg-rp-accent text-rp-accent-ink',
+    warn: 'bg-rp-warn text-rp-canvas',
+    rose: 'bg-rp-subject-2 text-rp-canvas',
+  };
   return (
-    <div
-      className={`flex items-center justify-center rounded-full text-white font-bold flex-shrink-0 ${bgClass}`}
-      style={{
-        width: size,
-        height: size,
-        fontSize: size * 0.35,
-      }}
+    <span
+      className={`grid shrink-0 place-items-center rounded-full font-bold ${tones[tone] || tones.accent}`}
+      style={{ width: size, height: size, fontSize: size * 0.35 }}
+      aria-hidden="true"
     >
       {(name?.[0] || '?').toUpperCase()}
-    </div>
+    </span>
   );
 }
 
-// ─── Section card ─────────────────────────────────────────────────────────────
 function Section({ title, badge, children }) {
   return (
-    <div className="card p-5 space-y-3">
-      <div className="flex items-center gap-2">
-        <h2 className="text-sm font-semibold text-rp-text">{title}</h2>
-        {badge != null && (
-          <span className="px-1.5 py-0.5 rounded-full text-xs font-bold bg-rp-accent/20 text-rp-accent">
-            {badge}
-          </span>
-        )}
+    <section className="card p-5">
+      <div className="mb-3 flex items-center gap-2">
+        <h2 className="text-title text-rp-text">{title}</h2>
+        {badge != null && <span className="chip chip-accent">{badge}</span>}
       </div>
       {children}
-    </div>
+    </section>
   );
 }
 
-// ─── Main FriendsPage ─────────────────────────────────────────────────────────
 export default function FriendsPage() {
   const { currentUser } = useAuth();
   const { friends } = useFriends();
@@ -58,126 +51,103 @@ export default function FriendsPage() {
   const [search, setSearch] = useState('');
   const { users } = useAllUsers(search);
 
-  const friendUids = new Set(friends.map((f) => f.uid));
-  const sentUids = new Set(sent.map((s) => s.toUid));
-  const requestFromUids = new Set(requests.map((r) => r.fromUid));
+  const friendUids = new Set(friends.map((friend) => friend.uid));
+  const sentUids = new Set(sent.map((request) => request.toUid));
+  const requestFromUids = new Set(requests.map((request) => request.fromUid));
 
   const filteredUsers =
     search.trim().length >= 2
-      ? users.filter(
-          (u) => {
-            const isFriend = friendUids.has(u.uid);
-            const isSent = sentUids.has(u.uid);
-            const isReq = requestFromUids.has(u.uid);
-            const matchName = u.displayName?.toLowerCase().includes(search.toLowerCase());
-
-            return !isFriend && !isSent && !isReq && matchName;
-          }
-        )
+      ? users.filter((user) => {
+          const matchName = user.displayName?.toLowerCase().includes(search.toLowerCase());
+          return !friendUids.has(user.uid) && !sentUids.has(user.uid) && !requestFromUids.has(user.uid) && matchName;
+        })
       : [];
 
-  async function handleSendRequest(u) {
-    await sendFriendRequest(currentUser, u.uid, u.displayName || 'Učenec');
+  async function handleSendRequest(user) {
+    await sendFriendRequest(currentUser, user.uid, user.displayName || 'Učenec');
     setSearch('');
   }
 
-  async function handleRespond(reqId, status) {
-    await respondToRequest(reqId, status);
+  async function handleRespond(requestId, status) {
+    await respondToRequest(requestId, status);
   }
 
   return (
-    <div className="max-w-2xl mx-auto space-y-6 animate-fade-in-up pb-8">
-      <div className="flex items-center gap-4">
-        <div className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 bg-rp-accent/10 border border-rp-accent/20">
-          <svg
-            className="w-5 h-5 text-rp-accent"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"
-            />
-          </svg>
-        </div>
+    <div className="mx-auto max-w-2xl space-y-5">
+      <section className="rise flex items-center gap-4">
+        <span
+          className="grid h-11 w-11 shrink-0 place-items-center rounded-lg border border-rp-accent/25 bg-rp-accent/10 text-rp-accent"
+          aria-hidden="true"
+        >
+          <UsersIcon className="h-5 w-5" />
+        </span>
         <div>
-          <h1 className="text-2xl font-bold text-rp-text">Prijatelji</h1>
-          <p className="text-xs text-rp-muted">{friends.length} prijateljev</p>
+          <h1 className="text-page text-rp-text">Prijatelji</h1>
+          <p className="mt-0.5 text-small text-rp-muted">
+            {countedNoun(friends.length, 'prijatelj', 'prijatelja', 'prijatelji', 'prijateljev')}
+          </p>
         </div>
-      </div>
+      </section>
 
-      {/* ─── Incoming requests ─── */}
       {requests.length > 0 && (
         <Section title="Zahteve za prijateljstvo" badge={requests.length}>
-          {requests.map((req) => (
-            <div
-              key={req.id}
-              className="flex items-center justify-between gap-3 py-1.5"
-            >
-              <div className="flex items-center gap-3">
-                <MiniAvatar
-                  name={req.fromName}
-                  bgClass="bg-rp-subject-2 text-white"
-                />
-                <span className="text-sm font-medium text-rp-text">{req.fromName}</span>
+          <div className="grid gap-1.5">
+            {requests.map((request) => (
+              <div key={request.id} className="flex items-center justify-between gap-3 py-1.5">
+                <div className="flex min-w-0 items-center gap-3">
+                  <MiniAvatar name={request.fromName} tone="rose" />
+                  <span className="truncate text-body font-medium text-rp-text">{request.fromName}</span>
+                </div>
+                <div className="flex shrink-0 gap-2">
+                  <button
+                    type="button"
+                    onClick={() => handleRespond(request.id, 'accepted')}
+                    className="rounded-md bg-rp-success px-3 py-1.5 text-small font-semibold text-rp-canvas transition-opacity hover:opacity-90"
+                  >
+                    Sprejmi
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => handleRespond(request.id, 'rejected')}
+                    className="rounded-md border border-rp-danger/30 px-3 py-1.5 text-small font-semibold text-rp-danger transition-colors hover:bg-rp-danger/10"
+                  >
+                    Zavrni
+                  </button>
+                </div>
               </div>
-              <div className="flex gap-2">
-                <button
-                  onClick={() => handleRespond(req.id, 'accepted')}
-                  className="px-3 py-1.5 rounded-lg text-xs font-semibold transition-all hover:opacity-90 bg-rp-success text-white"
-                >
-                  Sprejmi
-                </button>
-                <button
-                  onClick={() => handleRespond(req.id, 'rejected')}
-                  className="px-3 py-1.5 rounded-lg text-xs font-semibold transition-all border border-rp-danger/30 text-rp-danger hover:bg-rp-danger/10"
-                >
-                  Zavrni
-                </button>
-              </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </Section>
       )}
 
-      {/* ─── Friends list ─── */}
       <Section title="Moji prijatelji" badge={friends.length}>
         {friends.length === 0 ? (
-          <div className="flex flex-col items-center gap-3 py-6 text-rp-muted">
-            <div className="text-4xl">👥</div>
-            <p className="text-sm">Nimaš še prijateljev. Poišči jih spodaj!</p>
+          <div className="flex flex-col items-center gap-3 py-6 text-center">
+            <span
+              className="grid h-12 w-12 place-items-center rounded-lg border border-rp-line bg-rp-overlay text-rp-muted"
+              aria-hidden="true"
+            >
+              <UsersIcon className="h-6 w-6" />
+            </span>
+            <p className="text-body text-rp-muted">Nimaš še prijateljev. Poišči jih spodaj.</p>
           </div>
         ) : (
-          <div className="space-y-3">
-            {friends.map((f) => (
+          <div className="grid gap-1">
+            {friends.map((friend) => (
               <div
-                key={f.uid}
-                className="flex items-center justify-between gap-3 py-2 px-3 rounded-xl hover:bg-rp-overlay/70 transition-colors border border-transparent hover:border-rp-line"
+                key={friend.uid}
+                className="flex items-center justify-between gap-3 rounded-md px-3 py-2 transition-colors hover:bg-rp-overlay"
               >
-                <div className="flex items-center gap-4">
-                  <MiniAvatar name={f.displayName} />
-                  <span className="text-sm font-medium text-rp-text">{f.displayName}</span>
+                <div className="flex min-w-0 items-center gap-3">
+                  <MiniAvatar name={friend.displayName} />
+                  <span className="truncate text-body font-medium text-rp-text">{friend.displayName}</span>
                 </div>
                 <button
-                  onClick={() => navigate(`/chat?dm=${f.uid}`)}
-                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all border border-rp-accent/30 text-rp-accent hover:bg-rp-accent/15"
+                  type="button"
+                  onClick={() => navigate(`/chat?dm=${friend.uid}`)}
+                  className="flex shrink-0 items-center gap-1.5 rounded-md border border-rp-accent/30 px-3 py-1.5 text-small font-semibold text-rp-accent transition-colors hover:bg-rp-accent/10"
                 >
-                  <svg
-                    className="w-4 h-4"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2.5}
-                      d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
-                    />
-                  </svg>
+                  <ChatIcon className="h-4 w-4" />
                   Pogovor
                 </button>
               </div>
@@ -186,72 +156,49 @@ export default function FriendsPage() {
         )}
       </Section>
 
-      {/* ─── Search & Add ─── */}
       <Section title="Dodaj prijatelja">
-        <input
-          type="text"
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          placeholder="Išči po imenu … (vsaj 2 znaka)"
-          className="w-full px-4 py-2.5 rounded-xl text-sm outline-none bg-rp-overlay/85 border border-rp-line/50 text-rp-text transition-colors focus:border-rp-accent/50"
-        />
+        <label className="relative block">
+          <span className="sr-only">Išči po imenu</span>
+          <SearchIcon className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-rp-muted" />
+          <input
+            type="text"
+            value={search}
+            onChange={(event) => setSearch(event.target.value)}
+            placeholder="Išči po imenu… (vsaj 2 znaka)"
+            className="field !pl-9"
+          />
+        </label>
 
         {search.trim().length >= 2 && filteredUsers.length === 0 && (
-          <p className="text-sm text-rp-muted">
-            Ni rezultatov.
-          </p>
+          <p className="mt-3 text-small text-rp-muted">Ni rezultatov.</p>
         )}
 
-        <div className="space-y-3">
-          {filteredUsers.map((u) => (
-            <div
-              key={u.uid}
-              className="flex items-center justify-between gap-3 py-1.5"
-            >
-              <div className="flex items-center gap-3">
-                <MiniAvatar
-                  name={u.displayName}
-                  bgClass="bg-rp-warn text-white"
-                />
-                <div>
-                  <p className="text-sm font-medium text-rp-text">
-                    {u.displayName || 'Učenec'}
-                  </p>
-                </div>
+        <div className="mt-3 grid gap-1.5">
+          {filteredUsers.map((user) => (
+            <div key={user.uid} className="flex items-center justify-between gap-3 py-1.5">
+              <div className="flex min-w-0 items-center gap-3">
+                <MiniAvatar name={user.displayName} tone="warn" />
+                <p className="truncate text-body font-medium text-rp-text">{user.displayName || 'Učenec'}</p>
               </div>
               <button
-                onClick={() => handleSendRequest(u)}
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all hover:opacity-90 bg-rp-accent text-white"
+                type="button"
+                onClick={() => handleSendRequest(user)}
+                className="flex shrink-0 items-center gap-1.5 rounded-md bg-rp-accent px-3 py-1.5 text-small font-semibold text-rp-accent-ink transition-opacity hover:opacity-90"
               >
-                <svg
-                  className="w-4 h-4"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2.5}
-                    d="M12 4v16m8-8H4"
-                  />
-                </svg>
+                <PlusIcon className="h-4 w-4" />
                 Dodaj
               </button>
             </div>
           ))}
         </div>
 
-        {/* Pending sent */}
         {sent.length > 0 && (
-          <div className="space-y-2 border-t border-rp-line pt-3">
-            <p className="text-xs font-semibold text-rp-muted">
-              Čaka na odziv
-            </p>
-            {sent.map((req) => (
-              <div key={req.id} className="flex items-center gap-3 py-1">
-                <div className="w-2 h-2 rounded-full flex-shrink-0 animate-pulse bg-rp-warn" />
-                <span className="text-sm text-rp-subtle">{req.toName}</span>
+          <div className="mt-4 grid gap-2 border-t border-rp-line pt-4">
+            <p className="text-label text-rp-muted">Čaka na odziv</p>
+            {sent.map((request) => (
+              <div key={request.id} className="flex items-center gap-3 py-1">
+                <span className="h-2 w-2 shrink-0 animate-pulse rounded-full bg-rp-warn" aria-hidden="true" />
+                <span className="text-body text-rp-subtle">{request.toName}</span>
               </div>
             ))}
           </div>

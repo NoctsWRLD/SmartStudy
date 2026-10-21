@@ -1,37 +1,79 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
+import { isFirebaseConfigured } from '../firebase';
+import FirebaseSetupNotice from '../components/FirebaseSetupNotice';
+import Logo from '../components/Logo';
+import { SparkIcon } from '../components/icons';
 
 export function AuthShell({ title, subtitle, error, children, footer }) {
   return (
-    <div className="grid min-h-screen md:grid-cols-2">
-      <div className="hidden flex-col justify-between bg-rp-text p-10 text-[var(--rp-canvas)] md:flex">
-        <span className="grid h-10 w-10 place-items-center rounded-xl bg-[var(--rp-canvas)] font-display text-lg font-bold text-rp-text" aria-hidden="true">S</span>
-        <div>
-          <p className="font-display text-4xl font-bold leading-[1.05] tracking-tight">Mirna glava.<br />Narejene naloge.</p>
-          <p className="mt-4 max-w-sm text-[15px] leading-6 opacity-70">Predmeti, naloge, preverjanja in kartice na enem mestu — za osnovnošolce, dijake in študente.</p>
+    <div className="relative grid min-h-dvh overflow-hidden lg:grid-cols-[1.05fr_1fr]">
+      <div className="aurora-wash" aria-hidden="true" />
+
+      <div className="relative hidden flex-col justify-between p-10 lg:flex">
+        <span className="flex items-center gap-3">
+          <Logo size={40} />
+          <span className="font-display text-lg font-bold tracking-tight text-rp-text">SmartStudy</span>
+        </span>
+
+        <div className="max-w-sm">
+          <p className="font-display text-4xl font-bold leading-[1.05] tracking-tight text-rp-text">
+            Mirna glava.
+            <br />
+            Narejene naloge.
+          </p>
+          <p className="mt-4 text-body leading-6 text-rp-subtle">
+            Predmeti, naloge, preverjanja, urnik in kartice na enem mestu — za osnovnošolce,
+            dijake in študente.
+          </p>
+
+          <div className="mt-8" aria-hidden="true">
+            <ul className="rail">
+              {['accent', 'accent', 'empty', 'warn', 'accent', 'empty', 'muted'].map((tone, index) => (
+                <li key={index} className="rail-seg" data-tone={tone}>
+                  <span style={{ width: `${[90, 55, 0, 100, 40, 0, 25][index]}%` }} />
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
-        <p className="text-sm opacity-60">25 minut fokusa naenkrat.</p>
+
+        <p className="text-small text-rp-muted">25 minut fokusa naenkrat.</p>
       </div>
-      <div className="flex items-center justify-center p-4 sm:p-8">
+
+      <div className="relative flex items-center justify-center p-4 sm:p-8">
         <div className="rise w-full max-w-md">
-          <span className="grid h-11 w-11 place-items-center rounded-2xl bg-rp-text font-display text-xl font-bold text-[var(--rp-canvas)] md:hidden" aria-hidden="true">S</span>
-          <h1 className="page-title mt-4 md:mt-0">{title}</h1>
-          <p className="body-quiet mt-2">{subtitle}</p>
-          {error && <div className="mt-5 rounded-2xl border border-rp-danger/30 bg-rp-danger/[.07] p-3 text-sm text-rp-danger" role="alert">{error}</div>}
+          <span className="flex items-center gap-2.5 lg:hidden">
+            <Logo size={36} />
+            <span className="font-display text-[17px] font-bold tracking-tight text-rp-text">SmartStudy</span>
+          </span>
+
+          <h1 className="mt-6 text-page text-rp-text lg:mt-0">{title}</h1>
+          <p className="mt-2 text-body text-rp-muted">{subtitle}</p>
+
+          {error && (
+            <div
+              className="mt-5 rounded-md border border-rp-danger/30 bg-rp-danger/[.07] p-3 text-body text-rp-danger"
+              role="alert"
+            >
+              {error}
+            </div>
+          )}
+
           <div className="mt-6">{children}</div>
-          <p className="mt-6 text-sm text-rp-muted">{footer}</p>
+          <p className="mt-6 text-body text-rp-muted">{footer}</p>
         </div>
       </div>
     </div>
   );
 }
 
-export function AuthField({ label, ...props }) {
+export function AuthField({ label, id, ...props }) {
   return (
     <div>
-      <label className="mb-1.5 block text-[13px] font-semibold text-rp-subtle">{label}</label>
-      <input {...props} className="field" />
+      <label className="field-label" htmlFor={id}>{label}</label>
+      <input id={id} {...props} className="field" />
     </div>
   );
 }
@@ -55,27 +97,59 @@ export function AuthSubmit({ loading, idle, busy }) {
 export default function LoginPage() {
   const { login, currentUser } = useAuth();
   const navigate = useNavigate();
-  useEffect(() => { if (currentUser) navigate('/dashboard', { replace: true }); }, [currentUser, navigate]);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
-  async function handleSubmit(e) {
-    e.preventDefault();
-    setError(''); setLoading(true);
-    try { await login(email, password); navigate('/dashboard'); }
-    catch { setError('Napačen e-poštni naslov ali geslo. Poskusi znova.'); }
+  useEffect(() => {
+    if (currentUser) navigate('/dashboard', { replace: true });
+  }, [currentUser, navigate]);
+
+  async function handleSubmit(event) {
+    event.preventDefault();
+    setError('');
+    setLoading(true);
+    try {
+      await login(email, password);
+      navigate('/dashboard');
+    } catch {
+      setError('Napačen e-poštni naslov ali geslo. Poskusi znova.');
+    }
     setLoading(false);
   }
 
+  if (!isFirebaseConfigured) return <FirebaseSetupNotice />;
+
   return (
-    <AuthShell title="Prijava" subtitle="Tvoje naloge te že čakajo." error={error}
-      footer={<>Še nimaš računa? <Link to="/register" className="font-semibold text-rp-accent hover:underline">Ustvari ga</Link></>}>
-      <form onSubmit={handleSubmit} className="space-y-3.5">
-        <AuthField label="E-pošta" id="login-email" type="email" required value={email} onChange={(e) => setEmail(e.target.value)} placeholder="tia@sola.si" autoComplete="email" />
-        <AuthField label="Geslo" id="login-password" type="password" required value={password} onChange={(e) => setPassword(e.target.value)} placeholder="••••••••" autoComplete="current-password" />
-        <AuthSubmit loading={loading} idle="Prijavi me" busy="Prijavljam…" />
+    <AuthShell
+      title="Prijava"
+      subtitle="Tvoje naloge te že čakajo."
+      error={error}
+      footer={<>Še nimaš računa? <Link to="/register" className="font-semibold text-rp-accent hover:underline">Ustvari ga</Link></>}
+    >
+      <form onSubmit={handleSubmit} className="grid gap-3.5">
+        <AuthField
+          label="E-pošta"
+          id="login-email"
+          type="email"
+          required
+          value={email}
+          onChange={(event) => setEmail(event.target.value)}
+          placeholder="tia@sola.si"
+          autoComplete="email"
+        />
+        <AuthField
+          label="Geslo"
+          id="login-password"
+          type="password"
+          required
+          value={password}
+          onChange={(event) => setPassword(event.target.value)}
+          placeholder="••••••••"
+          autoComplete="current-password"
+        />
+        <AuthSubmit loading={loading} idle="Prijavi se" busy="Prijavljam…" />
       </form>
     </AuthShell>
   );

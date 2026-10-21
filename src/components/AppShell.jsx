@@ -166,7 +166,11 @@ export default function AppShell({ children }) {
         <TopBar onOpenMenu={() => setMenuOpen(true)} />
         <main
           id="main-content"
-          className="mx-auto w-full max-w-6xl flex-1 px-4 pb-28 pt-6 md:px-6 lg:pb-14 lg:pt-9"
+          className={
+            location.pathname === '/chat'
+              ? 'mx-auto flex w-full max-w-6xl flex-1 flex-col px-0 pb-0 pt-0 md:px-6 lg:pt-0'
+              : 'mx-auto w-full max-w-6xl flex-1 px-4 pb-28 pt-6 md:px-6 lg:pb-14 lg:pt-9'
+          }
         >
           {children}
         </main>
