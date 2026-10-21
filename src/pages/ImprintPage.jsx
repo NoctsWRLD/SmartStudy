@@ -1,7 +1,14 @@
 import LegalProse from '../components/LegalProse';
 import SiteShell from '../components/SiteShell';
+import { useSeo } from '../hooks/useSeo';
 
 export default function ImprintPage() {
+  useSeo({
+    title: 'Impressum',
+    description: 'Podatki o operaterju spletnega mesta SmartStudy in osebi, odgovorni za njegovo vsebino.',
+    path: '/impressum',
+  });
+
   return (
     <SiteShell>
       <LegalProse

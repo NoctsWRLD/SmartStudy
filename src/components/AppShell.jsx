@@ -2,6 +2,8 @@ import { useEffect, useRef, useState } from 'react';
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { ACCOUNT_LINKS, NAV_GROUPS, isPathActive } from '../navigation';
+import { useSeo } from '../hooks/useSeo';
+import { getPageTitle } from '../utils/pageTitles';
 import SideNav from './SideNav';
 import TopBar from './TopBar';
 import MobileTabBar from './MobileTabBar';
@@ -139,6 +141,8 @@ function MoreSheet({ pathname, onClose }) {
 export default function AppShell({ children }) {
   const location = useLocation();
   const [menuOpen, setMenuOpen] = useState(false);
+
+  useSeo({ title: getPageTitle(location.pathname), path: location.pathname });
 
   useEffect(() => {
     if (!menuOpen) return undefined;

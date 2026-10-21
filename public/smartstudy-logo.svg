@@ -1,1 +1,13 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" fill="none"><rect width="48" height="48" rx="14" fill="#17714D"/><path d="M24 11c-3.6-2.2-8-2.6-12-1.6v22.4c4-1 8.4-.6 12 1.6 3.6-2.2 8-2.6 12-1.6V9.4c-4-1-8.4-.6-12 1.6Z" fill="none" stroke="#fff" stroke-width="3" stroke-linejoin="round"/><path d="M24 11v22.4" stroke="#fff" stroke-width="3" stroke-linecap="round"/><path d="M17.5 18.5c1.2-.5 2.6-.6 4-.3M17.5 23.5c1.2-.5 2.6-.6 4-.3M26.5 18.2c1.4-.3 2.8-.2 4 .3M26.5 23.2c1.4-.3 2.8-.2 4 .3" stroke="#fff" stroke-width="2" stroke-linecap="round" opacity="0.85"/></svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" fill="none">
+  <defs>
+    <linearGradient id="aurora" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#3BC9D9" />
+      <stop offset="52%" stop-color="#5E6BF2" />
+      <stop offset="100%" stop-color="#B45CF0" />
+    </linearGradient>
+  </defs>
+  <rect width="48" height="48" rx="14" fill="url(#aurora)" />
+  <path d="M24 11c-3.6-2.2-8-2.6-12-1.6v22.4c4-1 8.4-.6 12 1.6 3.6-2.2 8-2.6 12-1.6V9.4c-4-1-8.4-.6-12 1.6Z" fill="none" stroke="#0A0D1F" stroke-width="3" stroke-linejoin="round" />
+  <path d="M24 11v22.4" stroke="#0A0D1F" stroke-width="3" stroke-linecap="round" />
+  <path d="M17.5 18.5c1.2-.5 2.6-.6 4-.3M17.5 23.5c1.2-.5 2.6-.6 4-.3M26.5 18.2c1.4-.3 2.8-.2 4 .3M26.5 23.2c1.4-.3 2.8-.2 4 .3" stroke="#0A0D1F" stroke-width="2" stroke-linecap="round" opacity="0.75" />
+</svg>

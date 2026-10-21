@@ -5,6 +5,7 @@ import { isFirebaseConfigured } from '../firebase';
 import FirebaseSetupNotice from '../components/FirebaseSetupNotice';
 import Logo from '../components/Logo';
 import { SparkIcon } from '../components/icons';
+import { useSeo } from '../hooks/useSeo';
 
 export function AuthShell({ title, subtitle, error, children, footer }) {
   return (
@@ -95,6 +96,8 @@ export function AuthSubmit({ loading, idle, busy }) {
 }
 
 export default function LoginPage() {
+  useSeo({ title: 'Prijava', description: 'Prijavi se v svoj SmartStudy račun.', path: '/login' });
+
   const { login, currentUser } = useAuth();
   const navigate = useNavigate();
   const [email, setEmail] = useState('');

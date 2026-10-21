@@ -1,7 +1,8 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import SiteHeader from '../components/SiteHeader';
 import SiteFooter from '../components/SiteFooter';
+import { SITE_DESCRIPTION, SITE_NAME, absoluteUrl } from '../config';
 import {
   BookIcon,
   CalendarIcon,
@@ -10,6 +11,7 @@ import {
   ExamIcon,
   TaskIcon,
 } from '../components/icons';
+import { useSeo } from '../hooks/useSeo';
 
 const CAPABILITIES = [
   {
@@ -148,8 +150,39 @@ function FaqItem({ question, answer }) {
 }
 
 export default function LandingPage() {
+  useSeo({
+    title: 'SmartStudy',
+    description: 'Predmeti, naloge, preverjanja, urnik in kartice v enem pregledu. Za dijake in študente.',
+    path: '/',
+  });
+
+  const structuredData = useMemo(
+    () => ({
+      '@context': 'https://schema.org',
+      '@graph': [
+        {
+          '@type': 'WebSite',
+          name: SITE_NAME,
+          url: absoluteUrl('/'),
+          inLanguage: 'sl-SI',
+        },
+        {
+          '@type': 'SoftwareApplication',
+          name: SITE_NAME,
+          applicationCategory: 'EducationalApplication',
+          operatingSystem: 'Web',
+          description: SITE_DESCRIPTION,
+          url: absoluteUrl('/'),
+          inLanguage: 'sl-SI',
+        },
+      ],
+    }),
+    [],
+  );
+
   return (
     <div className="relative min-h-dvh bg-rp-canvas">
+      <script type="application/ld+json">{JSON.stringify(structuredData)}</script>
       <div className="aurora-wash" aria-hidden="true" />
 
       <SiteHeader />

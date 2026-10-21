@@ -1,7 +1,14 @@
 import LegalProse from '../components/LegalProse';
 import SiteShell from '../components/SiteShell';
+import { useSeo } from '../hooks/useSeo';
 
 export default function AccessibilityPage() {
+  useSeo({
+    title: 'Dostopnost',
+    description: 'Kako SmartStudy skrbi za dostopnost, kaj je narejeno in kako sporočiti težavo.',
+    path: '/dostopnost',
+  });
+
   return (
     <SiteShell>
       <LegalProse

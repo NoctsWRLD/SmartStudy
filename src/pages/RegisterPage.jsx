@@ -2,8 +2,11 @@ import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { AuthShell, AuthField, AuthSubmit } from './LoginPage';
+import { useSeo } from '../hooks/useSeo';
 
 export default function RegisterPage() {
+  useSeo({ title: 'Ustvari račun', description: 'Ustvari SmartStudy račun in dodaj prvega predmeta.', path: '/register' });
+
   const { register, currentUser } = useAuth();
   const navigate = useNavigate();
   const [name, setName] = useState('');

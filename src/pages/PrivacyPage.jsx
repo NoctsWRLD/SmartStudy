@@ -1,7 +1,14 @@
 import LegalProse from '../components/LegalProse';
 import SiteShell from '../components/SiteShell';
+import { useSeo } from '../hooks/useSeo';
 
 export default function PrivacyPage() {
+  useSeo({
+    title: 'Pravilnik o zasebnosti',
+    description: 'Katere podatke SmartStudy zbira, zakaj jih zbira, kdo jih obdeluje in kakšne pravice imaš do njih.',
+    path: '/pravilnik-o-zasebnosti',
+  });
+
   return (
     <SiteShell>
       <LegalProse
