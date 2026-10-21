@@ -6,6 +6,7 @@ import SubjectModal from '../components/SubjectModal';
 import SubjectTaskModal from '../components/SubjectTaskModal';
 import Skeleton from '../components/Skeleton';
 import EmptyState from '../components/EmptyState';
+import ErrorState from '../components/ErrorState';
 import { SearchIcon, SparkIcon } from '../components/icons';
 import { countedNoun } from '../utils/slovenian';
 
@@ -100,7 +101,7 @@ export default function SubjectsPage() {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const fromTask = searchParams.get('from') === 'task';
-  const { subjects, loading, addSubject, updateSubject, deleteSubject } = useSubjects();
+  const { subjects, loading, error, addSubject, updateSubject, deleteSubject } = useSubjects();
   const { tasks, toggleTask, deleteTask } = useTasks();
   const [modalOpen, setModalOpen] = useState(searchParams.get('create') === '1');
   const [editSubject, setEditSubject] = useState(null);
@@ -202,7 +203,9 @@ export default function SubjectsPage() {
         </div>
       )}
 
-      {loading ? (
+      {error ? (
+        <ErrorState message={error} />
+      ) : loading ? (
         <Skeleton lines={4} />
       ) : subjects.length === 0 ? (
         <EmptyState

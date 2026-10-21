@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { useSubjects, useTasks } from '../hooks/useFirestore';
+import ErrorState from '../components/ErrorState';
 import { useFlashcards } from '../hooks/useStudy';
 import TaskCard from '../components/TaskCard';
 import TaskModal from '../components/TaskModal';
@@ -22,8 +23,8 @@ export default function DashboardPage() {
   const navigate = useNavigate();
   const { currentUser } = useAuth();
   const [now, setNow] = useState(() => new Date());
-  const { subjects, loading: subjectsLoading } = useSubjects();
-  const { tasks, loading: tasksLoading, addTask, updateTask, toggleTask, deleteTask } = useTasks();
+  const { subjects, loading: subjectsLoading, error: subjectsError } = useSubjects();
+  const { tasks, loading: tasksLoading, error: tasksError, addTask, updateTask, toggleTask, deleteTask } = useTasks();
   const { cards } = useFlashcards();
   const [modalOpen, setModalOpen] = useState(false);
   const [editTask, setEditTask] = useState(null);
@@ -72,7 +73,7 @@ export default function DashboardPage() {
   return (
     <div className="space-y-8">
       <section className="rise" aria-labelledby="dash-title">
-        <p className="text-small text-rp-muted">{dateLabel}</p>
+        <p className="text-small text-rp-muted lg:hidden">{dateLabel}</p>
         <h1 id="dash-title" className="mt-2 max-w-2xl text-page text-rp-text">
           {greeting}, {displayName}.
         </h1>
@@ -99,6 +100,10 @@ export default function DashboardPage() {
           <Link to="/exams" className="btn-ghost">Preverjanja</Link>
         </div>
       </section>
+
+      {(tasksError || subjectsError) && (
+        <ErrorState message={tasksError || subjectsError} />
+      )}
 
       <section
         className="rise grid grid-cols-2 gap-4 border-y border-rp-line py-5 sm:grid-cols-4"

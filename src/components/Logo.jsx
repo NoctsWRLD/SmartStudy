@@ -1,9 +1,16 @@
+import { useId } from 'react';
+
 /**
  * The mark is a square of aurora with an open book cut into it. The glyph is
  * always the deepest ink in the palette so it stays legible on every stop of
  * the gradient, in both themes.
+ *
+ * The gradient is a real SVG paint server rather than a CSS gradient in
+ * `fill` — Chrome does not accept a gradient function as an SVG fill.
  */
 export default function Logo({ size = 36, className = '' }) {
+  const gradientId = useId();
+
   return (
     <svg
       width={size}
@@ -14,7 +21,14 @@ export default function Logo({ size = 36, className = '' }) {
       aria-label="SmartStudy logotip"
       className={className}
     >
-      <rect width="48" height="48" rx="14" fill="var(--rp-aurora)" />
+      <defs>
+        <linearGradient id={gradientId} x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stopColor="var(--rp-aurora-1)" />
+          <stop offset="52%" stopColor="var(--rp-aurora-2)" />
+          <stop offset="100%" stopColor="var(--rp-aurora-3)" />
+        </linearGradient>
+      </defs>
+      <rect width="48" height="48" rx="14" fill={`url(#${gradientId})`} />
       <path
         d="M24 11c-3.6-2.2-8-2.6-12-1.6v22.4c4-1 8.4-.6 12 1.6 3.6-2.2 8-2.6 12-1.6V9.4c-4-1-8.4-.6-12 1.6Z"
         fill="none"

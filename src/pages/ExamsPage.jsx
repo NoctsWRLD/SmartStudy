@@ -5,6 +5,7 @@ import { useExams } from '../hooks/useStudy';
 import ExamModal from '../components/ExamModal';
 import Skeleton from '../components/Skeleton';
 import EmptyState from '../components/EmptyState';
+import ErrorState from '../components/ErrorState';
 import { EditIcon, TrashIcon } from '../components/icons';
 import { countdown } from '../utils/countdown';
 import { formatSlovenianDate, getSlovenianDateKey } from '../utils/dates';
@@ -12,7 +13,7 @@ import { formatSlovenianDate, getSlovenianDateKey } from '../utils/dates';
 export default function ExamsPage() {
   const navigate = useNavigate();
   const { subjects, loading: subjectsLoading } = useSubjects();
-  const { exams, loading, addExam, updateExam, deleteExam } = useExams();
+  const { exams, loading, error, addExam, updateExam, deleteExam } = useExams();
   const [modalOpen, setModalOpen] = useState(false);
   const [editExam, setEditExam] = useState(null);
   const [subjectFilter, setSubjectFilter] = useState('');
@@ -109,7 +110,9 @@ export default function ExamsPage() {
         </div>
       </section>
 
-      {loading ? (
+      {error ? (
+        <ErrorState message={error} />
+      ) : loading ? (
         <div className="card p-4"><Skeleton lines={4} /></div>
       ) : filtered.length === 0 ? (
         <EmptyState

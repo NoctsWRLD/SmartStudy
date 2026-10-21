@@ -15,6 +15,7 @@ export function useSubjects() {
   const { currentUser } = useAuth();
   const [subjects, setSubjects] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     if (!currentUser) return;
@@ -33,6 +34,7 @@ export function useSubjects() {
       },
       err => {
         console.error('UseSubjects error:', err);
+        setError('Predmeti se naložijo z napako. Preveri povezavo in poskusi znova.');
         setLoading(false);
       }
     );
@@ -69,13 +71,14 @@ export function useSubjects() {
     }
   }
 
-  return { subjects, loading, addSubject, updateSubject, deleteSubject };
+  return { subjects, loading, error, addSubject, updateSubject, deleteSubject };
 }
 
 export function useTasks() {
   const { currentUser } = useAuth();
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     if (!currentUser) return;
@@ -94,6 +97,7 @@ export function useTasks() {
       },
       err => {
         console.error('UseTasks error:', err);
+        setError('Naloge se naložijo z napako. Preveri povezavo in poskusi znova.');
         setLoading(false);
       }
     );
@@ -156,5 +160,5 @@ export function useTasks() {
     }
   }
 
-  return { tasks, loading, addTask, addTasks, updateTask, toggleTask, deleteTask };
+  return { tasks, loading, error, addTask, addTasks, updateTask, toggleTask, deleteTask };
 }

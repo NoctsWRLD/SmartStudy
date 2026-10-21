@@ -34,7 +34,10 @@ export default function SiteHeader() {
 
         <div className="ml-auto flex items-center gap-2">
           <Link to="/login" className="btn-ghost hidden sm:inline-flex">Prijava</Link>
-          <Link to="/register" className="btn-primary">Ustvari račun</Link>
+          <Link to="/register" className="btn-primary whitespace-nowrap !px-4 !py-2 sm:!px-5">
+            <span className="sm:hidden">Ustvari</span>
+            <span className="hidden sm:inline">Ustvari račun</span>
+          </Link>
           <button
             type="button"
             onClick={() => setOpen((value) => !value)}

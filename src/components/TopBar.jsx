@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { useSettings } from '../contexts/SettingsContext';
 import { useTasks } from '../hooks/useFirestore';
-import { getSlovenianDateKey } from '../utils/dates';
+import { formatSlovenianDate, getSlovenianDateKey } from '../utils/dates';
 import { countedNoun } from '../utils/slovenian';
 import Logo from './Logo';
 import { GearIcon, LogOutIcon, MenuIcon, MoonIcon, SunIcon, UserIcon } from './icons';
@@ -14,9 +14,10 @@ function TodayCount() {
   const open = tasks.filter((task) => !task.completed && task.dueDate === today).length;
   if (open === 0) return null;
   return (
-    <span className="chip chip-accent">
+    <span className="chip chip-accent whitespace-nowrap">
       <span className="h-1.5 w-1.5 rounded-full bg-rp-accent" aria-hidden="true" />
-      {countedNoun(open, 'naloga danes', 'nalogi danes', 'naloge danes', 'nalog danes')}
+      <span className="hidden sm:inline">{countedNoun(open, 'naloga danes', 'nalogi danes', 'naloge danes', 'nalog danes')}</span>
+      <span className="sm:hidden">{countedNoun(open, 'danes', 'danes', 'dani', 'dani')}</span>
     </span>
   );
 }
@@ -124,6 +125,8 @@ function ThemeToggle() {
 }
 
 export default function TopBar({ onOpenMenu }) {
+  const dateLabel = formatSlovenianDate(getSlovenianDateKey(), { weekday: 'long', day: 'numeric', month: 'long' });
+
   return (
     <header className="sticky top-0 z-30 border-b border-rp-line bg-rp-panel/85 backdrop-blur-xl">
       <div className="flex h-16 items-center gap-3 px-4 md:px-6">
@@ -140,6 +143,10 @@ export default function TopBar({ onOpenMenu }) {
           <Logo size={28} />
           <span className="font-display text-[15px] font-bold tracking-tight text-rp-text">SmartStudy</span>
         </Link>
+
+        <div className="hidden min-w-0 items-baseline gap-3 lg:flex">
+          <p className="truncate text-small text-rp-muted">{dateLabel}</p>
+        </div>
 
         <div className="ml-auto flex items-center gap-2">
           <TodayCount />

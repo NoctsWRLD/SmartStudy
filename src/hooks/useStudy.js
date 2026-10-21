@@ -15,6 +15,7 @@ function useUserCollection(name) {
   const { currentUser } = useAuth();
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     if (!currentUser) return;
@@ -23,23 +24,25 @@ function useUserCollection(name) {
       q,
       (snap) => {
         setItems(snap.docs.map((d) => ({ id: d.id, ...d.data() })));
+        setError(null);
         setLoading(false);
       },
       (err) => {
         console.error(`${name} error:`, err);
+        setError('Podatki se naložijo z napako. Preveri povezavo in poskusi znova.');
         setLoading(false);
       },
     );
     return unsub;
   }, [currentUser, name]);
 
-  return { items, loading };
+  return { items, loading, error };
 }
 
 /* Preverjanja: { title, subjectId, date: 'YYYY-MM-DD', uid, createdAt } */
 export function useExams() {
   const { currentUser } = useAuth();
-  const { items: raw, loading } = useUserCollection('exams');
+  const { items: raw, loading, error } = useUserCollection('exams');
   const exams = useMemo(() => [...raw].sort((a, b) => (a.date || '').localeCompare(b.date || '')), [raw]);
 
   async function addExam(data) {
@@ -56,13 +59,13 @@ export function useExams() {
     try { await deleteDoc(doc(db, 'exams', id)); }
     catch (err) { reportWriteError('Deleting exam', err); }
   }
-  return { exams, loading, addExam, updateExam, deleteExam };
+  return { exams, loading, error, addExam, updateExam, deleteExam };
 }
 
 /* Kartice: { subjectId, front, back, known, uid, createdAt } */
 export function useFlashcards() {
   const { currentUser } = useAuth();
-  const { items: rawCards, loading } = useUserCollection('flashcards');
+  const { items: rawCards, loading, error } = useUserCollection('flashcards');
   const cards = useMemo(
     () => [...rawCards].sort((a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0)),
     [rawCards],
@@ -82,18 +85,18 @@ export function useFlashcards() {
     try { await deleteDoc(doc(db, 'flashcards', id)); }
     catch (err) { reportWriteError('Deleting card', err); }
   }
-  return { cards, loading, addCard, updateCard, deleteCard };
+  return { cards, loading, error, addCard, updateCard, deleteCard };
 }
 
 /* Fokus: { minutes, mode: 'focus'|'break', day: 'YYYY-MM-DD', uid, createdAt } */
 export function useFocusSessions() {
   const { currentUser } = useAuth();
-  const { items: sessions, loading } = useUserCollection('focusSessions');
+  const { items: sessions, loading, error } = useUserCollection('focusSessions');
 
   async function logSession({ minutes, mode, day }) {
     try {
       await addDoc(collection(db, 'focusSessions'), { minutes, mode, day, uid: currentUser.uid, createdAt: serverTimestamp() });
     } catch (err) { reportWriteError('Logging focus session', err); }
   }
-  return { sessions, loading, logSession };
+  return { sessions, loading, error, logSession };
 }

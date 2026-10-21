@@ -123,61 +123,63 @@ export default function SchedulePage() {
       </section>
 
       <section className="rise" aria-label="Teden">
-        <div className="grid grid-cols-7 gap-2">
-          {weekDays.map((day, index) => {
-            const dayTasks = getTasksForDay(day);
-            const isToday = day === todayStr;
+        <div className="overflow-hidden rounded-lg border border-rp-line bg-rp-panel">
+          <div className="grid grid-cols-7 divide-x divide-rp-line">
+            {weekDays.map((day, index) => {
+              const dayTasks = getTasksForDay(day);
+              const isToday = day === todayStr;
 
-            return (
-              <div key={day} className="flex min-w-0 flex-col">
-                <div className={`mb-2 border-b pb-2 text-center ${isToday ? 'border-rp-accent/45' : 'border-rp-line'}`}>
-                  <p className={`text-[11px] font-semibold ${isToday ? 'text-rp-accent' : 'text-rp-muted'}`}>
-                    {DAYS_SHORT[index]}
-                  </p>
-                  <div
-                    className={`mx-auto mt-1 grid h-7 w-7 place-items-center rounded-full text-small font-bold transition-colors ${
-                      isToday ? 'bg-rp-accent text-rp-accent-ink' : 'text-rp-subtle'
-                    }`}
-                  >
-                    {getDayOfMonth(day)}
+              return (
+                <div key={day} className="flex min-w-0 flex-col">
+                  <div className={`mb-2 border-b pb-2 text-center ${isToday ? 'border-rp-accent/45' : 'border-rp-line'}`}>
+                    <p className={`text-[11px] font-semibold ${isToday ? 'text-rp-accent' : 'text-rp-muted'}`}>
+                      {DAYS_SHORT[index]}
+                    </p>
+                    <div
+                      className={`mx-auto mt-1 grid h-7 w-7 place-items-center rounded-full text-small font-bold transition-colors ${
+                        isToday ? 'bg-rp-accent text-rp-accent-ink' : 'text-rp-subtle'
+                      }`}
+                    >
+                      {getDayOfMonth(day)}
+                    </div>
                   </div>
-                </div>
 
-                <button
-                  type="button"
-                  onClick={() => handleDayClick(day)}
-                  title={`Dodaj nalogo – ${DAYS_FULL[index]}`}
-                  aria-label={`Dodaj nalogo – ${DAYS_FULL[index]}, ${formatSlovenianDate(day, { day: 'numeric', month: 'long' })}`}
-                  className="flex min-h-28 flex-1 flex-col gap-1.5 rounded-md p-1.5 text-left transition-colors hover:bg-rp-overlay"
-                >
-                  {dayTasks.map((task) => {
-                    const subject = getSubject(task);
-                    const color = subject ? getSubjectColor(subject.colorIndex) : null;
-                    return (
-                      <span
-                        key={task.id}
-                        onClick={(event) => { event.stopPropagation(); handleEdit(task); }}
-                        role="button"
-                        tabIndex={0}
-                        onKeyDown={(event) => {
-                          if (event.key === 'Enter' || event.key === ' ') {
-                            event.preventDefault();
-                            handleEdit(task);
-                          }
-                        }}
-                        className={`block cursor-pointer rounded-xs border px-2 py-1.5 text-left text-[11px] leading-tight transition-opacity hover:opacity-80 ${
-                          color ? `${color.bg} ${color.border} ${color.text}` : 'bg-rp-accent/12 border-rp-accent/30 text-rp-accent'
-                        }`}
-                      >
-                        <span className="block truncate font-semibold">{task.title}</span>
-                        {subject && <span className="mt-0.5 block truncate opacity-75">{subject.name}</span>}
-                      </span>
-                    );
-                  })}
-                </button>
-              </div>
-            );
-          })}
+                  <button
+                    type="button"
+                    onClick={() => handleDayClick(day)}
+                    title={`Dodaj nalogo – ${DAYS_FULL[index]}`}
+                    aria-label={`Dodaj nalogo – ${DAYS_FULL[index]}, ${formatSlovenianDate(day, { day: 'numeric', month: 'long' })}`}
+                    className="flex min-h-32 flex-1 flex-col gap-1.5 p-1.5 text-left transition-colors hover:bg-rp-overlay"
+                  >
+                    {dayTasks.map((task) => {
+                      const subject = getSubject(task);
+                      const color = subject ? getSubjectColor(subject.colorIndex) : null;
+                      return (
+                        <span
+                          key={task.id}
+                          onClick={(event) => { event.stopPropagation(); handleEdit(task); }}
+                          role="button"
+                          tabIndex={0}
+                          onKeyDown={(event) => {
+                            if (event.key === 'Enter' || event.key === ' ') {
+                              event.preventDefault();
+                              handleEdit(task);
+                            }
+                          }}
+                          className={`block w-full cursor-pointer rounded-xs border px-2 py-1.5 text-left text-[11px] leading-tight transition-opacity hover:opacity-80 ${
+                            color ? `${color.bg} ${color.border} ${color.text}` : 'bg-rp-accent/12 border-rp-accent/30 text-rp-accent'
+                          }`}
+                        >
+                          <span className="block truncate font-semibold">{task.title}</span>
+                          {subject && <span className="mt-0.5 block truncate opacity-75">{subject.name}</span>}
+                        </span>
+                      );
+                    })}
+                  </button>
+                </div>
+              );
+            })}
+          </div>
         </div>
         <p className="mt-3 text-small text-rp-muted">
           {weekTotal === 0

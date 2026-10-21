@@ -5,6 +5,7 @@ import { useFlashcards } from '../hooks/useStudy';
 import FlashcardModal from '../components/FlashcardModal';
 import Skeleton from '../components/Skeleton';
 import EmptyState from '../components/EmptyState';
+import ErrorState from '../components/ErrorState';
 import { CardIcon, EditIcon, TrashIcon } from '../components/icons';
 import { getSubjectColor } from '../utils/colors';
 import { countedNoun } from '../utils/slovenian';
@@ -21,7 +22,7 @@ function shuffle(list) {
 export default function FlashcardsPage() {
   const navigate = useNavigate();
   const { subjects, loading: subjectsLoading } = useSubjects();
-  const { cards, loading, addCard, updateCard, deleteCard } = useFlashcards();
+  const { cards, loading, error, addCard, updateCard, deleteCard } = useFlashcards();
   const [deckId, setDeckId] = useState('');
   const [modalOpen, setModalOpen] = useState(false);
   const [editCard, setEditCard] = useState(null);
@@ -105,7 +106,9 @@ export default function FlashcardsPage() {
         </div>
       </section>
 
-      {loading || subjectsLoading ? (
+      {error ? (
+        <ErrorState message={error} />
+      ) : loading || subjectsLoading ? (
         <div className="card p-4"><Skeleton lines={4} /></div>
       ) : studying && card ? (
         <section className="mx-auto max-w-xl" aria-label="Učenje">

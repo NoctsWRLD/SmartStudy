@@ -373,7 +373,7 @@ export default function ChatPage() {
   );
 
   return (
-    <div className="flex h-full min-h-0 flex-col">
+    <div className="flex min-h-0 flex-1 flex-col">
       <div className="flex min-h-0 flex-1 overflow-hidden rounded-lg border border-rp-line bg-rp-panel">
         <aside className="hidden w-56 shrink-0 flex-col overflow-hidden border-r border-rp-line md:flex">
           {sidePanel}

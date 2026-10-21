@@ -6,6 +6,7 @@ import TaskModal from '../components/TaskModal';
 import Skeleton from '../components/Skeleton';
 import StatTile from '../components/StatTile';
 import EmptyState from '../components/EmptyState';
+import ErrorState from '../components/ErrorState';
 import { CheckIcon, SearchIcon, SparkIcon } from '../components/icons';
 import { addDaysToDateKey, getSlovenianDateKey } from '../utils/dates';
 import { filterTasks, summarizeTasks } from '../utils/tasks';
@@ -21,7 +22,7 @@ export default function TasksPage() {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const { subjects, loading: subjectsLoading } = useSubjects();
-  const { tasks, loading, addTask, updateTask, toggleTask, deleteTask } = useTasks();
+  const { tasks, loading, error, addTask, updateTask, toggleTask, deleteTask } = useTasks();
   const initialSubjectId = searchParams.get('subject') || '';
   const [modalOpen, setModalOpen] = useState(searchParams.get('new') === '1' && Boolean(initialSubjectId));
   const [editTask, setEditTask] = useState(null);
@@ -148,38 +149,40 @@ export default function TasksPage() {
 
       <section className="space-y-4" aria-label="Seznam nalog">
         <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
-          <div className="flex gap-1 rounded-md border border-rp-line bg-rp-raised p-1">
-            {FILTERS.map((filter) => (
-              <button
-                key={filter.key}
-                type="button"
-                onClick={() => setStatusFilter(filter.key)}
-                aria-pressed={statusFilter === filter.key}
-                className={`rounded-xs px-3.5 py-1.5 text-small font-semibold transition-colors ${
-                  statusFilter === filter.key
-                    ? 'bg-rp-accent text-rp-accent-ink'
-                    : 'text-rp-subtle hover:bg-rp-overlay hover:text-rp-text'
-                }`}
-              >
-                {filter.label}
-              </button>
-            ))}
+          <div className="flex flex-wrap items-center gap-2">
+            <div className="flex gap-1 rounded-md border border-rp-line bg-rp-raised p-1">
+              {FILTERS.map((filter) => (
+                <button
+                  key={filter.key}
+                  type="button"
+                  onClick={() => setStatusFilter(filter.key)}
+                  aria-pressed={statusFilter === filter.key}
+                  className={`rounded-xs px-3.5 py-1.5 text-small font-semibold transition-colors ${
+                    statusFilter === filter.key
+                      ? 'bg-rp-accent text-rp-accent-ink'
+                      : 'text-rp-subtle hover:bg-rp-overlay hover:text-rp-text'
+                  }`}
+                >
+                  {filter.label}
+                </button>
+              ))}
+            </div>
+
+            <button
+              type="button"
+              onClick={() => { setSelecting((value) => !value); setSelected([]); }}
+              aria-pressed={selecting}
+              className={`rounded-md border px-4 py-2 text-small font-semibold transition-colors ${
+                selecting
+                  ? 'border-rp-accent bg-rp-accent/[.08] text-rp-text'
+                  : 'border-rp-line text-rp-subtle hover:border-rp-line-strong hover:text-rp-text'
+              }`}
+            >
+              {selecting ? 'Prekliči izbor' : 'Izberi'}
+            </button>
           </div>
 
-          <button
-            type="button"
-            onClick={() => { setSelecting((value) => !value); setSelected([]); }}
-            aria-pressed={selecting}
-            className={`shrink-0 self-start rounded-md border px-4 py-2 text-small font-semibold transition-colors lg:self-auto ${
-              selecting
-                ? 'border-rp-accent bg-rp-accent/[.08] text-rp-text'
-                : 'border-rp-line text-rp-subtle hover:border-rp-line-strong hover:text-rp-text'
-            }`}
-          >
-            {selecting ? 'Prekliči izbor' : 'Izberi'}
-          </button>
-
-          <div className="grid gap-2 sm:grid-cols-[minmax(12rem,1fr)_auto_auto]">
+          <div className="grid gap-2 sm:grid-cols-[minmax(12rem,1fr)_auto_auto] lg:ml-auto">
             <label className="relative block">
               <span className="sr-only">Poišči nalogo</span>
               <SearchIcon className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-rp-muted" />
@@ -240,7 +243,9 @@ export default function TasksPage() {
           </div>
         )}
 
-        {loading || subjectsLoading ? (
+        {error ? (
+          <ErrorState message={error} />
+        ) : loading || subjectsLoading ? (
           <Skeleton lines={5} />
         ) : filtered.length === 0 ? (
           <EmptyState

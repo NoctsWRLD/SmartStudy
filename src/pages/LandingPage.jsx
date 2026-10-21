@@ -223,19 +223,24 @@ export default function LandingPage() {
               na telefonu.
             </p>
 
-            <ul className="mt-10 grid gap-x-10 gap-y-8 sm:grid-cols-2 lg:grid-cols-3">
+            <ul className="mt-10 divide-y divide-rp-line border-y border-rp-line">
               {CAPABILITIES.map((item) => {
                 const Icon = item.icon;
                 return (
-                  <li key={item.title}>
+                  <li
+                    key={item.title}
+                    className="grid gap-3 py-6 sm:grid-cols-[3rem_minmax(0,1fr)_auto] sm:items-start sm:gap-6"
+                  >
                     <span
                       className="grid h-10 w-10 place-items-center rounded-md border border-rp-line bg-rp-raised text-rp-accent"
                       aria-hidden="true"
                     >
                       <Icon className="h-5 w-5" />
                     </span>
-                    <h3 className="mt-4 text-subtitle text-rp-text">{item.title}</h3>
-                    <p className="mt-2 text-body leading-6 text-rp-muted">{item.copy}</p>
+                    <div>
+                      <h3 className="text-subtitle text-rp-text">{item.title}</h3>
+                      <p className="mt-2 max-w-xl text-body leading-6 text-rp-muted">{item.copy}</p>
+                    </div>
                   </li>
                 );
               })}

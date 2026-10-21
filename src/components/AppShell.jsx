@@ -172,7 +172,7 @@ export default function AppShell({ children }) {
           id="main-content"
           className={
             location.pathname === '/chat'
-              ? 'mx-auto flex w-full max-w-6xl flex-1 flex-col px-0 pb-0 pt-0 md:px-6 lg:pt-0'
+              ? 'mx-auto flex min-h-0 w-full max-w-6xl flex-1 flex-col px-0 pb-0 pt-0 md:px-6 lg:pt-0'
               : 'mx-auto w-full max-w-6xl flex-1 px-4 pb-28 pt-6 md:px-6 lg:pb-14 lg:pt-9'
           }
         >
