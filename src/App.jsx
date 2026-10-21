@@ -1,4 +1,5 @@
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom';
+import { BaseRouter } from './components/BaseRouter.jsx';
 import { AuthProvider } from './contexts/AuthContext';
 import ProtectedRoute from './components/ProtectedRoute';
 import Layout from './components/Layout';
@@ -43,7 +44,7 @@ export default function App() {
   if (!isFirebaseConfigured) return <FirebaseSetupNotice />;
 
   return (
-    <BrowserRouter>
+    <BaseRouter>
       <AuthProvider>
         <SettingsProvider>
           <Routes>
@@ -158,6 +159,6 @@ export default function App() {
           </Routes>
         </SettingsProvider>
       </AuthProvider>
-    </BrowserRouter>
+    </BaseRouter>
   );
 }
