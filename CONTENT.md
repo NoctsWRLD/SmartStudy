@@ -156,7 +156,7 @@ izmišljen.
 | 1 | **Cena in naročniški model** | Ni znan, ali je aplikacija brezplačna, plačljiva ali ima naročnino. | Brez cene: sekcija »Cenik« ni izdelana. Vpišem lahko še enkrat. |
 | 2 | **Operater, naslov in odgovorna oseba** | Ime podjetja, davčna številka in poštni naslov niso znani. | `/impressum`, pogosta vprašanja, noga strani. |
 | 3 | **Kontaktna podpora** | Ni znano, ali je podpora e-pošta, obrazec ali kanal. | `/impressum`, noga. |
-| 4 | **Končna javna domena** | Potrebna za kanonične naslove, `sitemap.xml`, pravilnik o zasebnosti. | `src/config.js` (`SITE_URL`), `public/sitemap.xml`, `public/robots.txt`, `public/llms.txt`. |
+| 4 | ~~Končna javna domena~~ | **Rešeno:** `https://smartstudyslo.vercel.app` | `src/config.js` (`SITE_URL`), `public/sitemap.xml`, `public/robots.txt`, `public/llms.txt`. |
 | 5 | **Mnenja uporabnikov** | Ni nobenega resničnega odziva, ki bi ga smel prikazati. | Brez sekcije z ocenami. |
 | 6 | **Statistika uporabe** | "N dijakov uporablja" ni mogoče trditi. | Brez številk v oglaševalskem bloku. |
 | 7 | **Podrobnosti hrambe in regije** | Firebase je znan obdelovalec, regija in hramba nista potrjeni. | `/pravilnik-o-zasebnosti`. |
@@ -168,5 +168,6 @@ izmišljen.
   dodana v `validTheme`, a pravila veljajo šele, ko se objavijo:
   `firebase deploy --only firestore:rules`. Do takrat se izbira teme shrani
   samo lokalno v brskalniku — sprememba je vidna, račun pa je ne prenese.
-- **`SITE_URL` v `src/config.js` je nadomestek.** Zamenjaj z dejansko
-  domeno, nato preobnovi `public/sitemap.xml` in `public/robots.txt`.
+- **Domena je znana:** `https://smartstudyslo.vercel.app`. Če se spletno mesto
+  preseli, spremeni `SITE_URL` v `src/config.js` ter `public/sitemap.xml` in
+  `public/robots.txt`.

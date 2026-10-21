@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://smartstudy.vercel.app/sitemap.xml
+Sitemap: https://smartstudyslo.vercel.app/sitemap.xml

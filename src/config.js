@@ -1,12 +1,11 @@
 /**
  * Site-wide constants.
  *
- * TODO(vsebina): SITE_URL is the final public address. It is not known yet —
- * the app ships to both GitHub Pages and Vercel, and the two have different
- * hostnames. Change it here once, and the canonical tags, Open Graph cards,
- * robots.txt and sitemap.xml all follow.
+ * SITE_URL is the public address of the Vercel deployment. It drives the
+ * canonical tags, the Open Graph cards, robots.txt and sitemap.xml — if the
+ * site ever moves, this is the one line to change.
  */
-export const SITE_URL = 'https://smartstudy.vercel.app';
+export const SITE_URL = 'https://smartstudyslo.vercel.app';
 
 export const SITE_NAME = 'SmartStudy';
 

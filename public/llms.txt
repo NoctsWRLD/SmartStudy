@@ -6,15 +6,15 @@
 
 ## Javne strani
 
-- [Predstavitvena stran](https://smartstudy.vercel.app/): kaj SmartStudy ponuja, kako deluje in za koga je.
-- [Pravilnik o zasebnosti](https://smartstudy.vercel.app/pravilnik-o-zasebnosti): katere podatke zbira, zakaj in kdo jih obdeluje.
-- [Impressum](https://smartstudy.vercel.app/impressum): podatki o operaterju spletnega mesta.
-- [Dostopnost](https://smartstudy.vercel.app/dostopnost): cilj dostopnosti in kako sporočiti težavo.
+- [Predstavitvena stran](https://smartstudyslo.vercel.app/): kaj SmartStudy ponuja, kako deluje in za koga je.
+- [Pravilnik o zasebnosti](https://smartstudyslo.vercel.app/pravilnik-o-zasebnosti): katere podatke zbira, zakaj in kdo jih obdeluje.
+- [Impressum](https://smartstudyslo.vercel.app/impressum): podatki o operaterju spletnega mesta.
+- [Dostopnost](https://smartstudyslo.vercel.app/dostopnost): cilj dostopnosti in kako sporočiti težavo.
 
 ## Prijava
 
-- [Prijava](https://smartstudy.vercel.app/login): vstop v obstoječi račun.
-- [Ustvari račun](https://smartstudy.vercel.app/register): nov račun za dijake in študente.
+- [Prijava](https://smartstudyslo.vercel.app/login): vstop v obstoječi račun.
+- [Ustvari račun](https://smartstudyslo.vercel.app/register): nov račun za dijake in študente.
 
 ## Aplikacija
 
