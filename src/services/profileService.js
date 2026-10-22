@@ -54,3 +54,9 @@ export function watchUserProfile(uid, onData) {
     if (snap.exists()) onData({ uid: snap.id, ...snap.data() });
   });
 }
+
+/** Store the study preferences on the user's own document. */
+export async function updatePreferences(uid, preferences) {
+  const { normalizePreferences } = await import('../utils/preferences');
+  await updateDoc(doc(db, 'users', uid), { preferences: normalizePreferences(preferences) });
+}

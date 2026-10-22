@@ -25,6 +25,21 @@ service cloud.firestore {
       return value is string && value.matches('^[A-HJKMNP-Z2-9]{6}$');
     }
 
+    // Study preferences are a small map with a fixed set of keys.
+    function validPreferences(value) {
+      return value is map
+        && value.keys().hasOnly(['focusMinutes', 'startTime', 'deadlineWarningDays', 'weekStart'])
+        && value.focusMinutes is int
+        && value.focusMinutes >= 5
+        && value.focusMinutes <= 180
+        && value.startTime is string
+        && value.startTime.matches('^([01][0-9]|2[0-3]):[0-5][0-9]$')
+        && value.deadlineWarningDays is int
+        && value.deadlineWarningDays >= 1
+        && value.deadlineWarningDays <= 30
+        && value.weekStart in ['mon', 'sun'];
+    }
+
     function isOwnSubject(subjectId) {
       return subjectId == '' || (
         exists(/databases/$(database)/documents/subjects/$(subjectId)) &&
@@ -44,7 +59,7 @@ service cloud.firestore {
     match /users/{uid} {
       allow read: if owns(uid);
       allow create: if owns(uid)
-        && request.resource.data.keys().hasOnly(['displayName', 'email', 'school', 'photoURL', 'createdAt', 'theme', 'friendCode'])
+        && request.resource.data.keys().hasOnly(['displayName', 'email', 'school', 'photoURL', 'createdAt', 'theme', 'friendCode', 'preferences'])
         && request.resource.data.keys().hasAll(['displayName', 'email', 'school', 'photoURL', 'createdAt'])
         && request.resource.data.displayName is string
         && request.resource.data.displayName.size() <= 60
@@ -55,16 +70,18 @@ service cloud.firestore {
         && safeImageUrl(request.resource.data.photoURL)
         && request.resource.data.createdAt == request.time
         && (!('theme' in request.resource.data) || validTheme(request.resource.data.theme))
-        && (!('friendCode' in request.resource.data) || validFriendCode(request.resource.data.friendCode));
+        && (!('friendCode' in request.resource.data) || validFriendCode(request.resource.data.friendCode))
+        && (!('preferences' in request.resource.data) || validPreferences(request.resource.data.preferences));
       allow update: if owns(uid)
-        && request.resource.data.keys().hasOnly(['displayName', 'email', 'school', 'photoURL', 'createdAt', 'theme', 'friendCode'])
-        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['displayName', 'school', 'theme', 'friendCode'])
+        && request.resource.data.keys().hasOnly(['displayName', 'email', 'school', 'photoURL', 'createdAt', 'theme', 'friendCode', 'preferences'])
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['displayName', 'school', 'theme', 'friendCode', 'preferences'])
         && request.resource.data.displayName is string
         && request.resource.data.displayName.size() <= 60
         && request.resource.data.school is string
         && request.resource.data.school.size() <= 120
         && (!request.resource.data.diff(resource.data).affectedKeys().hasAny(['theme']) || validTheme(request.resource.data.theme))
-        && (!request.resource.data.diff(resource.data).affectedKeys().hasAny(['friendCode']) || validFriendCode(request.resource.data.friendCode));
+        && (!request.resource.data.diff(resource.data).affectedKeys().hasAny(['friendCode']) || validFriendCode(request.resource.data.friendCode))
+        && (!request.resource.data.diff(resource.data).affectedKeys().hasAny(['preferences']) || validPreferences(request.resource.data.preferences));
       allow delete: if owns(uid);
     }
 

@@ -70,6 +70,15 @@ export function CheckIcon({ className }) {
   );
 }
 
+export function CopyIcon({ className }) {
+  return (
+    <svg {...base(className, 2)}>
+      <rect x="9" y="9" width="11" height="11" rx="2.5" />
+      <path strokeLinecap="round" strokeLinejoin="round" d="M15 5.5A2.5 2.5 0 0012.5 3h-6A3.5 3.5 0 003 6.5v6A2.5 2.5 0 005.5 15" />
+    </svg>
+  );
+}
+
 export function SparkIcon({ className }) {
   return (
     <svg viewBox="0 0 24 24" fill="currentColor" className={className || 'h-4 w-4'} aria-hidden="true">

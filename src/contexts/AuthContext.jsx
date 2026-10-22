@@ -49,6 +49,31 @@ export function AuthProvider({ children }) {
     setCurrentUser({ ...user, displayName: displayName || user.displayName });
   }
 
+  /** Store the study preferences on the user's own document. */
+  async function updatePreferences(preferences) {
+    const user = auth.currentUser;
+    const { updatePreferences: save } = await import('../services/profileService');
+    await save(user.uid, preferences);
+  }
+
+  /** Change the e-mail address of the account. */
+  async function changeEmail(newEmail, password) {
+    const { changeAccountEmail } = await import('../services/accountService');
+    await changeAccountEmail(auth.currentUser, password, newEmail);
+  }
+
+  /** Change the password of the account. */
+  async function changePassword(newPassword, password) {
+    const { changeAccountPassword } = await import('../services/accountService');
+    await changeAccountPassword(auth.currentUser, password, newPassword);
+  }
+
+  /** Delete the account and everything in it. */
+  async function deleteAccount(password, chatIds = []) {
+    const { deleteAccount: remove } = await import('../services/accountService');
+    await remove(auth.currentUser, password, chatIds);
+  }
+
   useEffect(() => {
     if (!auth) {
       return undefined;
@@ -88,7 +113,18 @@ export function AuthProvider({ children }) {
     };
   }, [currentUid]);
 
-  const value = { currentUser, userProfile, register, login, logout, updateUserProfile };
+  const value = {
+    currentUser,
+    userProfile,
+    register,
+    login,
+    logout,
+    updateUserProfile,
+    updatePreferences,
+    changeEmail,
+    changePassword,
+    deleteAccount,
+  };
 
   return (
     <AuthContext.Provider value={value}>
