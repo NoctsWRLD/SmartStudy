@@ -20,6 +20,11 @@ service cloud.firestore {
       return value in ['noc', 'dnevnik', 'tabla', 'tabla-temna'];
     }
 
+    // Six characters from an unambiguous alphabet.
+    function validFriendCode(value) {
+      return value is string && value.matches('^[A-HJKMNP-Z2-9]{6}$');
+    }
+
     function isOwnSubject(subjectId) {
       return subjectId == '' || (
         exists(/databases/$(database)/documents/subjects/$(subjectId)) &&
@@ -39,7 +44,7 @@ service cloud.firestore {
     match /users/{uid} {
       allow read: if owns(uid);
       allow create: if owns(uid)
-        && request.resource.data.keys().hasOnly(['displayName', 'email', 'school', 'photoURL', 'createdAt', 'theme'])
+        && request.resource.data.keys().hasOnly(['displayName', 'email', 'school', 'photoURL', 'createdAt', 'theme', 'friendCode'])
         && request.resource.data.keys().hasAll(['displayName', 'email', 'school', 'photoURL', 'createdAt'])
         && request.resource.data.displayName is string
         && request.resource.data.displayName.size() <= 60
@@ -49,16 +54,32 @@ service cloud.firestore {
         && request.resource.data.school.size() <= 120
         && safeImageUrl(request.resource.data.photoURL)
         && request.resource.data.createdAt == request.time
-        && (!('theme' in request.resource.data) || validTheme(request.resource.data.theme));
+        && (!('theme' in request.resource.data) || validTheme(request.resource.data.theme))
+        && (!('friendCode' in request.resource.data) || validFriendCode(request.resource.data.friendCode));
       allow update: if owns(uid)
-        && request.resource.data.keys().hasOnly(['displayName', 'email', 'school', 'photoURL', 'createdAt', 'theme'])
-        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['displayName', 'school', 'theme'])
+        && request.resource.data.keys().hasOnly(['displayName', 'email', 'school', 'photoURL', 'createdAt', 'theme', 'friendCode'])
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['displayName', 'school', 'theme', 'friendCode'])
         && request.resource.data.displayName is string
         && request.resource.data.displayName.size() <= 60
         && request.resource.data.school is string
         && request.resource.data.school.size() <= 120
-        && (!request.resource.data.diff(resource.data).affectedKeys().hasAny(['theme']) || validTheme(request.resource.data.theme));
+        && (!request.resource.data.diff(resource.data).affectedKeys().hasAny(['theme']) || validTheme(request.resource.data.theme))
+        && (!request.resource.data.diff(resource.data).affectedKeys().hasAny(['friendCode']) || validFriendCode(request.resource.data.friendCode));
       allow delete: if owns(uid);
+    }
+
+    // A friend code is the document id. It is created by the account it
+    // points at and can never be rewritten, so a code cannot be hijacked.
+    match /userCodes/{code} {
+      allow read: if signedIn();
+      allow create: if signedIn()
+        && request.resource.data.keys().hasOnly(['uid', 'createdAt'])
+        && request.resource.data.keys().hasAll(['uid', 'createdAt'])
+        && request.resource.data.uid == request.auth.uid
+        && request.resource.data.createdAt == request.time
+        && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.friendCode == code;
+      allow update: if false;
+      allow delete: if signedIn() && resource.data.uid == request.auth.uid;
     }
 
     // Searchable profile data is deliberately separate from private account data.
@@ -226,7 +247,8 @@ service cloud.firestore {
       allow delete: if signedIn() && resource.data.uid == request.auth.uid;
     }
 
-    match /friendRequests/{requestId} {     allow read: if signedIn()
+    match /friendRequests/{requestId} {
+      allow read: if signedIn()
         && (resource.data.fromUid == request.auth.uid || resource.data.toUid == request.auth.uid);
       allow create: if signedIn()
         && request.resource.data.keys().hasOnly(['fromUid', 'fromName', 'toUid', 'toName', 'status', 'createdAt'])
@@ -234,6 +256,7 @@ service cloud.firestore {
         && request.resource.data.fromUid == request.auth.uid
         && request.resource.data.toUid is string
         && request.resource.data.toUid != request.auth.uid
+        && exists(/databases/$(database)/documents/publicProfiles/$(request.resource.data.toUid))
         && request.resource.data.fromName == get(/databases/$(database)/documents/publicProfiles/$(request.auth.uid)).data.displayName
         && request.resource.data.toName == get(/databases/$(database)/documents/publicProfiles/$(request.resource.data.toUid)).data.displayName
         && request.resource.data.status == 'pending'
@@ -243,7 +266,11 @@ service cloud.firestore {
         && resource.data.status == 'pending'
         && request.resource.data.status in ['accepted', 'rejected']
         && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status']);
-      allow delete: if signedIn() && resource.data.fromUid == request.auth.uid && resource.data.status == 'pending';
+      // Withdrawing a request and ending a friendship are the same deletion.
+      // Both sides may do it: the document is the friendship.
+      allow delete: if signedIn()
+        && (resource.data.fromUid == request.auth.uid || resource.data.toUid == request.auth.uid)
+        && resource.data.status in ['pending', 'accepted'];
     }
 
     match /chats/{chatId}/messages/{messageId} {

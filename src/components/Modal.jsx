@@ -56,7 +56,7 @@ export default function Modal({ isOpen, onClose, title, description, children, f
 
   return (
     <div className="fixed inset-0 z-50 grid place-items-center p-4">
-      <div className="overlay-fade absolute inset-0 bg-rp-canvas/70 backdrop-blur-sm" onClick={onClose} aria-hidden="true" />
+      <div className="overlay-fade absolute inset-0 bg-rp-canvas/80 backdrop-blur-md" onClick={onClose} aria-hidden="true" />
       <div
         ref={panelRef}
         role="dialog"

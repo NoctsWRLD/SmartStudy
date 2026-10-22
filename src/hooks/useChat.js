@@ -1,11 +1,12 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import {
   collection, query, orderBy, limit, where, startAt, endAt,
-  onSnapshot, addDoc, deleteDoc, doc, updateDoc,
+  onSnapshot, addDoc, deleteDoc, doc, updateDoc, setDoc, getDoc,
   serverTimestamp,
 } from 'firebase/firestore';
 import { db } from '../firebaseDb';
 import { useAuth } from '../contexts/AuthContext';
+import { requestPairId } from '../utils/friendCode';
 
 // ─── User profile (Firestore) ─────────────────────────────────────────────────
 export function useUserProfile(uid) {
@@ -78,15 +79,20 @@ export function useAllUsers(searchTerm = '') {
 }
 
 // ─── Friends (accepted requests) ──────────────────────────────────────────────
+/**
+ * A friendship is one accepted request document. The document id is derived
+ * from the two uids, so a pair can only ever have one request — accepting,
+ * rejecting or deleting it is the same operation for both sides.
+ */
 export function useFriends() {
   const { currentUser } = useAuth();
-  const [friends, setFriends] = useState([]);
+  const [sent, setSent] = useState({});
+  const [received, setReceived] = useState({});
 
   useEffect(() => {
-    if (!currentUser) return;
+    if (!currentUser) return undefined;
     const uid = currentUser.uid;
 
-    // Listen to accepted requests where I'm sender OR receiver
     const qSent = query(
       collection(db, 'friendRequests'),
       where('fromUid', '==', uid),
@@ -98,33 +104,38 @@ export function useFriends() {
       where('status', '==', 'accepted')
     );
 
-    const map = new Map();
+    const toMap = (snapshot) => {
+      const map = {};
+      snapshot.docs.forEach((doc) => {
+        map[doc.id] = { id: doc.id, ...doc.data() };
+      });
+      return map;
+    };
 
-    const unsubSent = onSnapshot(qSent, (snap) => {
-      snap.docs.forEach((d) => {
-        const data = d.data();
-        map.set(data.toUid, { uid: data.toUid, displayName: data.toName, reqId: d.id });
-      });
-      // Remove old entries from sent where status changed
-      snap.docChanges().forEach((change) => {
-        if (change.type === 'removed') map.delete(change.doc.data().toUid);
-      });
-      setFriends([...map.values()]);
-    });
-
-    const unsubRecv = onSnapshot(qRecv, (snap) => {
-      snap.docs.forEach((d) => {
-        const data = d.data();
-        map.set(data.fromUid, { uid: data.fromUid, displayName: data.fromName, reqId: d.id });
-      });
-      snap.docChanges().forEach((change) => {
-        if (change.type === 'removed') map.delete(change.doc.data().fromUid);
-      });
-      setFriends([...map.values()]);
-    });
+    const unsubSent = onSnapshot(
+      qSent,
+      (snap) => setSent(toMap(snap)),
+      (err) => console.error('useFriends (poslano):', err),
+    );
+    const unsubRecv = onSnapshot(
+      qRecv,
+      (snap) => setReceived(toMap(snap)),
+      (err) => console.error('useFriends (prejeto):', err),
+    );
 
     return () => { unsubSent(); unsubRecv(); };
   }, [currentUser]);
+
+  const friends = useMemo(() => {
+    const list = [];
+    Object.values(sent).forEach((request) => {
+      list.push({ uid: request.toUid, displayName: request.toName, requestId: request.id });
+    });
+    Object.values(received).forEach((request) => {
+      list.push({ uid: request.fromUid, displayName: request.fromName, requestId: request.id });
+    });
+    return list;
+  }, [sent, received]);
 
   return { friends };
 }
@@ -171,9 +182,73 @@ export function useSentRequests() {
   return { sent };
 }
 
+// ─── The account's own friend code ────────────────────────────────────────────
+/**
+ * Every account has one code. It is created on first use and can be replaced
+ * from the settings if it leaks.
+ */
+export function useFriendCode(currentUser, savedCode) {
+  const [code, setCode] = useState(savedCode || '');
+  const [loading, setLoading] = useState(Boolean(currentUser?.uid));
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    if (!currentUser?.uid) {
+      setLoading(false);
+      return undefined;
+    }
+    let cancelled = false;
+
+    (async () => {
+      try {
+        const { ensureFriendCode } = await import('../services/friendService');
+        const result = await ensureFriendCode(currentUser.uid, savedCode);
+        if (!cancelled) {
+          setCode(result);
+          setError(null);
+        }
+      } catch (err) {
+        console.error('Koda prijatelja ni bila ustvarjena:', err);
+        if (!cancelled) setError('Kode prijatelja trenutno ni mogoče ustvariti.');
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
+    })();
+
+    return () => { cancelled = true; };
+  }, [currentUser?.uid, savedCode]);
+
+  const regenerate = useMemo(() => async () => {
+    const { regenerateFriendCode } = await import('../services/friendService');
+    const next = await regenerateFriendCode(currentUser.uid, code);
+    setCode(next);
+    return next;
+  }, [currentUser?.uid, code]);
+
+  return { code, loading, error, regenerate };
+}
+
 // ─── Send friend request ──────────────────────────────────────────────────────
+/**
+ * One request per pair. The document id is derived from the two uids, so a
+ * second attempt collides with the first one instead of creating a duplicate.
+ * The names are read from the server-side profiles, so a request cannot carry
+ * a name the sender made up.
+ */
 export async function sendFriendRequest(fromUser, toUid, toName) {
-  await addDoc(collection(db, 'friendRequests'), {
+  if (!fromUser?.uid || !toUid) return { ok: false, reason: 'invalid' };
+  if (fromUser.uid === toUid) return { ok: false, reason: 'self' };
+
+  const requestId = requestPairId(fromUser.uid, toUid);
+  const requestRef = doc(db, 'friendRequests', requestId);
+
+  const existing = await getDoc(requestRef);
+  if (existing.exists()) {
+    const status = existing.data()?.status;
+    return { ok: false, reason: status === 'accepted' ? 'already-friend' : 'already-sent' };
+  }
+
+  await setDoc(requestRef, {
     fromUid: fromUser.uid,
     fromName: fromUser.displayName || 'Učenec',
     toUid,
@@ -181,11 +256,22 @@ export async function sendFriendRequest(fromUser, toUid, toName) {
     status: 'pending',
     createdAt: serverTimestamp(),
   });
+
+  return { ok: true, requestId };
 }
 
 // ─── Respond to friend request ────────────────────────────────────────────────
 export async function respondToRequest(reqId, status) {
   await updateDoc(doc(db, 'friendRequests', reqId), { status });
+}
+
+// ─── Withdraw a request, or end a friendship ──────────────────────────────────
+/**
+ * Deleting the request document is what ends a friendship: both sides watch
+ * the same document, so the friend disappears for the other person too.
+ */
+export async function deleteFriendRequest(reqId) {
+  await deleteDoc(doc(db, 'friendRequests', reqId));
 }
 
 // ─── Send text message ────────────────────────────────────────────────────────
