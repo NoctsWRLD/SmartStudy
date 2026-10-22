@@ -14,7 +14,7 @@ export default function LoginPage() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
-  useSeo({ title: 'Prijava', description: 'Prijavi se v svoj SmartStudy račun.', path: '/login' });
+  useSeo({ title: 'Prijava', description: 'Prijavi se v svoj Scribe račun.', path: '/login' });
 
   useEffect(() => {
     if (currentUser) navigate('/dashboard', { replace: true });

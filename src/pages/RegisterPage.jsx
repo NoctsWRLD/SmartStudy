@@ -14,7 +14,7 @@ export default function RegisterPage() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
-  useSeo({ title: 'Ustvari račun', description: 'Ustvari SmartStudy račun in dodaj prvega predmeta.', path: '/register' });
+  useSeo({ title: 'Ustvari račun', description: 'Ustvari Scribe račun in dodaj prvega predmeta.', path: '/register' });
 
   useEffect(() => {
     if (currentUser) navigate('/dashboard', { replace: true });

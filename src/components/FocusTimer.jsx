@@ -62,20 +62,13 @@ export default function FocusTimer() {
       <div className="mt-4 flex items-center gap-4">
         <div className="relative grid h-24 w-24 shrink-0 place-items-center" role="timer" aria-label={`Preostalo ${formatTime(secondsLeft)}`}>
           <svg className="absolute inset-0 -rotate-90" viewBox="0 0 100 100" aria-hidden="true">
-            <defs>
-              <linearGradient id="focus-arc" x1="0" y1="0" x2="1" y2="1">
-                <stop offset="0%" stopColor="var(--rp-aurora-1)" />
-                <stop offset="52%" stopColor="var(--rp-aurora-2)" />
-                <stop offset="100%" stopColor="var(--rp-aurora-3)" />
-              </linearGradient>
-            </defs>
             <circle cx="50" cy="50" r="42" fill="none" stroke="var(--rp-fill)" strokeWidth="7" />
             <circle
               cx="50"
               cy="50"
               r="42"
               fill="none"
-              stroke="url(#focus-arc)"
+              stroke="var(--rp-accent)"
               strokeWidth="7"
               strokeLinecap="round"
               strokeDasharray={circumference}
@@ -83,7 +76,7 @@ export default function FocusTimer() {
               className="transition-[stroke-dashoffset] duration-700"
             />
           </svg>
-          <span className="tnum text-xl font-bold text-rp-text">{formatTime(secondsLeft)}</span>
+          <span className="mono text-xl font-bold text-rp-text">{formatTime(secondsLeft)}</span>
         </div>
 
         <div className="min-w-0 flex-1">

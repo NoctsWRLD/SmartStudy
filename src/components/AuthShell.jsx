@@ -3,18 +3,16 @@ import Logo from './Logo';
 import { SparkIcon } from './icons';
 
 /**
- * The split sign-in screen. The left panel carries the aurora wash and a
- * study rail — the same device the app is built on.
+ * The split sign-in screen. The left panel carries a ruled study rail — the
+ * same device the app is built on — on a flat ink ground.
  */
 export function AuthShell({ title, subtitle, error, children, footer }) {
   return (
     <div className="relative grid min-h-dvh overflow-hidden lg:grid-cols-[1.05fr_1fr]">
-      <div className="aurora-wash" aria-hidden="true" />
-
-      <div className="relative hidden flex-col justify-between p-10 lg:flex">
+      <div className="relative hidden flex-col justify-between border-r border-rp-line bg-rp-panel p-10 lg:flex">
         <span className="flex items-center gap-3">
           <Logo size={40} />
-          <span className="font-display text-lg font-bold tracking-tight text-rp-text">SmartStudy</span>
+          <span className="font-display text-lg font-bold tracking-tight text-rp-text">Scribe</span>
         </span>
 
         <div className="max-w-sm">
@@ -46,7 +44,7 @@ export function AuthShell({ title, subtitle, error, children, footer }) {
         <div className="rise w-full max-w-md">
           <span className="flex items-center gap-2.5 lg:hidden">
             <Logo size={36} />
-            <span className="font-display text-[17px] font-bold tracking-tight text-rp-text">SmartStudy</span>
+            <span className="font-display text-[17px] font-bold tracking-tight text-rp-text">Scribe</span>
           </span>
 
           <h1 className="mt-6 text-page text-rp-text lg:mt-0">{title}</h1>

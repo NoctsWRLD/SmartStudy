@@ -15,7 +15,7 @@ export default function SiteFooter() {
           <div className="max-w-xs">
             <span className="flex items-center gap-2.5">
               <Logo size={30} />
-              <span className="font-display text-[15px] font-bold tracking-tight text-rp-text">SmartStudy</span>
+              <span className="font-display text-[15px] font-bold tracking-tight text-rp-text">Scribe</span>
             </span>
             <p className="mt-3 text-small leading-6 text-rp-muted">
               Predmeti, naloge, preverjanja, urnik in kartice v enem pregledu.
@@ -39,7 +39,7 @@ export default function SiteFooter() {
         </div>
 
         <p className="mt-8 border-t border-rp-line pt-6 text-small text-rp-muted">
-          © {new Date().getFullYear()} SmartStudy
+          © {new Date().getFullYear()} Scribe
         </p>
       </div>
     </footer>

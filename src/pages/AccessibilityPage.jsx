@@ -5,7 +5,7 @@ import { useSeo } from '../hooks/useSeo';
 export default function AccessibilityPage() {
   useSeo({
     title: 'Dostopnost',
-    description: 'Kako SmartStudy skrbi za dostopnost, kaj je narejeno in kako sporočiti težavo.',
+    description: 'Kako Scribe skrbi za dostopnost, kaj je narejeno in kako sporočiti težavo.',
     path: '/dostopnost',
   });
 
@@ -13,7 +13,7 @@ export default function AccessibilityPage() {
     <SiteShell>
       <LegalProse
         title="Dostopnost"
-        intro="SmartStudy je zasnovan tako, da ga lahko uporablja vsak dijak, dijakinja in študent — tudi z bralnikom zaslona, tipkovnico ali povečano sliko."
+        intro="Scribe je zasnovan tako, da ga lahko uporablja vsak dijak, dijakinja in študent — tudi z bralnikom zaslona, tipkovnico ali povečano sliko."
         updated="21. oktober 2026"
         note="TODO(vsebina): Ta izjava še ni bila pregledana po standardu WCAG 2.2 AA. Pred objavo jo preveri strokovnjak za dostopnost."
       >

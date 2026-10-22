@@ -5,7 +5,7 @@ import { useSeo } from '../hooks/useSeo';
 export default function PrivacyPage() {
   useSeo({
     title: 'Pravilnik o zasebnosti',
-    description: 'Katere podatke SmartStudy zbira, zakaj jih zbira, kdo jih obdeluje in kakšne pravice imaš do njih.',
+    description: 'Katere podatke Scribe zbira, zakaj jih zbira, kdo jih obdeluje in kakšne pravice imaš do njih.',
     path: '/pravilnik-o-zasebnosti',
   });
 
@@ -13,13 +13,13 @@ export default function PrivacyPage() {
     <SiteShell>
       <LegalProse
         title="Pravilnik o zasebnosti"
-        intro="Ta pravilnik pojasnjuje, katere podatke SmartStudy zbira, zakaj jih zbira in kakšne pravice imaš do njih."
+        intro="Ta pravilnik pojasnjuje, katere podatke Scribe zbira, zakaj jih zbira in kakšne pravice imaš do njih."
         updated="21. oktober 2026"
         note="TODO(vsebina): Manjkajo podatki o operaterju, kontaktni e-pošti in regiji hrambe podatkov. Besedilo je pripravljeno, a še ni pravno pregledano."
       >
         <h2>Katere podatke zbiram</h2>
         <p>
-          Ob registraciji SmartStudy od tebe prebere e-poštni naslov, geslo in ime, ki ju
+          Ob registraciji Scribe od tebe prebere e-poštni naslov, geslo in ime, ki ju
           vpišeš. V svoj profil lahko dodaš tudi šolo. Ko začneš uporabljati aplikacijo,
           shranjuješ predmete, naloge, preverjanja, kartice, zapise fokus sej in nastavitve
           videza.
@@ -47,14 +47,14 @@ export default function PrivacyPage() {
 
         <h2>Komu podatkov ne posredujem</h2>
         <ul>
-          <li>SmartStudy tvojih podatkov ne prodaja in jih ne deli z oglaševalci.</li>
+          <li>Scribe tvojih podatkov ne prodaja in jih ne deli z oglaševalci.</li>
           <li>Podatke ne pošiljamo tretjim osebam za namen trženja ali profiliranja.</li>
           <li>Uporabniške podatke v klepetu vidijo le udeleženci istega kanala ali pogovora.</li>
         </ul>
 
         <h2>Analytics in piškotki</h2>
         <p>
-          SmartStudy ne uporablja analitičnih orodij tretjih oseb in ne postavlja tržnih
+          Scribe ne uporablja analitičnih orodij tretjih oseb in ne postavlja tržnih
           piškotkov. Prijava uporablja piškotke, ki jih postavi Firebase Authentication —
           brez njih se računa ne more vzdrževati.
         </p>

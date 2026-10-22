@@ -7,14 +7,13 @@ import { SparkIcon } from './icons';
 export default function FirebaseSetupNotice() {
   return (
     <main className="relative grid min-h-dvh place-items-center overflow-hidden px-4 py-10">
-      <div className="aurora-wash" aria-hidden="true" />
       <section className="card relative w-full max-w-xl p-6 sm:p-8" aria-labelledby="setup-title">
         <div className="grid h-12 w-12 place-items-center rounded-xl bg-rp-accent/10 text-rp-accent" aria-hidden="true">
           <SparkIcon className="h-6 w-6" />
         </div>
         <p className="mt-5 text-label text-rp-accent">Še en korak</p>
         <h1 id="setup-title" className="mt-2 text-page text-rp-text">
-          Poveži Firebase, da zaženeš SmartStudy
+          Poveži Firebase, da zaženeš Scribe
         </h1>
         <p className="mt-3 text-body leading-6 text-rp-subtle">
           Aplikacija se je uspešno naložila, vendar še nima Firebase nastavitev. Zato

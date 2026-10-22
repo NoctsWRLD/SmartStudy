@@ -13,7 +13,7 @@ const KEY = '__spa_redirect'
  * route instead of a 404.
  *
  * `import.meta.env.BASE_URL` is whatever Vite resolved for this build
- * ('/' locally and on Vercel, '/SmartStudy/' on GitHub Pages), so the same
+ * ('/' locally and on Vercel, '/Scribe/' on GitHub Pages), so the same
  * code works on every target. It always carries a trailing slash.
  */
 export function BaseRouter({ children }) {

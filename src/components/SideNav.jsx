@@ -10,12 +10,12 @@ export default function SideNav({ pathname, onNavigate }) {
       <NavLink
         to="/dashboard"
         onClick={onNavigate}
-        aria-label="SmartStudy domov"
+        aria-label="Scribe domov"
         className="flex items-center gap-2.5 rounded-lg px-1 transition-opacity hover:opacity-80"
       >
         <Logo size={32} />
         <span className="font-display text-[17px] font-bold tracking-tight text-rp-text">
-          SmartStudy
+          Scribe
         </span>
       </NavLink>
 

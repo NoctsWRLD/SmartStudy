@@ -15,9 +15,9 @@ export default function SiteHeader() {
   return (
     <header className="sticky top-0 z-40 border-b border-rp-line bg-rp-canvas/80 backdrop-blur-xl">
       <div className="mx-auto flex h-16 max-w-6xl items-center gap-3 px-4 md:px-6">
-        <Link to="/" className="flex items-center gap-2.5" aria-label="SmartStudy — domov">
+        <Link to="/" className="flex items-center gap-2.5" aria-label="Scribe — domov">
           <Logo size={32} />
-          <span className="font-display text-[17px] font-bold tracking-tight text-rp-text">SmartStudy</span>
+          <span className="font-display text-[17px] font-bold tracking-tight text-rp-text">Scribe</span>
         </Link>
 
         <nav className="ml-8 hidden items-center gap-1 md:flex" aria-label="Navigacija po strani">

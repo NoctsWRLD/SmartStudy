@@ -2,8 +2,10 @@ import { createContext, useCallback, useContext, useLayoutEffect, useMemo, useSt
 import { useAuth } from './AuthContext';
 import { DEFAULT_THEME, normalizeThemeId } from '../utils/themes';
 
-const STORAGE_KEY = 'smartstudy.settings.v1';
-const THEME_KEY = 'smartstudy.theme';
+const STORAGE_KEY = 'scribe.settings.v1';
+const THEME_KEY = 'scribe.theme';
+// Accounts created before the rename keep their local preferences here.
+const LEGACY_KEYS = { settings: 'smartstudy.settings.v1', theme: 'smartstudy.theme' };
 
 const THEME_IDS = ['noc', 'dnevnik'];
 
@@ -12,7 +14,9 @@ const SettingsContext = createContext(null);
 
 function readSettings() {
   try {
-    const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
+    const saved = JSON.parse(
+      localStorage.getItem(STORAGE_KEY) || localStorage.getItem(LEGACY_KEYS.settings) || '{}',
+    );
     return {
       highContrast: typeof saved.highContrast === 'boolean' ? saved.highContrast : DEFAULT_SETTINGS.highContrast,
       reduceMotion: typeof saved.reduceMotion === 'boolean' ? saved.reduceMotion : DEFAULT_SETTINGS.reduceMotion,
@@ -24,7 +28,10 @@ function readSettings() {
 
 function readLocalTheme() {
   try {
-    return normalizeThemeId(localStorage.getItem(THEME_KEY));
+    return (
+      normalizeThemeId(localStorage.getItem(THEME_KEY)) ||
+      normalizeThemeId(localStorage.getItem(LEGACY_KEYS.theme))
+    );
   } catch {
     return null;
   }

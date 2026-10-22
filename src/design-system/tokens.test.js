@@ -115,12 +115,39 @@ describe('token system', () => {
     }
   });
 
-  it('keeps the aurora gradient wired to three distinct stops in both themes', () => {
+  it('keeps the margin rule readable as a line on every surface', () => {
     for (const [name, tokens] of THEMES) {
-      const stops = [tokens['rp-aurora-1'], tokens['rp-aurora-2'], tokens['rp-aurora-3']];
-      expect(stops.every(Boolean), `${name} is missing an aurora stop`).toBe(true);
-      expect(new Set(stops).size, `${name} aurora stops are not distinct`).toBe(3);
-      expect(tokens['rp-aurora']).toContain('var(--rp-aurora-1)');
+      for (const surface of ['rp-canvas', 'rp-raised']) {
+        const ratio = contrast(tokens['rp-rule'], tokens[surface]);
+        expect(ratio, `${name} margin rule on ${surface} is ${ratio.toFixed(2)}:1`).toBeGreaterThanOrEqual(3);
+      }
+    }
+  });
+
+  it('contains no gradient at all — the highlighter is data, never decoration', () => {
+    const code = css.replace(/\/\*[\s\S]*?\*\//g, '');
+    expect(code).not.toMatch(/gradient/i);
+  });
+
+  it('keeps the aurora tokens out of the system entirely', () => {
+    for (const [name, tokens] of THEMES) {
+      const stray = Object.keys(tokens).filter((token) => token.includes('aurora'));
+      expect(stray, `${name} still defines an aurora token`).toEqual([]);
+    }
+  });
+});
+
+describe('type and spacing roles', () => {
+  it('pairs a display face, a reading face and a mono face', () => {
+    expect(css).toMatch(/--font-display:/);
+    expect(css).toMatch(/--font-sans:/);
+    expect(css).toMatch(/--font-mono:/);
+  });
+
+  it('builds the spacing scale on a 4px base unit', () => {
+    const scale = ['--spacing-1: 0.25rem', '--spacing-2: 0.5rem', '--spacing-3: 0.75rem', '--spacing-4: 1rem'];
+    for (const step of scale) {
+      expect(css, `missing ${step}`).toContain(step);
     }
   });
 });

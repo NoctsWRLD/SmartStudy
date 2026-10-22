@@ -5,12 +5,17 @@
  * canonical tags, the Open Graph cards, robots.txt and sitemap.xml — if the
  * site ever moves, this is the one line to change.
  */
-export const SITE_URL = 'https://smartstudyslo.vercel.app';
+export const SITE_URL = 'https://scribeslo.vercel.app';
 
-export const SITE_NAME = 'SmartStudy';
+export const SITE_NAME = 'Scribe';
 
 export const SITE_DESCRIPTION =
-  'Predmeti, naloge, preverjanja, urnik in kartice v enem pregledu. Za dijake in študente.';
+  'Scribe združi predmete, naloge, preverjanja, urnik, kartice in prijatelje v en dnevnik, ki se bere kot zapiski, ne kot nadzorna plošča.';
+
+/** The one-line promise the product makes, in Slovenian and in English. */
+export const SITE_TAGLINE = 'Zapiši. Nauči se.';
+
+export const SITE_TAGLINE_EN = 'Write it down. Learn it.';
 
 /** Absolute URL for a path on this site. */
 export function absoluteUrl(path = '/') {

@@ -93,7 +93,7 @@ export default function SettingsPage() {
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;
-    link.download = `smartstudy-podatki-${getSlovenianDateKey()}.json`;
+    link.download = `scribe-podatki-${getSlovenianDateKey()}.json`;
     link.click();
     window.setTimeout(() => URL.revokeObjectURL(url), 1000);
     setExported(true);
@@ -119,7 +119,7 @@ export default function SettingsPage() {
           <div className="flex items-center gap-4">
             <span
               className="grid h-12 w-12 shrink-0 place-items-center rounded-lg"
-              style={{ background: 'var(--rp-aurora)' }}
+              style={{ background: 'var(--rp-accent)' }}
               aria-hidden="true"
             >
               {theme === 'noc'

@@ -5,7 +5,7 @@ import { useSeo } from '../hooks/useSeo';
 export default function ImprintPage() {
   useSeo({
     title: 'Impressum',
-    description: 'Podatki o operaterju spletnega mesta SmartStudy in osebi, odgovorni za njegovo vsebino.',
+    description: 'Podatki o operaterju spletnega mesta Scribe in osebi, odgovorni za njegovo vsebino.',
     path: '/impressum',
   });
 
@@ -19,7 +19,7 @@ export default function ImprintPage() {
       >
         <h2>Operater spletnega mesta</h2>
         <p>
-          TODO(vsebina): Ime in priimek oziroma naziv podjetja, ki upravlja SmartStudy.
+          TODO(vsebina): Ime in priimek oziroma naziv podjetja, ki upravlja Scribe.
         </p>
         <p>
           TODO(vsebina): Poštni naslov.

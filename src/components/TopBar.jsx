@@ -128,9 +128,9 @@ export default function TopBar({ onOpenMenu }) {
           <MenuIcon className="h-5 w-5" />
         </button>
 
-        <Link to="/dashboard" className="flex items-center gap-2 lg:hidden" aria-label="SmartStudy domov">
+        <Link to="/dashboard" className="flex items-center gap-2 lg:hidden" aria-label="Scribe domov">
           <Logo size={28} />
-          <span className="font-display text-[15px] font-bold tracking-tight text-rp-text">SmartStudy</span>
+          <span className="font-display text-[15px] font-bold tracking-tight text-rp-text">Scribe</span>
         </Link>
 
         <div className="hidden min-w-0 items-baseline gap-3 lg:flex">

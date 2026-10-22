@@ -126,7 +126,7 @@ export default function FlashcardsPage() {
           >
             <div
               className="h-full rounded-full transition-[width] duration-300"
-              style={{ width: `${((index + 1) / order.length) * 100}%`, background: 'var(--rp-aurora)' }}
+              style={{ width: `${((index + 1) / order.length) * 100}%`, background: 'var(--rp-accent)' }}
             />
           </div>
 

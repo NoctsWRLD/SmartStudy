@@ -2,8 +2,8 @@
  * The study rail — the app's structural device.
  *
  * A rail is a run of time (a week, a day, a countdown) whose segments are
- * filled by how much of that time is claimed. The aurora gradient *is* the
- * fill, so the gradient carries meaning instead of decorating.
+ * filled by how much of that time is claimed. The fill is a flat accent colour,
+ * so it carries meaning instead of decorating.
  */
 export default function StudyRail({ segments, label, caption, className = '' }) {
   if (!segments?.length) return null;

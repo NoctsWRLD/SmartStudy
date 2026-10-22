@@ -1,5 +1,5 @@
 /* ==========================================================================
-   SmartStudy — "Zora" design system
+   Scribe — token system
    --------------------------------------------------------------------------
    Layer 1  literal   --rp-* raw values (one place, per theme)
    Layer 2  semantic  role names that components actually read
@@ -7,6 +7,10 @@
 
    Dark mode is a token swap: every semantic token gets a second value in
    `:root[data-theme='noc']`. No component-level theme overrides exist.
+
+   The direction is a ruled schoolbook: paper ground, ink text, one pen
+   colour, hairline rules instead of shadows and gradients. There is no
+   gradient in this file — the highlighter is data, never decoration.
    ========================================================================== */
 
 @import 'tailwindcss';
@@ -31,7 +35,7 @@
   font-weight: 400 700;
   font-display: swap;
   src: url('./assets/fonts/dm-sans-latin-ext.woff2') format('woff2');
-  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CF, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
 }
 
 @font-face {
@@ -49,7 +53,7 @@
   font-weight: 500 700;
   font-display: swap;
   src: url('./assets/fonts/space-grotesk-latin-ext.woff2') format('woff2');
-  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CF, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
 }
 
 /* --------------------------------------------------------------------------
@@ -75,6 +79,7 @@
   --color-rp-line: var(--rp-line);
   --color-rp-line-strong: var(--rp-line-strong);
   --color-rp-fill: var(--rp-fill);
+  --color-rp-rule: var(--rp-rule);
 
   /* action */
   --color-rp-accent: var(--rp-accent);
@@ -99,9 +104,10 @@
   --color-rp-subject-9: var(--rp-subject-9);
   --color-rp-subject-10: var(--rp-subject-10);
 
-  /* type families */
+  /* type families — display for headings, sans for reading, mono for data */
   --font-display: 'Space Grotesk', 'DM Sans', ui-sans-serif, system-ui, sans-serif;
   --font-sans: 'DM Sans', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: ui-monospace, 'SFMono-Regular', 'SF Mono', 'JetBrains Mono', Menlo, Consolas, 'Liberation Mono', monospace;
 
   /* type scale — role names, fluid where it matters */
   --text-display: clamp(2.5rem, 1.35rem + 4.8vw, 4.25rem);
@@ -142,7 +148,7 @@
   --text-label--letter-spacing: 0.01em;
   --text-label--font-weight: 600;
 
-  /* radius scale — deliberate variety, not one value for everything */
+  /* radius scale — three deliberate steps, not one value for everything */
   --radius: 0.5rem;
   --radius-xs: 0.375rem;
   --radius-sm: 0.625rem;
@@ -150,30 +156,48 @@
   --radius-lg: 1rem;
   --radius-xl: 1.25rem;
   --radius-2xl: 1.5rem;
+
+  /* spacing rhythm — 4px base, every vertical interval is a step of it */
+  --spacing-1: 0.25rem;
+  --spacing-2: 0.5rem;
+  --spacing-3: 0.75rem;
+  --spacing-4: 1rem;
+  --spacing-5: 1.25rem;
+  --spacing-6: 1.5rem;
+  --spacing-7: 1.75rem;
+  --spacing-8: 2rem;
+  --spacing-9: 2.25rem;
+  --spacing-10: 2.5rem;
+  --spacing-12: 3rem;
+  --spacing-14: 3.5rem;
+  --spacing-16: 4rem;
+  --spacing-20: 5rem;
+  --spacing-24: 6rem;
 }
 
 /* --------------------------------------------------------------------------
-   Layer 1 — light theme "Dnevnik" (default fallback before the app boots)
+   Layer 1 — light theme "Dan"
    -------------------------------------------------------------------------- */
 :root {
   color-scheme: light;
 
-  --rp-canvas: #f4f6fb;
+  --rp-canvas: #f4f5f8;
   --rp-panel: #ffffff;
   --rp-raised: #ffffff;
-  --rp-overlay: #edf0f9;
-  --rp-sunken: #fafbfe;
+  --rp-overlay: #eef0f6;
+  --rp-sunken: #f7f8fb;
 
   --rp-text: #0e1226;
   --rp-subtle: #414a6b;
   --rp-muted: #5c6485;
 
-  --rp-line: #e2e7f3;
-  --rp-line-strong: #cbd3e6;
-  --rp-fill: #edf0f9;
+  --rp-line: #dfe3ee;
+  --rp-line-strong: #c3c9dc;
+  --rp-fill: #eceef5;
+  --rp-rule: #4f46e5;
 
-  --rp-accent: #0e7490;
-  --rp-accent-hover: #0a5f76;
+  --rp-accent: #4f46e5;
+  --rp-accent-hover: #3f38c9;
   --rp-accent-ink: #ffffff;
 
   --rp-warn: #8f5806;
@@ -182,25 +206,21 @@
   --rp-success: #0a6b54;
   --rp-info: #1d4ed8;
 
-  --rp-aurora-1: #12b5ce;
-  --rp-aurora-2: #5b5be0;
-  --rp-aurora-3: #b44be0;
-  --rp-aurora: linear-gradient(100deg, var(--rp-aurora-1), var(--rp-aurora-2) 52%, var(--rp-aurora-3));
-
-  --rp-subject-1: #7a3fb5;
-  --rp-subject-2: #b03483;
+  --rp-subject-1: #6d28d9;
+  --rp-subject-2: #a21c72;
   --rp-subject-3: #b03149;
   --rp-subject-4: #8f5806;
   --rp-subject-5: #0a6b54;
   --rp-subject-6: #1668a8;
-  --rp-subject-7: #4f46e5;
-  --rp-subject-8: #42700c;
-  --rp-subject-9: #b23a0b;
+  --rp-subject-7: #4338ca;
+  --rp-subject-8: #3f6212;
+  --rp-subject-9: #9a3412;
   --rp-subject-10: #475569;
 
-  --rp-shadow-1: 0 1px 2px rgb(14 18 38 / 0.06);
-  --rp-shadow-2: 0 10px 28px -14px rgb(14 18 38 / 0.28);
-  --rp-shadow-3: 0 28px 60px -26px rgb(14 18 38 / 0.34);
+  /* elevation is nearly flat: the ruled paper is separated by lines, not shadow */
+  --rp-shadow-1: 0 0 0 1px rgb(14 18 38 / 0.04);
+  --rp-shadow-2: 0 8px 24px -18px rgb(14 18 38 / 0.35);
+  --rp-shadow-3: 0 24px 56px -28px rgb(14 18 38 / 0.4);
 
   --rp-duration-fast: 120ms;
   --rp-duration-base: 200ms;
@@ -215,34 +235,30 @@
 :root[data-theme='noc'] {
   color-scheme: dark;
 
-  --rp-canvas: #0a0d1f;
-  --rp-panel: #111530;
-  --rp-raised: #191e42;
-  --rp-overlay: #232a56;
-  --rp-sunken: #0e1228;
+  --rp-canvas: #0b1020;
+  --rp-panel: #121a33;
+  --rp-raised: #182140;
+  --rp-overlay: #20294c;
+  --rp-sunken: #0d1428;
 
-  --rp-text: #f2f4ff;
-  --rp-subtle: #c3c9e8;
-  --rp-muted: #98a0cb;
+  --rp-text: #f1f4ff;
+  --rp-subtle: #bcc5e8;
+  --rp-muted: #8e98c2;
 
-  --rp-line: rgb(139 147 190 / 0.22);
-  --rp-line-strong: rgb(139 147 190 / 0.4);
-  --rp-fill: #151a38;
+  --rp-line: rgb(146 156 200 / 0.2);
+  --rp-line-strong: rgb(146 156 200 / 0.38);
+  --rp-fill: #151c38;
+  --rp-rule: #9b8cff;
 
-  --rp-accent: #2bd9e8;
-  --rp-accent-hover: #5fe4f0;
-  --rp-accent-ink: #04121a;
+  --rp-accent: #9b8cff;
+  --rp-accent-hover: #b0a4ff;
+  --rp-accent-ink: #0b1020;
 
-  --rp-warn: #f0a868;
-  --rp-warn-fill: #f0a868;
-  --rp-danger: #f87d92;
-  --rp-success: #3fd9a4;
+  --rp-warn: #e8a44c;
+  --rp-warn-fill: #e8a44c;
+  --rp-danger: #f2778a;
+  --rp-success: #46d39a;
   --rp-info: #6fa8ff;
-
-  --rp-aurora-1: #3bc9d9;
-  --rp-aurora-2: #5e6bf2;
-  --rp-aurora-3: #b45cf0;
-  --rp-aurora: linear-gradient(100deg, var(--rp-aurora-1), var(--rp-aurora-2) 52%, var(--rp-aurora-3));
 
   --rp-subject-1: #a692ff;
   --rp-subject-2: #f58cc0;
@@ -255,9 +271,9 @@
   --rp-subject-9: #ffa26b;
   --rp-subject-10: #a9b6ce;
 
-  --rp-shadow-1: 0 1px 0 rgb(255 255 255 / 0.03);
-  --rp-shadow-2: 0 12px 30px -18px rgb(0 0 0 / 0.9);
-  --rp-shadow-3: 0 30px 70px -24px rgb(0 0 0 / 0.8);
+  --rp-shadow-1: 0 0 0 1px rgb(255 255 255 / 0.03);
+  --rp-shadow-2: 0 10px 26px -20px rgb(0 0 0 / 0.9);
+  --rp-shadow-3: 0 28px 64px -30px rgb(0 0 0 / 0.85);
 }
 
 /* High contrast: stronger lines, brighter secondary text. Same tokens.
@@ -357,8 +373,14 @@ button:disabled {
   font-family: 'Space Grotesk', 'DM Sans', ui-sans-serif, system-ui, sans-serif;
 }
 
+/* Data is tabular: times, dates, counts, codes. A ledger reads in columns. */
+.mono,
 .tnum {
   font-variant-numeric: tabular-nums;
+  font-family: var(--font-mono);
+}
+
+.tnum {
   font-family: 'Space Grotesk', 'DM Sans', ui-sans-serif, system-ui, sans-serif;
 }
 
@@ -370,7 +392,7 @@ button:disabled {
 }
 
 /* --------------------------------------------------------------------------
-   Surfaces
+   Surfaces — the ruled schoolbook
    -------------------------------------------------------------------------- */
 .panel {
   background: var(--rp-panel);
@@ -382,19 +404,60 @@ button:disabled {
   background: var(--rp-raised);
   border: 1px solid var(--rp-line);
   border-radius: var(--radius-lg);
-  box-shadow: var(--rp-shadow-1);
 }
 
 .card-hover {
   transition:
     border-color var(--rp-duration-base) var(--rp-ease),
-    background-color var(--rp-duration-base) var(--rp-ease),
-    transform var(--rp-duration-base) var(--rp-ease);
+    background-color var(--rp-duration-base) var(--rp-ease);
 }
 
 .card-hover:hover {
   border-color: var(--rp-line-strong);
   background: var(--rp-overlay);
+}
+
+/* A ledger list: rows separated by hairlines, not boxes. */
+.ledger {
+  border-top: 1px solid var(--rp-line);
+}
+
+.ledger-row {
+  border-bottom: 1px solid var(--rp-line);
+  background: transparent;
+  transition: background-color var(--rp-duration-fast) var(--rp-ease);
+}
+
+.ledger-row:hover {
+  background: var(--rp-overlay);
+}
+
+.ledger-row[data-selected='true'] {
+  background: color-mix(in srgb, var(--rp-accent) 10%, transparent);
+}
+
+/* The margin rule — the gutter line of an exercise book. */
+.margin-rule {
+  position: relative;
+  padding-left: 1rem;
+}
+
+.margin-rule::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.15rem;
+  bottom: 0.15rem;
+  width: 2px;
+  border-radius: 2px;
+  background: var(--rp-rule);
+}
+
+/* A sheet of paper: the surface a page is written on. */
+.sheet {
+  background: var(--rp-raised);
+  border: 1px solid var(--rp-line);
+  border-radius: var(--radius-md);
 }
 
 .row-item {
@@ -414,27 +477,9 @@ button:disabled {
   margin-top: 0.5rem;
 }
 
-/* The one surface that carries the aurora — used once per view, never twice. */
-.aurora-wash {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  background:
-    radial-gradient(70% 90% at 12% 0%, color-mix(in srgb, var(--rp-aurora-3) 34%, transparent) 0%, transparent 62%),
-    radial-gradient(60% 80% at 92% 8%, color-mix(in srgb, var(--rp-aurora-1) 28%, transparent) 0%, transparent 60%),
-    radial-gradient(90% 120% at 50% 110%, color-mix(in srgb, var(--rp-aurora-2) 22%, transparent) 0%, transparent 68%);
-}
-
-.aurora-text {
-  background: var(--rp-aurora);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-}
-
 /* --------------------------------------------------------------------------
    The study rail — the app's structural device. A rail is a horizontal run
-   of time segments; the aurora fill is how much of that time is claimed.
+   of time whose segments are filled by how much of that time is claimed.
    -------------------------------------------------------------------------- */
 .rail {
   display: flex;
@@ -455,7 +500,7 @@ button:disabled {
   position: absolute;
   inset: 0 auto 0 0;
   border-radius: 3px;
-  background: var(--rp-aurora);
+  background: var(--rp-accent);
   transform-origin: left center;
   animation: rail-fill 620ms var(--rp-ease-out) both;
 }
@@ -631,6 +676,13 @@ button:disabled {
   color: var(--rp-accent);
 }
 
+/* A code is data: it is set in mono so it can be read back without doubt. */
+.chip-code {
+  font-family: var(--font-mono);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
 /* --------------------------------------------------------------------------
    Motion — one orchestrated moment, everything else answers an action
    -------------------------------------------------------------------------- */
@@ -708,28 +760,22 @@ button:disabled {
   }
 }
 
-/* Loading skeletons */
+/* Loading skeletons — a breathing fill, no sheen sweep */
 .skel {
   position: relative;
   overflow: hidden;
   background: var(--rp-fill);
   border-radius: var(--radius-xs);
+  animation: skel-breathe 1.6s ease-in-out infinite;
 }
 
-.skel::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(100deg, transparent 20%, color-mix(in srgb, var(--rp-text) 12%, transparent) 50%, transparent 80%);
-  animation: skel-sheen 1.4s ease-in-out infinite;
-}
-
-@keyframes skel-sheen {
-  from {
-    transform: translateX(-100%);
+@keyframes skel-breathe {
+  0%,
+  100% {
+    opacity: 1;
   }
-  to {
-    transform: translateX(100%);
+  50% {
+    opacity: 0.55;
   }
 }
 
@@ -755,7 +801,7 @@ button:disabled {
     transition-duration: 0.01ms !important;
   }
 
-  .skel::after {
+  .skel {
     animation: none;
   }
 }

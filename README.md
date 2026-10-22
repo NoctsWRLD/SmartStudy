@@ -1,6 +1,6 @@
-# SmartStudy
+# Scribe
 
-SmartStudy je sodobna spletna aplikacija, zasnovana za pomoč učencem in študentom pri organizaciji časa, predmetov, nalog ter komunikaciji z vrstniki. Razvita je z uporabo tehnologij **React**, **Vite**, **Tailwind CSS** (s svetlo vijolično-modro temo) ter **Firebase** za hrambo podatkov in varno avtentikacijo.
+Scribe je sodobna spletna aplikacija, zasnovana za pomoč učencem in študentom pri organizaciji časa, predmetov, nalog ter komunikaciji z vrstniki. Razvita je z uporabo tehnologij **React**, **Vite**, **Tailwind CSS** (s svetlo vijolično-modro temo) ter **Firebase** za hrambo podatkov in varno avtentikacijo.
 
 ---
 

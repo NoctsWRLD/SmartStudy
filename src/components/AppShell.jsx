@@ -69,7 +69,7 @@ function MoreSheet({ pathname, onClose }) {
         <div className="flex h-16 items-center justify-between border-b border-rp-line px-4">
           <span className="flex items-center gap-2.5">
             <Logo size={28} />
-            <span className="font-display text-[15px] font-bold tracking-tight text-rp-text">SmartStudy</span>
+            <span className="font-display text-[15px] font-bold tracking-tight text-rp-text">Scribe</span>
           </span>
           <button
             ref={closeRef}

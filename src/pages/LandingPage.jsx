@@ -27,7 +27,7 @@ const CAPABILITIES = [
   {
     icon: ExamIcon,
     title: 'Odštevanje do testa',
-    copy: 'Vpišeš datum, SmartStudy odšteva dneve in pokaže, kdaj se sploh začne učiti.',
+    copy: 'Vpišeš datum, Scribe odšteva dneve in pokaže, kdaj se sploh začne učiti.',
   },
   {
     icon: CalendarIcon,
@@ -61,10 +61,10 @@ const AUDIENCES = [
 const FAQ = [
   ['Kaj potrebujem, da začnem?', 'Račun z e-pošto in geslom. Predmete, naloge in kartice dodaš sam — nič ne vpisuješ v skupne sezname.'],
   ['Kako se razlikujejo naloge, preverjanja in kartice?', 'Naloga ima rok in predmet. Preverjanje ima datum, od katerega se odšteva. Kartica ima vprašanje in odgovor ter zapise, ali si jo že znal.'],
-  ['Ali SmartStudy deluje brez interneta?', 'Ne. Podatki se shranijo v tvoj račun v oblaku, zato do njih dostopaš z vsake naprave, kjer si prijavljen.'],
-  ['Ali lahko uvozim urnik iz slike?', 'Da. Na strani Urnik naložiš fotografijo urnika, SmartStudy jo prebere in pokaže pregled vrstic, ki jih potrdiš ali popraviš.'],
-  ['Kaj se zgodi z mojimi podatki?', 'Ostanejo v tvojem računu. SmartStudy jih ne prodaja in ne deli z oglaševalci. Preberi pravilnik o zasebnosti.'],
-  ['Ali me SmartStudy opozarja na naloge?', 'Ne pošilja obvestil. Naloge vidiš na domačem pregledu in v urniku, kjer so razporejene po dnevih.'],
+  ['Ali Scribe deluje brez interneta?', 'Ne. Podatki se shranijo v tvoj račun v oblaku, zato do njih dostopaš z vsake naprave, kjer si prijavljen.'],
+  ['Ali lahko uvozim urnik iz slike?', 'Da. Na strani Urnik naložiš fotografijo urnika, Scribe jo prebere in pokaže pregled vrstic, ki jih potrdiš ali popraviš.'],
+  ['Kaj se zgodi z mojimi podatki?', 'Ostanejo v tvojem računu. Scribe jih ne prodaja in ne deli z oglaševalci. Preberi pravilnik o zasebnosti.'],
+  ['Ali me Scribe opozarja na naloge?', 'Ne pošilja obvestil. Naloge vidiš na domačem pregledu in v urniku, kjer so razporejene po dnevih.'],
 ];
 
 const HERO_RAIL = [
@@ -151,7 +151,7 @@ function FaqItem({ question, answer }) {
 
 export default function LandingPage() {
   useSeo({
-    title: 'SmartStudy',
+    title: 'Scribe',
     description: 'Predmeti, naloge, preverjanja, urnik in kartice v enem pregledu. Za dijake in študente.',
     path: '/',
   });
@@ -184,8 +184,6 @@ export default function LandingPage() {
 
   return (
     <div className="relative min-h-dvh bg-rp-canvas">
-      <div className="aurora-wash" aria-hidden="true" />
-
       <SiteHeader />
 
       <main className="relative">
@@ -198,7 +196,7 @@ export default function LandingPage() {
                 Vidi, kaj moraš naučiti še danes.
               </h1>
               <p className="mt-5 max-w-lg text-body leading-7 text-rp-subtle">
-                SmartStudy združi predmete, naloge, preverjanja, urnik in kartice v en
+                Scribe združi predmete, naloge, preverjanja, urnik in kartice v en
                 pregled, ki ga odpreš na računalniku ali telefonu.
               </p>
               <div className="mt-8 flex flex-wrap gap-3">
@@ -220,7 +218,7 @@ export default function LandingPage() {
               Vse, kar imaš za šolo, na enem mestu
             </h2>
             <p className="mt-3 max-w-xl text-body leading-6 text-rp-muted">
-              Šest stvari, ki jih SmartStudy drži skupaj — in jih po potrebi pokaže tudi tebi
+              Šest stvari, ki jih Scribe drži skupaj — in jih po potrebi pokaže tudi tebi
               na telefonu.
             </p>
 

@@ -13,5 +13,5 @@ export const PAGE_TITLES = {
 };
 
 export function getPageTitle(pathname) {
-  return PAGE_TITLES[pathname] || 'SmartStudy';
+  return PAGE_TITLES[pathname] || 'Scribe';
 }

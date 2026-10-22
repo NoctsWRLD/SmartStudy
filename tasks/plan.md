@@ -1,138 +1,86 @@
-# Implementation Plan: SmartStudy — redizajn v "Zora" temi
+# Plan — Scribe
 
-## Pregled
+Vertical slices. Each slice ships green: `npm run lint`, `npm test`, `npm run build`.
 
-Preoblikujem SmartStudy iz svetlo-zelene generične aplikacije v temno aplikacijo
-z aurora gradiento, belim in alkovin sivim besedilom, eno cijan akcijo in
-strukturalno napravo — **učni pas** — ki nosi hierarhijo. Dodam javno
-predstavitveno stran s pravnimi stranmi, preuredim aplikacijsko lupino iz
-trojne navigacije v eno, in vse dvanajst zaslonov prebuildam na novi lupini.
+## Slice 1 — Rename to Scribe
+- **Files:** `src/config.js`, `src/index.html` (via `index.html`), `src/components/Logo.jsx`,
+  `src/components/SideNav.jsx`, `src/components/TopBar.jsx`, `src/pages/*` headings,
+  `src/pages/LandingPage.jsx`, `src/pages/PrivacyPage.jsx`, `src/pages/ImprintPage.jsx`,
+  `src/pages/AccessibilityPage.jsx`, `README.md`, `AGENTS.md`, `package.json`,
+  `public/robots.txt`, `public/sitemap.xml`.
+- **Acceptance:** no occurrence of "SmartStudy"/"smartstudy" in `src/`, `public/`,
+  `README.md`, `package.json` except the Firebase project id and the historical
+  `smartstudyslo.vercel.app` URL until the domain is settled; wordmark renders "Scribe";
+  meta titles and OG copy say Scribe.
+- **Commit:** `Preimenuj aplikacijo v Scribe`
 
-Podatkovni model, Firestore pravila, avtentikacija in vsi klici so nedotaknjeni.
+## Slice 2 — Token layer + flat surfaces
+- **Files:** `src/index.css`, `src/design-system/tokens.test.js`, `src/utils/themes.js`,
+  `src/components/Logo.jsx`, `src/components/FocusTimer.jsx`,
+  `src/pages/FlashcardsPage.jsx`, `src/pages/SettingsPage.jsx`,
+  `src/components/SiteShell.jsx`, `src/components/AuthShell.jsx`,
+  `src/components/FirebaseSetupNotice.jsx`, `src/pages/LandingPage.jsx`.
+- **Acceptance:** token test passes; no `gradient` in the stylesheet or components;
+  logo is a flat ink square with the book glyph; rail fill is flat accent; the hero
+  has no aurora wash; theme display names are "Noč" and "Dan".
+- **Commit:** `Uvedi token sistem Scribe brez gradientov`
 
-## Odločitve arhitekture
+## Slice 3 — Friend codes (data + rules)
+- **Files:** `src/utils/friendCode.js` (+ test), `src/services/friendService.js`,
+  `firestore.rules`.
+- **Acceptance:** code generator produces 6 unambiguous characters and is
+  deterministic-testable; the code document is written once per account and looked up
+  by id; rules allow only the owner to create a code and no one to update it.
+- **Commit:** `Dodaj kode prijateljev in pravila Firestore`
 
-| # | Odločitev | Zakaj |
-| --- | --- | --- |
-| 1 | **Javna stran na `/`, aplikacija na `/dashboard`** | Koren naslova je tisto, kar se deli. Prijavljen uporabnik na `/` gre naprej na `/dashboard`; globoke povezave `/tasks` in ostale ostanejo nedotaknjene. |
-| 2 | **Lupina: levi pas ≥1024 px, spodnja vrstica <1024 px** | Tri navigacije za enajst ciljev so bila glavna težava. Zdaj je ena. |
-| 3 | **`StudyRail` kot komponenta, ne CSS primitiv** | Učni pas se pojavi na šestih mestih v šestih različnih skalah. Ena komponenta zagotovi, da je povsod enak. |
-| 4 | **Javna stran ne potrebuje Firebase** | `App.jsx` loči javne poti od zaščitenih, da javna stran deluje tudi brez konfiguracije. |
-| 5 | **Pot do nalog, predmetov, pregledanj, kartic, urnika, klepeta, prijateljev, profila in nastavitev ostane angleška** | Ne spreminjam obstoječih globokih povezav, razen korena. |
-| 6 | **Pisave se nalagajo prek `<link>` v `index.html`** | CSS `@import` blokira izris; `preconnect` + `display=swap` je hitrejši in Lighthouse to nagradi. |
-| 7 | **Barve predmetov so žetoni, ne hekse** | Predmet mora imeti isto identiteto v obeh temah. |
+## Slice 4 — Friends screen and modal
+- **Files:** `src/pages/FriendsPage.jsx`, `src/components/AddFriendModal.jsx`,
+  `src/hooks/useChat.js`, `src/components/Modal.jsx` (backdrop blur).
+- **Acceptance:** a `+` button on every search result opens the modal over a blurred
+  background; the modal searches by code and by name; a request can be sent, accepted,
+  rejected and withdrawn; a friend can be removed; every state has Slovenian copy;
+  unit tests cover code normalisation and pair-id derivation.
+- **Commit:** `Dopolni dodajanje in brisanje prijateljev`
 
-## Seznam nalog
+## Slice 5 — Nastavitve (account, preferences, data, danger zone)
+- **Files:** `src/pages/SettingsPage.jsx`, `src/pages/ProfilePage.jsx`,
+  `src/contexts/SettingsContext.jsx`, `src/contexts/AuthContext.jsx`,
+  `src/services/profileService.js`, `src/services/accountService.js`,
+  `src/components/ReauthModal.jsx`, `src/utils/preferences.js` (+ test).
+- **Acceptance:** profile, e-mail, password, friend code, appearance, study
+  preferences, export/import and account deletion all live in Nastavitve; e-mail and
+  password changes require the current password; import validates the file before
+  writing; deletion removes the user's Firestore documents and the auth account.
+- **Commit:** `Združi nastavitve računa in dodaj nevarno območje`
 
-### Faza 1 — Temelj
+## Slice 6 — Screen differentiation
+- **Files:** `src/pages/DashboardPage.jsx`, `TasksPage.jsx`, `SubjectsPage.jsx`,
+  `ExamsPage.jsx`, `FlashcardsPage.jsx`, `SchedulePage.jsx`, `ChatPage.jsx`,
+  `LandingPage.jsx`, `src/components/*` (ledger, sheet, tab primitives).
+- **Acceptance:** each screen uses the device named in SPEC §4; lists are ledger rows
+  with hairline separators; the landing hero is a ruled sheet of today's entries; no
+  two screens share the same layout skeleton; every screen keeps its empty, loading
+  and error states.
+- **Commit:** `Vsakemu zaslonu daj svojo strukturo`
 
-- [ ] **Naloga 1: Testna oprema in žetonska pogodba** *(Končano: 11 testov)*
-  - Vitest 5 + jsdom + Testing Library, `test/setup.js`, skripta `npm test`
-  - `src/design-system/tokens.test.js` — kontrast AA v obeh temah, popolnost
-    zamenjave tem, ločljivost aurore
-- [ ] **Naloga 2: Plast žetonov in tema `noc`**
-  - `src/index.css`: plast 1 (vrednosti), 2 (semantika), 3 (Tailwind most)
-  - Nova tema `noc` (privzeta) in `dnevnik`; selitev starih id-jev
-  - `src/utils/themes.js`, `src/utils/colors.js` z žetoni predmetov
-- [ ] **Naloga 3: Osnovni elementi in pisave**
-  - `Logo` z aurora ploščico, `icons.jsx` (Son/Moon/Chevron/…), `Badge`,
-    `Skeleton`, `FocusTimer` z lokom, `EmptyState`
+## Slice 7 — Security hardening and rules deploy
+- **Files:** `firestore.rules`, `src/services/accountService.js`.
+- **Acceptance:** rules are tightened (no cross-user writes, whitelisted keys, names
+  bound to the server profile, one request per pair, own-messages deletion);
+  `firebase deploy --only firestore:rules` succeeds; the deployed rules are listed in
+  the report.
+- **Commit:** `Okrepi in namesti pravila Firestore`
 
-### Checkpoint: Temelj
-- [ ] `npm run lint` in `npm test` mimo
-- [ ] `npm run build` uspešen
-- [ ] V brskalniku se vidi nova paleta brez napak v konzoli
+## Slice 8 — SEO and legal
+- **Files:** `src/config.js`, `src/hooks/useSeo.js`, `src/utils/pageTitles.js`,
+  `src/pages/PrivacyPage.jsx`, `ImprintPage.jsx`, `AccessibilityPage.jsx`,
+  `public/robots.txt`, `public/sitemap.xml`, `index.html`.
+- **Acceptance:** every route has a unique title and description, canonical URL and
+  OG tags; sitemap lists the real public routes; the legal pages name Google/Firebase
+  as the processor and mark the operator details as gaps.
+- **Commit:** `Posodobi SEO in pravne strani za Scribe`
 
-### Faza 2 — Lupina
-
-- [ ] **Naloga 4: `StudyRail` + `StatTile` + `EmptyState`**
-  - `src/components/StudyRail.jsx` — 7 segmentov, toni, `aria` opis
-  - `src/components/StatTile.jsx`, `src/components/EmptyState.jsx`
-- [ ] **Naloga 5: `AppShell` (levi pas, zgornja vrstica, spodnja vrstica)**
-  - `src/components/AppShell.jsx` nadomesti `Layout.jsx`
-  - Levi pas ≥1024 px, spodnja vrstica <1024 px, ena "preostalo" plošča
-  - Skupaj z `SideNav`, `TopBar`, `MobileTabBar`
-- [ ] **Naloga 6: Preusmeritev in route struktura**
-  - `App.jsx`: `/` javno, `/dashboard` zaščiteno, `*` → `/`
-  - `ProtectedRoute` obdrži vedenje, dobi test
-
-### Checkpoint: Lupina
-- [ ] Vse strani se odprejo v novi lupini
-- [ ] Nič napak v konzoli
-- [ ] Navigacija je na eni mesto, ne na tri
-
-### Faza 3 — Zasloni
-
-- [ ] **Naloga 7: Domov (`/dashboard`)**
-  - Učni pas tedna, danešnje naloge, fokus, odštevanje, napredek predmetov
-- [ ] **Naloga 8: Naloge (`/tasks`)**
-  - Povzetek, filter, iskanje, množične akcije — logika filtriranja v testu
-- [ ] **Naloga 9: Predmeti in preverjanja**
-  - `/subjects` (kartončki z napredkom), `/exams` (odštevanje)
-- [ ] **Naloga 10: Urnik**
-  - Tedenska mreža, danes označen, mobilni dnevni pogled
-- [ ] **Naloga 11: Kartice in klepet**
-  - `/flashcards` (obračanje), `/chat` (kanali)
-- [ ] **Naloga 12: Prijatelji, profil, nastavitve**
-  - `/friends`, `/profile`, `/settings` (nova tema z žetoni)
-- [ ] **Naloga 13: Prijava in registracija**
-  - `AuthShell` z aurora prhi, pravilna usmerjanja ob prijavi
-
-### Checkpoint: Zasloni
-- [ ] Vseh dvanajst zaslonov preoblikovanih in pregledanih
-- [ ] Prazna stanja, napake in uspehi imajo besedilo
-- [ ] `npm test` in `npm run build` mimo
-
-### Faza 4 — Javno
-
-- [ ] **Naloga 14: Javna stran `/`**
-  - `src/pages/LandingPage.jsx` + `SiteHeader` + `SiteFooter`
-  - Hero z resničnim prikazom »Danes«, možnosti, kako deluje, za koga, vprašanja
-- [ ] **Naloga 15: Pravne strani**
-  - `/pravilnik-o-zasebnosti`, `/impressum`, `/dostopnost`
-  - Označena mesta za manjkajoče podatke (`TODO(vsebina)`)
-- [ ] **Naloga 16: SEO in zakonuvost**
-  - Naslov in opis na stran, kanonični naslovi, OG/Twitter, JSON-LD
-  - `public/robots.txt`, `public/sitemap.xml`, favicon
-
-### Checkpoint: Javno
-- [ ] Javna stran deluje brez prijave
-- [ ] Meta, JSON-LD, robots in sitemap so prisotni
-- [ ] Vrzeli so navedene in vidne
-
-### Faza 5 — Izdaja
-
-- [ ] **Naloga 17: Izhodna pripravljenost**
-  - `base` iz okolja, `404.html` SPA, `vercel.json`, Pages workflow, `.nojekyll`
-- [ ] **Naloga 18: Zmogljivost**
-  - Razdeljen koda, `font-display: swap`, `preconnect`, dimenzije slik
-- [ ] **Naloga 19: Kritika zasnova in popravki**
-  - Posnetki pri 1440/768/390 px, vseh devet osi, popravki blokirajočih
-- [ ] **Naloga 20: Končno preverjanje**
-  - lint + test + build, pregled izhoda, commit
-
-### Checkpoint: Končno
-- [ ] Vsi zgornji kriteriji iz `SPEC.md` izpolnjeni
-- [ ] Poročilo z zapisanimi številkami
-
-## Tveganja in zmanjševanje
-
-| Tveganje | Vpliv | Ukrep |
-| --- | --- | --- |
-| Velik paket (924 kB) | Slab LCP | Kodo razdelim po potih (`React.lazy`) |
-| Pisave blokirajo izris | Slab LCP | `preconnect` + `display=swap` v `index.html` |
-| Učni pas ne deluje z realnimi podatki | Izguba naprave | Pas dobi tone iz realnih nalog, ne iz lažnih števil |
-| Barve predmetov ne dosežejo AA | Neberljiv predmet | Vrednosti preveri žetonski test, ne oko |
-| Selitev starih tem | Uporabnik izgubi nastavitve | `normalizeThemeId` preslikava `tabla` → `dnevnik` |
-| Globoke povezave se pokvarijo | Uporabnik izgubi bookmark | Koren preusmeri na `/dashboard`, ostale poti ostanejo |
-
-## Vzporedne možnosti
-
-Varno vzporedno: testi za že napisane funkcije (npr. `themes.test.js` ob
-`themes.js`), dokumentacija, SEO metapodatki.
-Zaporedno: vse, kar spreminja `App.jsx` ali `AppShell.jsx` — skupni vir.
-
-## Odprta vprašanja
-
-Cennik, operater, javna domena in kanal podpore — v `CONTENT.md` kot vrzeli.
-Gradnje ne blokirajo.
+## Slice 9 — Verification
+- **Files:** none (verification only).
+- **Acceptance:** lint, tests and build pass; the app was opened in Chromium at
+  1440/768/390 with no console errors; Lighthouse desktop and mobile scores recorded.

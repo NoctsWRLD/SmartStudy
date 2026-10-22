@@ -1,20 +1,20 @@
-# SmartStudy
+# Scribe
 
-> SmartStudy je aplikacija za dijake, dijakinje in študente: predmeti, naloge,
+> Scribe je aplikacija za dijake, dijakinje in študente: predmeti, naloge,
 > preverjanja, urnik, kartice, klepet in fokus v enem pregledu. Uporabniški vmesnik
 > je v slovenščini.
 
 ## Javne strani
 
-- [Predstavitvena stran](https://smartstudyslo.vercel.app/): kaj SmartStudy ponuja, kako deluje in za koga je.
-- [Pravilnik o zasebnosti](https://smartstudyslo.vercel.app/pravilnik-o-zasebnosti): katere podatke zbira, zakaj in kdo jih obdeluje.
-- [Impressum](https://smartstudyslo.vercel.app/impressum): podatki o operaterju spletnega mesta.
-- [Dostopnost](https://smartstudyslo.vercel.app/dostopnost): cilj dostopnosti in kako sporočiti težavo.
+- [Predstavitvena stran](https://scribeslo.vercel.app/): kaj Scribe ponuja, kako deluje in za koga je.
+- [Pravilnik o zasebnosti](https://scribeslo.vercel.app/pravilnik-o-zasebnosti): katere podatke zbira, zakaj in kdo jih obdeluje.
+- [Impressum](https://scribeslo.vercel.app/impressum): podatki o operaterju spletnega mesta.
+- [Dostopnost](https://scribeslo.vercel.app/dostopnost): cilj dostopnosti in kako sporočiti težavo.
 
 ## Prijava
 
-- [Prijava](https://smartstudyslo.vercel.app/login): vstop v obstoječi račun.
-- [Ustvari račun](https://smartstudyslo.vercel.app/register): nov račun za dijake in študente.
+- [Prijava](https://scribeslo.vercel.app/login): vstop v obstoječi račun.
+- [Ustvari račun](https://scribeslo.vercel.app/register): nov račun za dijake in študente.
 
 ## Aplikacija
 
