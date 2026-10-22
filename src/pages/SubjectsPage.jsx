@@ -68,7 +68,7 @@ function SubjectRow({ subject, tasks, onOpen, onEdit, onDelete }) {
         <button
           type="button"
           onClick={onOpen}
-          className="rounded-md px-3 py-1.5 text-small font-semibold text-rp-accent transition-colors hover:bg-rp-accent/10"
+          className="btn btn-sm !border-transparent !bg-transparent text-rp-accent hover:!bg-rp-accent/10"
         >
           Naloge
         </button>
@@ -77,7 +77,7 @@ function SubjectRow({ subject, tasks, onOpen, onEdit, onDelete }) {
           onClick={onEdit}
           aria-label={`Uredi predmet ${subject.name}`}
           title="Uredi predmet"
-          className="rounded-md p-2 text-rp-muted transition-colors hover:bg-rp-accent/10 hover:text-rp-accent"
+          className="btn btn-icon hover:!text-rp-accent"
         >
           <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828z" />
@@ -88,7 +88,7 @@ function SubjectRow({ subject, tasks, onOpen, onEdit, onDelete }) {
           onClick={onDelete}
           aria-label={`Izbriši predmet ${subject.name}`}
           title="Izbriši predmet"
-          className="rounded-md p-2 text-rp-muted transition-colors hover:bg-rp-danger/10 hover:text-rp-danger"
+          className="btn btn-icon hover:!text-rp-danger"
         >
           <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a2 2 0 00-1-1h-4a2 2 0 00-1 1v3M4 7h16" />
@@ -148,7 +148,7 @@ export default function SubjectsPage() {
           <button
             type="button"
             onClick={() => { setEditSubject(null); setModalOpen(true); }}
-            className="btn-primary"
+            className="btn btn-primary"
           >
             Nov predmet
           </button>
@@ -214,7 +214,7 @@ export default function SubjectsPage() {
           title="Začni s prvim predmetom"
           description="Ustvari na primer Matematiko ali Slovenščino. Nato ti naloge samodejno povežemo s predmetom."
           action={
-            <button type="button" onClick={() => setModalOpen(true)} className="btn-primary">
+            <button type="button" onClick={() => setModalOpen(true)} className="btn btn-primary">
               Ustvari prvi predmet
             </button>
           }

@@ -142,19 +142,19 @@ export default function ScheduleImportModal({ isOpen, onClose, subjects, onImpor
           <div>
             <input ref={fileRef} type="file" accept="image/*" onChange={handleFile} className="field" aria-label="Izberi sliko urnika" />
             {imageUrl && <img src={imageUrl} alt="Predogled urnika" className="mt-3 max-h-56 w-full rounded-xl border border-rp-line object-contain" />}
-            <button type="button" onClick={runOcr} disabled={!imageUrl || ocrLoading} className="btn-ghost mt-3 w-full disabled:opacity-50">
+            <button type="button" onClick={runOcr} disabled={!imageUrl || ocrLoading} className="btn mt-3 w-full disabled:opacity-50">
               {ocrLoading ? 'Berem sliko…' : 'Preberi besedilo s slike'}
             </button>
             {ocrError && <p className="mt-2 text-[13px] leading-5 text-rp-danger" role="alert">{ocrError}</p>}
             <label className="mb-1.5 mt-4 block text-[13px] font-semibold text-rp-subtle" htmlFor="import-text">Besedilo (lahko urediš ali prilepiš)</label>
             <textarea id="import-text" className="field min-h-28" value={ocrText} onChange={(e) => setOcrText(e.target.value)} placeholder="Ponedeljek&#10;8:00 Matematika&#10;9:00 Slovenščina&#10;Torek&#10;…" />
-            <button type="button" onClick={parseManual} disabled={!ocrText.trim()} className="btn-ghost mt-2 w-full disabled:opacity-50">Razčleni v vrstice</button>
+            <button type="button" onClick={parseManual} disabled={!ocrText.trim()} className="btn mt-2 w-full disabled:opacity-50">Razčleni v vrstice</button>
           </div>
 
           <div>
             <div className="mb-2 flex items-center justify-between gap-2">
               <h3 className="text-sm font-bold">Predlog nalog ({valid.length})</h3>
-              <button type="button" onClick={addRow} className="btn-ghost !px-3 !py-1.5 !text-xs">+ Dodaj vrstico</button>
+              <button type="button" onClick={addRow} className="btn !px-3 !py-1.5 !text-xs">+ Dodaj vrstico</button>
             </div>
             {drafts.length === 0 ? (
               <p className="rounded-xl border border-dashed border-rp-line p-4 text-[13px] leading-5 text-rp-muted">Ni vrstic. Preberi sliko, prilepi besedilo ali dodaj vrstico ročno.</p>
@@ -243,8 +243,8 @@ export default function ScheduleImportModal({ isOpen, onClose, subjects, onImpor
             {total > 0 ? `Skupaj ${total} ${nalogeWord(total)} v ${selectedWeeks.length} ${selectedWeeks.length === 1 ? 'tednu' : selectedWeeks.length === 2 ? 'tednih' : 'tednih'}` : 'Izberi vrstice in tedne.'}
           </p>
           <div className="flex gap-2">
-            <button type="button" onClick={onClose} className="btn-ghost">Prekliči</button>
-            <button type="button" onClick={handleSave} disabled={total === 0 || saving} className="btn-primary disabled:opacity-50">
+            <button type="button" onClick={onClose} className="btn">Prekliči</button>
+            <button type="button" onClick={handleSave} disabled={total === 0 || saving} className="btn btn-primary disabled:opacity-50">
               {saving ? 'Shranjujem…' : `Ustvari ${total} ${nalogeWord(total)}`}
             </button>
           </div>

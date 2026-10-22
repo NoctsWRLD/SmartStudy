@@ -24,7 +24,7 @@ export default function ErrorState({ message, onRetry, compact = false }) {
           {message || 'Podatkov ni bilo mogoče prebrati.'}
         </p>
         {onRetry && (
-          <button type="button" onClick={onRetry} className="btn-ghost mt-5">
+          <button type="button" onClick={onRetry} className="btn mt-5">
             Poskusi znova
           </button>
         )}

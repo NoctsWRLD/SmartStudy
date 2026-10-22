@@ -90,14 +90,14 @@ export default function FocusTimer() {
                 loggedRef.current = false;
                 setRunning((value) => (secondsLeft === 0 ? true : !value));
               }}
-              className="btn-primary !px-3.5 !py-2 !text-small"
+              className="btn btn-primary !px-3.5 !py-2 !text-small"
             >
               {running ? 'Pavza' : 'Začni'}
             </button>
             <button
               type="button"
               onClick={() => { setRunning(false); setFinished(false); setSecondsLeft(total); loggedRef.current = false; }}
-              className="btn-ghost !px-3 !py-2 !text-small"
+              className="btn !px-3 !py-2 !text-small"
               aria-label="Ponastavi časovnik"
             >
               Ponastavi

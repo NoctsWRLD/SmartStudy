@@ -100,7 +100,7 @@ export default function TaskCard({ task, subject, onToggle, onEdit, onDelete, se
           <button
             onClick={() => onDelete(task)}
             aria-label={`Izbriši nalogo ${task.title}`}
-            className="rounded-md p-2 text-rp-muted transition-colors hover:bg-rp-danger/10 hover:text-rp-danger"
+            className="btn btn-icon hover:!text-rp-danger"
           >
             <TrashIcon className="h-4 w-4" />
           </button>

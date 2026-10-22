@@ -21,8 +21,8 @@ function ExamForm({ onClose, onSave, subjects, exam }) {
       description="Zapiši test, spraševanje ali izpit — odštevanje te bo držalo v ritmu."
       footer={
         <>
-          <button type="button" onClick={onClose} className="btn-ghost">Prekliči</button>
-          <button type="submit" form="exam-form" className="btn-primary">
+          <button type="button" onClick={onClose} className="btn">Prekliči</button>
+          <button type="submit" form="exam-form" className="btn btn-primary">
             {exam ? 'Shrani spremembe' : 'Dodaj preverjanje'}
           </button>
         </>

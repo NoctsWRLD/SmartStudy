@@ -205,8 +205,8 @@ export default function LandingPage() {
                 odštevanje.
               </p>
               <div className="mt-8 flex flex-wrap gap-3">
-                <Link to="/register" className="btn-primary !px-6 !py-3">Ustvari račun</Link>
-                <Link to="/login" className="btn-ghost !px-6 !py-3">Prijava</Link>
+                <Link to="/register" className="btn btn-primary !px-6 !py-3">Ustvari račun</Link>
+                <Link to="/login" className="btn !px-6 !py-3">Prijava</Link>
               </div>
             </div>
 
@@ -317,8 +317,8 @@ export default function LandingPage() {
               Svojega sošolca poiščeš po kodi, ki jo dobiš od njega.
             </p>
             <div className="mt-7 flex flex-wrap justify-center gap-3">
-              <Link to="/register" className="btn-primary !px-6 !py-3">Ustvari račun</Link>
-              <Link to="/login" className="btn-ghost !px-6 !py-3">Že imaš račun? Prijava</Link>
+              <Link to="/register" className="btn btn-primary !px-6 !py-3">Ustvari račun</Link>
+              <Link to="/login" className="btn !px-6 !py-3">Že imaš račun? Prijava</Link>
             </div>
           </div>
         </section>

@@ -91,13 +91,13 @@ export default function DashboardPage() {
         />
 
         <div className="mt-6 flex flex-wrap gap-2">
-          <button type="button" onClick={openTaskModal} disabled={subjectsLoading} className="btn-primary disabled:opacity-60">
+          <button type="button" onClick={openTaskModal} disabled={subjectsLoading} className="btn btn-primary disabled:opacity-60">
             Nova naloga
           </button>
-          <Link to="/flashcards" className="btn-ghost">
+          <Link to="/flashcards" className="btn">
             Ponovi kartice{dueCards > 0 ? ` (${dueCards})` : ''}
           </Link>
-          <Link to="/exams" className="btn-ghost">Preverjanja</Link>
+          <Link to="/exams" className="btn">Preverjanja</Link>
         </div>
       </section>
 
@@ -145,8 +145,8 @@ export default function DashboardPage() {
               description="Dodaj prvo nalogo za ta teden ali ponovi kartice."
               action={
                 <div className="flex flex-wrap justify-center gap-2">
-                  <button type="button" onClick={openTaskModal} className="btn-primary !py-2.5 !text-small">Dodaj nalogo</button>
-                  <Link to="/flashcards" className="btn-ghost !py-2.5 !text-small">Kartice</Link>
+                  <button type="button" onClick={openTaskModal} className="btn btn-primary !py-2.5 !text-small">Dodaj nalogo</button>
+                  <Link to="/flashcards" className="btn !py-2.5 !text-small">Kartice</Link>
                 </div>
               }
             />
@@ -173,7 +173,7 @@ export default function DashboardPage() {
             compact
             title="Dodaj prvi predmet"
             description="Dodaj prvi predmet, da razvrstiš naloge, preverjanja in kartice."
-            action={<Link to="/subjects" className="btn-primary !py-2.5 !text-small">Odpri predmete</Link>}
+            action={<Link to="/subjects" className="btn btn-primary !py-2.5 !text-small">Odpri predmete</Link>}
           />
         ) : (
           <div className="flex gap-3 overflow-x-auto pb-2">

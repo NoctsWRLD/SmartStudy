@@ -21,8 +21,8 @@ function CardForm({ onClose, onSave, subjects, card, defaultSubjectId }) {
       description="Spredaj vprašanje ali pojem, zadaj odgovor."
       footer={
         <>
-          <button type="button" onClick={onClose} className="btn-ghost">Prekliči</button>
-          <button type="submit" form="card-form" className="btn-primary">
+          <button type="button" onClick={onClose} className="btn">Prekliči</button>
+          <button type="submit" form="card-form" className="btn btn-primary">
             {card ? 'Shrani spremembe' : 'Dodaj kartico'}
           </button>
         </>

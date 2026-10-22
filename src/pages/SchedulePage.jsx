@@ -87,7 +87,7 @@ export default function SchedulePage() {
           <p className="mt-1 text-small text-rp-muted">{weekLabel}</p>
         </div>
         <div className="flex flex-wrap items-center gap-2">
-          <button type="button" onClick={() => setWeekOffset(0)} className="btn-ghost !py-2 !text-small">
+          <button type="button" onClick={() => setWeekOffset(0)} className="btn !py-2 !text-small">
             Ta teden
           </button>
           <button
@@ -106,7 +106,7 @@ export default function SchedulePage() {
           >
             <ChevronRightIcon className="h-4 w-4" />
           </button>
-          <button type="button" onClick={() => setImportOpen(true)} className="btn-ghost !py-2 !text-small">
+          <button type="button" onClick={() => setImportOpen(true)} className="btn !py-2 !text-small">
             <ImageIcon className="h-4 w-4" />
             Urnik iz slike
           </button>
@@ -114,7 +114,7 @@ export default function SchedulePage() {
             id="schedule-add-task"
             type="button"
             onClick={() => { setEditTask(null); setPreselectedDate(todayStr); setModalOpen(true); }}
-            className="btn-primary !py-2 !text-small"
+            className="btn btn-primary !py-2 !text-small"
           >
             <PlusIcon className="h-4 w-4" />
             Nova naloga

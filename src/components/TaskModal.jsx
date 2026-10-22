@@ -22,8 +22,8 @@ function TaskForm({ onClose, onSave, subjects, task, defaultSubjectId }) {
       description="Naloga dobi predmet in rok. Brez roka ostane v nalogah, dokler ga ne dodaš."
       footer={
         <>
-          <button type="button" onClick={onClose} className="btn-ghost">Prekliči</button>
-          <button type="submit" form="task-form" className="btn-primary">
+          <button type="button" onClick={onClose} className="btn">Prekliči</button>
+          <button type="submit" form="task-form" className="btn btn-primary">
             {task ? 'Shrani spremembe' : 'Dodaj nalogo'}
           </button>
         </>

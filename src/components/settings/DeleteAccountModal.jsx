@@ -82,11 +82,11 @@ export default function DeleteAccountModal({ isOpen, onClose, onConfirm, display
         )}
 
         <div className="mt-5 flex justify-end gap-2">
-          <button type="button" onClick={onClose} className="btn-ghost">Prekliči</button>
+          <button type="button" onClick={onClose} className="btn">Prekliči</button>
           <button
             type="submit"
             disabled={busy || !nameMatches || !password}
-            className="rounded-md border border-rp-danger/40 bg-rp-danger/10 px-4 py-2 text-small font-semibold text-rp-danger transition-colors hover:bg-rp-danger/20 disabled:opacity-50"
+            className="btn btn-danger"
           >
             {busy ? 'Brišem…' : 'Izbriši račun'}
           </button>

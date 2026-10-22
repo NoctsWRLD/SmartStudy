@@ -150,7 +150,7 @@ export default function AddFriendModal({ isOpen, onClose, onSent, initialUser = 
               type="button"
               onClick={handleLookup}
               disabled={lookup.state === 'loading' || normalizedCode.length < 6}
-              className="btn-ghost shrink-0 !px-4"
+              className="btn shrink-0 !px-4"
             >
               {lookup.state === 'loading' ? 'Iščem…' : 'Poišči'}
             </button>
@@ -177,7 +177,7 @@ export default function AddFriendModal({ isOpen, onClose, onSent, initialUser = 
                 type="button"
                 onClick={() => handleSend(lookup.user)}
                 disabled={sending}
-                className="btn-primary shrink-0 !px-3.5 !py-2 !text-small"
+                className="btn btn-primary shrink-0 !px-3.5 !py-2 !text-small"
               >
                 {sending ? 'Pošiljam…' : 'Pošlji zahtevo'}
               </button>
@@ -263,7 +263,7 @@ export default function AddFriendModal({ isOpen, onClose, onSent, initialUser = 
                 type="button"
                 onClick={() => handleSend(selected)}
                 disabled={sending}
-                className="btn-primary shrink-0 !px-3.5 !py-2 !text-small"
+                className="btn btn-primary shrink-0 !px-3.5 !py-2 !text-small"
               >
                 {sending ? 'Pošiljam…' : 'Pošlji zahtevo'}
               </button>

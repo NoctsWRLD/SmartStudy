@@ -118,7 +118,7 @@ export default function TasksPage() {
           naloga je korak naprej.
         </p>
         <div className="mt-4">
-          <button id="add-task-btn" type="button" onClick={openNewTask} disabled={subjectsLoading} className="btn-primary disabled:opacity-60">
+          <button id="add-task-btn" type="button" onClick={openNewTask} disabled={subjectsLoading} className="btn btn-primary disabled:opacity-60">
             Nova naloga
           </button>
         </div>
@@ -240,14 +240,14 @@ export default function TasksPage() {
             </label>
             <span className="text-small text-rp-muted">Izbranih {selected.length}</span>
             <span className="flex-1" />
-            <button type="button" onClick={bulkComplete} disabled={selected.length === 0} className="btn-ghost !py-2 !text-small disabled:opacity-50">
+            <button type="button" onClick={bulkComplete} disabled={selected.length === 0} className="btn !py-2 !text-small disabled:opacity-50">
               Označi kot opravljene
             </button>
             <button
               type="button"
               onClick={bulkDelete}
               disabled={selected.length === 0}
-              className="rounded-md border border-rp-danger/30 px-4 py-2 text-small font-semibold text-rp-danger transition-colors hover:bg-rp-danger/10 disabled:opacity-50"
+              className="btn btn-danger"
             >
               Izbriši izbrane
             </button>
@@ -271,7 +271,7 @@ export default function TasksPage() {
             }
             action={
               !search && summary.pending === 0 && subjects.length > 0 ? (
-                <button type="button" onClick={openNewTask} className="btn-primary !py-2.5 !text-small">Dodaj nalogo</button>
+                <button type="button" onClick={openNewTask} className="btn btn-primary !py-2.5 !text-small">Dodaj nalogo</button>
               ) : null
             }
           />

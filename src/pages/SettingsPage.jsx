@@ -306,7 +306,7 @@ export default function SettingsPage() {
           />
         </div>
 
-        <button type="button" onClick={handleProfileSave} className="btn-primary mt-5">
+        <button type="button" onClick={handleProfileSave} className="btn btn-primary mt-5">
           Shrani profil
         </button>
         {profileNote && <Note tone="good">{profileNote}</Note>}
@@ -362,7 +362,7 @@ export default function SettingsPage() {
           <button
             type="submit"
             disabled={!newEmail || !emailPassword}
-            className="btn-ghost mt-3 disabled:opacity-50"
+            className="btn mt-3 disabled:opacity-50"
           >
             Spremeni e-pošto
           </button>
@@ -399,7 +399,7 @@ export default function SettingsPage() {
           <button
             type="submit"
             disabled={!newPassword || !passwordCurrent}
-            className="btn-ghost mt-3 disabled:opacity-50"
+            className="btn mt-3 disabled:opacity-50"
           >
             Spremeni geslo
           </button>
@@ -420,11 +420,11 @@ export default function SettingsPage() {
           ) : (
             <span className="skel h-11 w-40" aria-hidden="true" />
           )}
-          <button type="button" onClick={handleCopyCode} disabled={!friendCode} className="btn-ghost">
+          <button type="button" onClick={handleCopyCode} disabled={!friendCode} className="btn">
             {copied ? <CheckIcon className="h-4 w-4" /> : <CopyIcon className="h-4 w-4" />}
             {copied ? 'Kopirano' : 'Kopiraj kodo'}
           </button>
-          <button type="button" onClick={handleRegenerateCode} disabled={!friendCode} className="btn-quiet">
+          <button type="button" onClick={handleRegenerateCode} disabled={!friendCode} className="btn btn-link">
             Ustvari novo kodo
           </button>
         </div>
@@ -563,7 +563,7 @@ export default function SettingsPage() {
           </div>
         </div>
 
-        <button type="button" onClick={handlePreferencesSave} className="btn-primary mt-5">
+        <button type="button" onClick={handlePreferencesSave} className="btn btn-primary mt-5">
           Shrani nastavitve
         </button>
         {preferenceNote && <Note tone="good">{preferenceNote}</Note>}
@@ -598,14 +598,14 @@ export default function SettingsPage() {
         </p>
 
         <div className="mt-5 flex flex-wrap gap-2 border-t border-rp-line pt-5">
-          <button type="button" onClick={handleExport} className="btn-ghost">
+          <button type="button" onClick={handleExport} className="btn">
             Izvozi podatke
           </button>
           <button
             type="button"
             onClick={() => fileInputRef.current?.click()}
             disabled={importing}
-            className="btn-ghost disabled:opacity-50"
+            className="btn disabled:opacity-50"
           >
             {importing ? 'Uvozim…' : 'Uvozi podatke'}
           </button>

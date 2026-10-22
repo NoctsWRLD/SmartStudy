@@ -94,12 +94,12 @@ export default function FlashcardsPage() {
               <option key={subject.id} value={subject.id}>{subject.name}</option>
             ))}
           </select>
-          <button type="button" onClick={openNew} className="btn-ghost">Nova kartica</button>
+          <button type="button" onClick={openNew} className="btn">Nova kartica</button>
           <button
             type="button"
             onClick={startStudy}
             disabled={!deckCards.length}
-            className="btn-primary disabled:opacity-50"
+            className="btn btn-primary disabled:opacity-50"
           >
             Uči se ({deckCards.length})
           </button>
@@ -155,8 +155,8 @@ export default function FlashcardsPage() {
           </button>
 
           <div className="mt-4 grid grid-cols-2 gap-2">
-            <button type="button" onClick={() => mark(false)} className="btn-ghost !py-3">Še ne znam</button>
-            <button type="button" onClick={() => mark(true)} className="btn-primary !py-3">Znam</button>
+            <button type="button" onClick={() => mark(false)} className="btn !py-3">Še ne znam</button>
+            <button type="button" onClick={() => mark(true)} className="btn btn-primary !py-3">Znam</button>
           </div>
           <button type="button" onClick={() => setStudying(false)} className="link-signal mt-4">Končaj učenje</button>
         </section>
@@ -179,7 +179,7 @@ export default function FlashcardsPage() {
               icon={<CardIcon className="h-6 w-6" />}
               title="Začni zbirko za ta predmet"
               description="Dodaj 5–10 kartic z vprašanji, ki se največkrat pojavijo na testih."
-              action={<button type="button" onClick={openNew} className="btn-primary">Dodaj kartico</button>}
+              action={<button type="button" onClick={openNew} className="btn btn-primary">Dodaj kartico</button>}
             />
           ) : (
             <div className="grid gap-3 sm:grid-cols-2">
@@ -204,7 +204,7 @@ export default function FlashcardsPage() {
                         type="button"
                         onClick={() => { if (window.confirm('Izbrišem kartico?')) deleteCard(deckCard.id); }}
                         aria-label={`Izbriši kartico ${deckCard.front}`}
-                        className="rounded-md p-2 text-rp-muted transition-colors hover:bg-rp-danger/10 hover:text-rp-danger"
+                        className="btn btn-icon hover:!text-rp-danger"
                       >
                         <TrashIcon className="h-4 w-4" />
                       </button>

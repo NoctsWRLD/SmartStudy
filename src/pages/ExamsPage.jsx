@@ -74,7 +74,7 @@ export default function ExamsPage() {
           <button
             onClick={() => { if (window.confirm(`Izbrišem preverjanje »${exam.title}«?`)) deleteExam(exam.id); }}
             aria-label={`Izbriši preverjanje ${exam.title}`}
-            className="rounded-md p-2 text-rp-muted transition-colors hover:bg-rp-danger/10 hover:text-rp-danger"
+            className="btn btn-icon hover:!text-rp-danger"
           >
             <TrashIcon className="h-4 w-4" />
           </button>
@@ -92,7 +92,7 @@ export default function ExamsPage() {
           začneš učiti.
         </p>
         <div className="mt-4 flex flex-wrap items-center gap-2">
-          <button type="button" onClick={openNew} className="btn-primary">Novo preverjanje</button>
+          <button type="button" onClick={openNew} className="btn btn-primary">Novo preverjanje</button>
           <select
             value={subjectFilter}
             onChange={(event) => setSubjectFilter(event.target.value)}
@@ -115,7 +115,7 @@ export default function ExamsPage() {
         <EmptyState
           title="Ni zapisanih preverjanj"
           description="Dodaj prvo — že samo zapis datuma zmanjša stres pred testom."
-          action={<button type="button" onClick={openNew} className="btn-primary">Dodaj preverjanje</button>}
+          action={<button type="button" onClick={openNew} className="btn btn-primary">Dodaj preverjanje</button>}
         />
       ) : (
         <>

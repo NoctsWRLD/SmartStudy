@@ -179,7 +179,7 @@ export default function FriendsPage() {
             <p className="text-body text-rp-muted">
               Nimaš še prijateljev. Poišči sošolca po kodi ali po imenu.
             </p>
-            <button type="button" onClick={() => openAdd()} className="btn-primary !py-2.5 !text-small">
+            <button type="button" onClick={() => openAdd()} className="btn btn-primary !py-2.5 !text-small">
               Dodaj prijatelja
             </button>
           </div>
@@ -194,7 +194,7 @@ export default function FriendsPage() {
                 <button
                   type="button"
                   onClick={() => navigate(`/chat?dm=${friend.uid}`)}
-                  className="flex shrink-0 items-center gap-1.5 rounded-md border border-rp-line px-3 py-1.5 text-small font-semibold text-rp-subtle transition-colors hover:border-rp-accent hover:text-rp-accent"
+                  className="flex shrink-0 items-center gap-1.5 btn btn-sm"
                 >
                   <ChatIcon className="h-4 w-4" />
                   Pogovor
@@ -204,7 +204,7 @@ export default function FriendsPage() {
                   onClick={() => handleRemove(friend)}
                   aria-label={`Odstrani ${friend.displayName} iz prijateljev`}
                   title="Odstrani prijatelja"
-                  className="shrink-0 rounded-md p-2 text-rp-muted transition-colors hover:bg-rp-danger/10 hover:text-rp-danger"
+                  className="shrink-0 btn btn-icon hover:!text-rp-danger"
                 >
                   <TrashIcon className="h-4 w-4" />
                 </button>
@@ -247,7 +247,7 @@ export default function FriendsPage() {
                   onClick={() => openAdd(user)}
                   aria-label={`Dodaj ${user.displayName || 'učenca'} med prijatelje`}
                   title="Dodaj prijatelja"
-                  className="grid h-8 w-8 shrink-0 place-items-center rounded-md border border-rp-line text-rp-subtle transition-colors hover:border-rp-accent hover:bg-rp-accent hover:text-rp-accent-ink"
+                  className="btn btn-icon !h-8 !w-8"
                 >
                   <PlusIcon className="h-4 w-4" />
                 </button>
@@ -258,7 +258,7 @@ export default function FriendsPage() {
           <button
             type="button"
             onClick={() => openAdd()}
-            className="btn-primary mt-4 w-full !py-2.5 !text-small"
+            className="btn mt-4 w-full !py-2.5 !text-small"
           >
             <PlusIcon className="h-4 w-4" />
             Dodaj s kodo

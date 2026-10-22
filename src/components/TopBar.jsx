@@ -47,7 +47,7 @@ function AccountMenu() {
         aria-haspopup="menu"
         aria-expanded={open}
         onClick={() => setOpen((value) => !value)}
-        className="grid h-9 w-9 place-items-center rounded-md text-rp-muted transition-colors hover:bg-rp-overlay hover:text-rp-text"
+        className="btn btn-icon !h-9 !w-9"
       >
         <UserIcon className="h-[18px] w-[18px]" />
       </button>
@@ -83,7 +83,7 @@ function AccountMenu() {
               type="button"
               role="menuitem"
               onClick={handleLogout}
-              className="flex w-full items-center gap-3 rounded-md px-3 py-2 text-left text-body font-medium text-rp-danger transition-colors hover:bg-rp-danger/10"
+              className="btn btn-danger w-full !justify-start !px-3 !py-2 !text-body"
             >
               <LogOutIcon className="h-4 w-4" />
               Odjava
@@ -106,7 +106,7 @@ function ThemeToggle() {
       onClick={() => setTheme(next)}
       title={label}
       aria-label={label}
-      className="grid h-9 w-9 place-items-center rounded-md text-rp-muted transition-colors hover:bg-rp-overlay hover:text-rp-text"
+      className="btn btn-icon !h-9 !w-9"
     >
       {theme === 'noc' ? <SunIcon className="h-[18px] w-[18px]" /> : <MoonIcon className="h-[18px] w-[18px]" />}
     </button>
@@ -123,7 +123,7 @@ export default function TopBar({ onOpenMenu }) {
           type="button"
           onClick={onOpenMenu}
           aria-label="Odpri meni"
-          className="grid h-9 w-9 place-items-center rounded-md text-rp-subtle transition-colors hover:bg-rp-overlay hover:text-rp-text lg:hidden"
+          className="btn btn-icon !h-9 !w-9 lg:hidden"
         >
           <MenuIcon className="h-5 w-5" />
         </button>

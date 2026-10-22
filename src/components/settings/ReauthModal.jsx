@@ -57,8 +57,8 @@ export default function ReauthModal({ isOpen, onClose, onConfirm, title, descrip
         )}
 
         <div className="mt-5 flex justify-end gap-2">
-          <button type="button" onClick={onClose} className="btn-ghost">Prekliči</button>
-          <button type="submit" disabled={busy || !password} className="btn-primary">
+          <button type="button" onClick={onClose} className="btn">Prekliči</button>
+          <button type="submit" disabled={busy || !password} className="btn btn-primary">
             {busy ? 'Preverjam…' : confirmLabel}
           </button>
         </div>

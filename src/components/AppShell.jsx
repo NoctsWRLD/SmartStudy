@@ -76,7 +76,7 @@ function MoreSheet({ pathname, onClose }) {
             type="button"
             onClick={onClose}
             aria-label="Zapri meni"
-            className="grid h-9 w-9 place-items-center rounded-md text-rp-muted transition-colors hover:bg-rp-overlay hover:text-rp-text"
+            className="btn btn-icon !h-9 !w-9"
           >
             <XIcon className="h-5 w-5" />
           </button>
@@ -126,7 +126,7 @@ function MoreSheet({ pathname, onClose }) {
             <button
               type="button"
               onClick={handleLogout}
-              className="flex items-center gap-3 rounded-md px-3 py-2.5 text-left text-body font-medium text-rp-danger transition-colors hover:bg-rp-danger/10"
+              className="btn btn-danger w-full !justify-start !px-3 !py-2.5 !text-body"
             >
               <LogOutIcon className="h-[18px] w-[18px] shrink-0" />
               Odjava

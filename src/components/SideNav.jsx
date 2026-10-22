@@ -49,7 +49,7 @@ export default function SideNav({ pathname, onNavigate }) {
         ))}
       </nav>
 
-      <NavLink to="/tasks?new=1" onClick={onNavigate} className="btn-primary w-full">
+      <NavLink to="/tasks?new=1" onClick={onNavigate} className="btn btn-primary w-full">
         <PlusIcon className="h-4 w-4" />
         Nova naloga
       </NavLink>

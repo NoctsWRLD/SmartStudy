@@ -78,7 +78,7 @@ export function AuthField({ label, id, ...props }) {
 
 export function AuthSubmit({ loading, idle, busy }) {
   return (
-    <button type="submit" disabled={loading} className="btn-primary w-full !py-3.5 disabled:opacity-60">
+    <button type="submit" disabled={loading} className="btn btn-primary w-full !py-3.5 disabled:opacity-60">
       {loading ? (
         <span className="flex items-center justify-center gap-2">
           <svg className="h-4 w-4 animate-spin" fill="none" viewBox="0 0 24 24" aria-hidden="true">

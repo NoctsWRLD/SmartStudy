@@ -115,7 +115,10 @@ export function AuthProvider({ children }) {
 
     (async () => {
       const auth = await getAuthInstance();
-      if (cancelled || !auth) {
+      // A cancelled run belongs to an unmounted tree: it must not touch the
+      // state, and in particular must not declare the session resolved.
+      if (cancelled) return;
+      if (!auth) {
         setSessionResolved(true);
         return;
       }
@@ -126,8 +129,21 @@ export function AuthProvider({ children }) {
       unsubscribe = onAuthStateChanged(auth, async (user) => {
         setCurrentUser(user);
         setUserProfile(null);
-        setSessionResolved(true);
-        if (!user) return;
+        if (user) {
+          setSessionResolved(true);
+        } else {
+          // The first notification can be empty while the saved session is
+          // still being restored. Give it a moment before treating it as
+          // "signed out", otherwise a signed-in visitor is sent to the login
+          // page for a split second.
+          window.setTimeout(() => {
+            if (cancelled) return;
+            const restored = auth.currentUser;
+            if (restored) setCurrentUser(restored);
+            setSessionResolved(true);
+          }, 1500);
+          return;
+        }
 
         // Backfill the profile documents for accounts created before they
         // existed, or created while the write was blocked.
@@ -139,6 +155,7 @@ export function AuthProvider({ children }) {
           console.error('Public profile initialization failed:', error);
         }
       });
+
     })();
 
     return () => {

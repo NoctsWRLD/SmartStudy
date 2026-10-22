@@ -45,8 +45,8 @@ export default function SubjectTaskModal({ isOpen, onClose, subject, tasks, onTo
             </p>
           </div>
           <div className="flex shrink-0 items-center gap-1">
-            {onAddTask && <button type="button" onClick={onAddTask} aria-label="Dodaj nalogo" className="flex items-center gap-1.5 rounded-lg bg-rp-accent px-3 py-2 text-xs font-semibold text-white transition hover:opacity-90"><PlusIcon /><span aria-hidden="true">Naloga</span></button>}
-            <button type="button" onClick={onClose} aria-label="Zapri predmet" className="rounded-xl p-2 text-rp-muted transition hover:bg-rp-line/50 hover:text-rp-text focus:outline-none">
+            {onAddTask && <button type="button" onClick={onAddTask} aria-label="Dodaj nalogo" className="btn btn-primary btn btn-sm"><PlusIcon /><span aria-hidden="true">Naloga</span></button>}
+            <button type="button" onClick={onClose} aria-label="Zapri predmet" className="btn btn-icon">
               <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
             </button>
           </div>

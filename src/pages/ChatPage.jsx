@@ -212,7 +212,7 @@ function MessageInput({ chatId, currentUser }) {
           type="button"
           onClick={handleSend}
           disabled={!text.trim() || sending}
-          className="grid h-9 w-9 shrink-0 place-items-center rounded-md bg-rp-accent text-rp-accent-ink transition-opacity disabled:opacity-30"
+          className="btn btn-primary !h-9 !w-9"
           aria-label="Pošlji sporočilo"
           title="Pošlji"
         >
@@ -235,7 +235,7 @@ function RoomItem({ label, icon, active, onClick }) {
       type="button"
       onClick={onClick}
       aria-current={active ? 'true' : undefined}
-      className={`flex w-full items-center gap-2.5 rounded-md px-3 py-2 text-left text-body font-medium transition-colors ${
+      className={`btn w-full !justify-start !px-3 !py-2 !text-body ${
         active ? 'bg-rp-accent/[.12] text-rp-accent' : 'text-rp-subtle hover:bg-rp-overlay hover:text-rp-text'
       }`}
     >

@@ -22,8 +22,8 @@ function SubjectForm({ onClose, onSave, subject }) {
       size="sm"
       footer={
         <>
-          <button type="button" onClick={onClose} className="btn-ghost">Prekliči</button>
-          <button type="submit" form="subject-form" className="btn-primary">
+          <button type="button" onClick={onClose} className="btn">Prekliči</button>
+          <button type="submit" form="subject-form" className="btn btn-primary">
             {subject ? 'Shrani spremembe' : 'Dodaj predmet'}
           </button>
         </>
