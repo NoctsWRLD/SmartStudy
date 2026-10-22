@@ -14,7 +14,7 @@ export default function PrivacyPage() {
       <LegalProse
         title="Pravilnik o zasebnosti"
         intro="Ta pravilnik pojasnjuje, katere podatke Scribe zbira, zakaj jih zbira in kakšne pravice imaš do njih."
-        updated="21. oktober 2026"
+        updated="22. oktober 2026"
         note="TODO(vsebina): Manjkajo podatki o operaterju, kontaktni e-pošti in regiji hrambe podatkov. Besedilo je pripravljeno, a še ni pravno pregledano."
       >
         <h2>Katere podatke zbiram</h2>
@@ -23,6 +23,12 @@ export default function PrivacyPage() {
           vpišeš. V svoj profil lahko dodaš tudi šolo. Ko začneš uporabljati aplikacijo,
           shranjuješ predmete, naloge, preverjanja, kartice, zapise fokus sej in nastavitve
           videza.
+        </p>
+        <p>
+          Vsak račun dobi tudi svojo <strong>prijateljsko kodo</strong> — šest znakov, s
+          katerimi te sošolci najdejo. Kode drugih uporabnikov Scribe ne izpiše; vidiš
+          le svojo. Ime in začetna črka tistih, ki iščeš sošolca, sta vidna drugim
+          prijavljenim uporabnikom, in sicer samo takrat, ko iščeš po imenu.
         </p>
         <p>
           Gesla se nikoli ne shranjujejo v oblaku v čitljivi obliki — za njih skrbi ponudnik
@@ -62,14 +68,17 @@ export default function PrivacyPage() {
         <h2>Hramba in brisanje</h2>
         <p>
           Podatki ostanejo v tvojem računu, dokler jih ne izbrišeš. Predmete, naloge,
-          preverjanja in kartice izbrišeš v aplikaciji, svoj račun pa lahko odpraviš tako, da
-          izbrišeš svojo uporabniško podatkovno bazo v Firebase.
+          preverjanja in kartice izbrišeš v aplikaciji. Svoj račun odpraviš v Nastavitvah v
+          razdelku »Nevarno območje«: Scribe tedaj izbriše tvoje predmete, naloge,
+          preverjanja, kartice, zapise fokusa, zahteve za prijateljstvo in tvoja sporočila
+          v klepetu ter odjavi tvoj račun. Tega ni mogoče razveljaviti.
         </p>
 
-        <h2>Vaše pravice</h2>
+        <h2>Tvoje pravice</h2>
         <p>
           Imaš pravico do dostopa do svojih podatkov, do njihove poprave in do brisanja.
-          Vse podatke lahko tudi izvoziš v obliki JSON — v Nastavitvah je gumb »Izvozi podatke«.
+          Vse podatke lahko tudi izvoziš v obliki JSON — v Nastavitvah je gumb »Izvozi
+          podatke«. Uvoziš jih lahko nazaj z gumbom »Uvozi podatke«.
         </p>
 
         <h2>Piškotki in sledenje</h2>

@@ -14,7 +14,7 @@ export default function ImprintPage() {
       <LegalProse
         title="Impressum"
         intro="Podatki o operaterju spletnega mesta in osebi, odgovorni za njegovo vsebino."
-        updated="21. oktober 2026"
+        updated="22. oktober 2026"
         note="TODO(vsebina): Ime operaterja, naslov, davčna številka in kontaktna e-pošta še niso določeni. Dopolni, preden objaviš."
       >
         <h2>Operater spletnega mesta</h2>
@@ -43,7 +43,8 @@ export default function ImprintPage() {
         <h2>Platforma in odločanje o pristojnosti</h2>
         <p>
           Spletno mesto je objavljeno na Vercelu in GitHub Pages. Za dostop do spletnega mesta
-          je odgovoren ponudnik gostovanja, pri katerem je mesto registrirano.
+          je odgovoren ponudnik gostovanja, pri katerem je mesto registrirano. Podatke v
+          oblaku obdeluje Google Firebase.
         </p>
       </LegalProse>
     </SiteShell>

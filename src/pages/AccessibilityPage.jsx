@@ -14,7 +14,7 @@ export default function AccessibilityPage() {
       <LegalProse
         title="Dostopnost"
         intro="Scribe je zasnovan tako, da ga lahko uporablja vsak dijak, dijakinja in študent — tudi z bralnikom zaslona, tipkovnico ali povečano sliko."
-        updated="21. oktober 2026"
+        updated="22. oktober 2026"
         note="TODO(vsebina): Ta izjava še ni bila pregledana po standardu WCAG 2.2 AA. Pred objavo jo preveri strokovnjak za dostopnost."
       >
         <h2>Cilj</h2>
@@ -33,6 +33,8 @@ export default function AccessibilityPage() {
           <li>Premiki in animacije se izklopijo, kadar naprava nastavi zmanjšan gibanje — samodejno ali v Nastavitvah.</li>
           <li>Ikone, ki ne sporočajo vsebine same, so označene kot okrasne; gumbi, ki niso besedilni, imajo opis za bralnik zaslona.</li>
           <li>Grafični učni pas in druge slike imajo besedilni opis, ki pove, kaj prikazujejo.</li>
+          <li>Številke, datumi, ure in prijateljske kode so zapisane v monospace pisavi in se zato preberejo v stolpcih.</li>
+          <li>Modali zajamejo fokus, zaprejo se z Esc in fokus vrnejo na gumb, ki jih je odprl.</li>
         </ul>
 
         <h2>Znane omejitve</h2>

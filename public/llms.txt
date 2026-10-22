@@ -1,8 +1,8 @@
 # Scribe
 
-> Scribe je aplikacija za dijake, dijakinje in študente: predmeti, naloge,
-> preverjanja, urnik, kartice, klepet in fokus v enem pregledu. Uporabniški vmesnik
-> je v slovenščini.
+> Scribe je šolski dnevnik za dijake, dijakinje in študente: predmeti, naloge,
+> preverjanja, urnik, kartice, klepet in fokus na enem mestu. Uporabniški vmesnik
+> je v slovenščini. Slogan: »Zapiši. Nauči se.«
 
 ## Javne strani
 
@@ -27,3 +27,5 @@ Aplikacija je zaščitena in zahteva prijavo. Ob prijavi so na voljo:
 - **Kartice** — učenje s karticami, ki si zapise, kaj znaš.
 - **Urnik** — teden po dnevih, z možnostjo uvoza urnika iz fotografije.
 - **Klepet** — kanali, predmetni kanali in neposredna sporočila.
+- **Prijatelji** — iskanje sošolca po 6-mestni prijateljski kodi ali po imenu.
+- **Nastavitve** — profil, e-pošta, geslo, prijateljska koda, videz, učne nastavitve, izvoz in uvoz podatkov, brisanje računa.
