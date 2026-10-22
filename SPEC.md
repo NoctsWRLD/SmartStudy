@@ -66,7 +66,8 @@ The app stops looking like a SaaS dashboard and looks like the student's own not
 | Type | `--font-display` (Space Grotesk), `--font-sans` (DM Sans), `--font-mono` (system) |
 | Scale | `display / hero / page / title / subtitle / body / small / label`, each with line height and tracking |
 | Spacing | 4px base: `--spacing-1` … `--spacing-24` |
-| Radius | `xs / sm / md / lg / xl / 2xl` |
+| Radius | One value: **2px** (`xs / sm / md / lg / xl / 2xl` all resolve to it). The paper has corners, not pills. Only avatars and switch knobs stay round. |
+| Buttons | One geometry: `.btn` (height, weight, 1px border, 2px corner). Three fills — plain, `.btn-primary`, `.btn-danger` — plus `.btn-sm`, `.btn-lg`, `.btn-icon`, `.btn-link`. |
 | Elevation | `--rp-shadow-1/2/3` — nearly flat; rules do the separating |
 | Motion | `--rp-duration-fast/base/slow`, `--rp-ease`, `--rp-ease-out`, `prefers-reduced-motion` honoured |
 
@@ -106,6 +107,13 @@ Every screen uses a different device, so no two screens read the same.
 | `/pravilnik-o-zasebnosti`, `/impressum`, `/dostopnost` | Legal | Prose pages, no chrome. |
 
 ---
+
+### Button and corner rules
+
+- Every corner in the product is 2px. There is one button geometry, defined once
+  in the `components` layer so a Tailwind utility can still override it.
+- Exactly one primary action per view; everything else is the plain button.
+- Icon-only controls use `.btn-icon` and always carry an `aria-label`.
 
 ## 5. Friends — the worked feature
 
@@ -201,10 +209,11 @@ Priority slots written for this round: the landing headline and subhead, the fri
 modal (tabs, labels, empty / error / success states), the settings section headings and
 helper texts, the account-deletion confirmation, and the empty states of every list.
 
-**Open gaps** (need information only the owner has): legal operator name and address for
-the imprint, the supervisory/contact e-mail, the real public domain, a privacy-policy
-review by a lawyer, and the Firebase Hosting/Blaze plan needed for a Cloud Function if
-the account deletion is ever to remove other people's messages server-side.
+**Open gaps** (need information only the owner has; the full list with locations is in
+`CONTENT.md`): legal operator name, address and tax number for the imprint, the contact
+e-mail, the lawful basis and retention period, a privacy-policy review by a lawyer,
+confirmation of the final public domain, and the Firebase Blaze plan needed for a Cloud
+Function if account deletion is ever to remove other people's messages server-side.
 
 ---
 
@@ -213,6 +222,7 @@ the account deletion is ever to remove other people's messages server-side.
 - `npm run lint`, `npm run build`, `npm test` pass.
 - Every screen in §4 has its own device; no screen is a re-skin of another.
 - No gradient exists in the stylesheet or in any component.
+- Every corner is 2px and every button uses the single `.btn` system.
 - Friends can be added by code or by name through a blurred modal, and removed, and the
   changes survive a page reload (they are in Firestore).
 - Nastavitve contains profile, account, friends code, appearance, study preferences,
