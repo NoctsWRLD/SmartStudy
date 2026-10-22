@@ -1,12 +1,28 @@
-import { createContext, useContext, useEffect, useState } from 'react';
-import {
-  createUserWithEmailAndPassword,
-  signInWithEmailAndPassword,
-  signOut,
-  onAuthStateChanged,
-  updateProfile,
-} from 'firebase/auth';
-import { auth } from '../firebase';
+import { createContext, useContext, useEffect, useRef, useState } from 'react';
+import { isFirebaseConfigured } from '../firebase';
+
+/**
+ * The authentication SDK is loaded on demand.
+ *
+ * A visitor who only reads the landing page never downloads the login code:
+ * the chunk is fetched when the session is actually resolved, so the public
+ * page is not paying for it.
+ */
+let authPromise = null;
+
+async function getAuthInstance() {
+  if (!isFirebaseConfigured) return null;
+  if (!authPromise) {
+    authPromise = (async () => {
+      const [{ getAuth }, { app }] = await Promise.all([
+        import('firebase/auth'),
+        import('../firebase'),
+      ]);
+      return app ? getAuth(app) : null;
+    })();
+  }
+  return authPromise;
+}
 
 const AuthContext = createContext(null);
 
@@ -19,12 +35,11 @@ export function AuthProvider({ children }) {
   const [currentUser, setCurrentUser] = useState(null);
   const [userProfile, setUserProfile] = useState(null);
   const [sessionResolved, setSessionResolved] = useState(false);
-
-  // Without a Firebase configuration there is no session to wait for, so the
-  // public pages render straight away.
-  const loading = Boolean(auth) && !sessionResolved;
+  const authRef = useRef(null);
 
   async function register(email, password, displayName) {
+    const auth = await getAuthInstance();
+    const { createUserWithEmailAndPassword, updateProfile } = await import('firebase/auth');
     const result = await createUserWithEmailAndPassword(auth, email, password);
     await updateProfile(result.user, { displayName });
     try {
@@ -38,16 +53,22 @@ export function AuthProvider({ children }) {
     return result;
   }
 
-  function login(email, password) {
+  async function login(email, password) {
+    const auth = await getAuthInstance();
+    const { signInWithEmailAndPassword } = await import('firebase/auth');
     return signInWithEmailAndPassword(auth, email, password);
   }
 
-  function logout() {
+  async function logout() {
+    const auth = authRef.current || (await getAuthInstance());
+    const { signOut } = await import('firebase/auth');
     return signOut(auth);
   }
 
   /** Update display name and/or school */
   async function updateUserProfile({ displayName, school }) {
+    const auth = authRef.current || (await getAuthInstance());
+    const { updateProfile } = await import('firebase/auth');
     const user = auth.currentUser;
     if (displayName) await updateProfile(user, { displayName });
     const { updateProfileDocuments } = await import('../services/profileService');
@@ -57,50 +78,73 @@ export function AuthProvider({ children }) {
 
   /** Store the study preferences on the user's own document. */
   async function updatePreferences(preferences) {
-    const user = auth.currentUser;
+    const auth = authRef.current || (await getAuthInstance());
     const { updatePreferences: save } = await import('../services/profileService');
-    await save(user.uid, preferences);
+    await save(auth.currentUser.uid, preferences);
   }
 
   /** Change the e-mail address of the account. */
   async function changeEmail(newEmail, password) {
+    const auth = authRef.current || (await getAuthInstance());
     const { changeAccountEmail } = await import('../services/accountService');
     await changeAccountEmail(auth.currentUser, password, newEmail);
   }
 
   /** Change the password of the account. */
   async function changePassword(newPassword, password) {
+    const auth = authRef.current || (await getAuthInstance());
     const { changeAccountPassword } = await import('../services/accountService');
     await changeAccountPassword(auth.currentUser, password, newPassword);
   }
 
   /** Delete the account and everything in it. */
   async function deleteAccount(password, chatIds = []) {
+    const auth = authRef.current || (await getAuthInstance());
     const { deleteAccount: remove } = await import('../services/accountService');
     await remove(auth.currentUser, password, chatIds);
   }
 
   useEffect(() => {
-    if (!auth) {
+    if (!isFirebaseConfigured) {
+      setSessionResolved(true);
       return undefined;
     }
-    const unsubscribe = onAuthStateChanged(auth, async (user) => {
-      setCurrentUser(user);
-      setUserProfile(null);
-      setSessionResolved(true);
-      if (!user) return;
 
-      // Backfill the profile documents for accounts created before they
-      // existed, or created while the write was blocked.
-      try {
-        const { ensureUserDocument, ensurePublicProfile } = await import('../services/profileService');
-        await ensureUserDocument(user.uid, { displayName: user.displayName, email: user.email });
-        await ensurePublicProfile(user.uid, user.displayName);
-      } catch (error) {
-        console.error('Public profile initialization failed:', error);
+    let unsubscribe;
+    let cancelled = false;
+
+    (async () => {
+      const auth = await getAuthInstance();
+      if (cancelled || !auth) {
+        setSessionResolved(true);
+        return;
       }
-    });
-    return unsubscribe;
+      authRef.current = auth;
+      const { onAuthStateChanged } = await import('firebase/auth');
+      if (cancelled) return;
+
+      unsubscribe = onAuthStateChanged(auth, async (user) => {
+        setCurrentUser(user);
+        setUserProfile(null);
+        setSessionResolved(true);
+        if (!user) return;
+
+        // Backfill the profile documents for accounts created before they
+        // existed, or created while the write was blocked.
+        try {
+          const { ensureUserDocument, ensurePublicProfile } = await import('../services/profileService');
+          await ensureUserDocument(user.uid, { displayName: user.displayName, email: user.email });
+          await ensurePublicProfile(user.uid, user.displayName);
+        } catch (error) {
+          console.error('Public profile initialization failed:', error);
+        }
+      });
+    })();
+
+    return () => {
+      cancelled = true;
+      if (unsubscribe) unsubscribe();
+    };
   }, []);
 
   // Real-time Firestore profile listener
@@ -124,6 +168,7 @@ export function AuthProvider({ children }) {
   const value = {
     currentUser,
     userProfile,
+    sessionResolved,
     register,
     login,
     logout,
@@ -134,9 +179,8 @@ export function AuthProvider({ children }) {
     deleteAccount,
   };
 
-  return (
-    <AuthContext.Provider value={value}>
-      {!loading && children}
-    </AuthContext.Provider>
-  );
+  // The children render straight away. Waiting for the session would hold
+  // back the public pages until the login code has been downloaded; the
+  // protected screens wait for it themselves.
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }

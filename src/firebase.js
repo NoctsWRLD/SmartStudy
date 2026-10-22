@@ -1,5 +1,4 @@
 import { initializeApp } from 'firebase/app';
-import { getAuth } from 'firebase/auth';
 
 const requiredKeys = [
   'VITE_FIREBASE_API_KEY',
@@ -24,6 +23,4 @@ const firebaseConfig = isFirebaseConfigured ? {
 } : null;
 
 export const app = firebaseConfig ? initializeApp(firebaseConfig) : null;
-
-export const auth = app ? getAuth(app) : null;
 export default app;
