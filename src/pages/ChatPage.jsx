@@ -84,7 +84,7 @@ function MessageBubble({ msg, isOwn, onDelete }) {
       <div className={`flex min-w-0 max-w-[85%] flex-col gap-0.5 md:max-w-[70%] ${isOwn ? 'items-end' : 'items-start'}`}>
         <div className={`flex items-center gap-2 ${isOwn ? 'flex-row-reverse' : ''}`}>
           <span className="text-small font-medium text-rp-muted">{isOwn ? 'Ti' : msg.senderName}</span>
-          <span className="text-[11px] text-rp-muted">{time}</span>
+          <span className="mono text-[11px] text-rp-muted">{time}</span>
         </div>
 
         <div className={`flex max-w-full items-center gap-2 ${isOwn ? 'flex-row-reverse' : ''}`}>

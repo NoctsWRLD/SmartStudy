@@ -14,15 +14,21 @@ function formatDate(dateStr) {
   return { label, tone };
 }
 
+/**
+ * One row in the ledger. Rows are separated by hairlines instead of boxes,
+ * and the deadline sits in a fixed column so a list of tasks reads the same
+ * way a list of deadlines does.
+ */
 export default function TaskCard({ task, subject, onToggle, onEdit, onDelete, selectionMode, selected, onSelect }) {
   const dateInfo = formatDate(task.dueDate);
   const color = subject ? getSubjectColor(subject.colorIndex) : null;
 
   return (
     <div
-      className={`row-item flex items-center gap-3 px-3.5 py-3 ${
+      className={`ledger-row flex items-center gap-3 px-3 py-3 ${
         task.completed && !selectionMode ? 'opacity-55' : ''
-      } ${selectionMode && selected ? 'border-rp-accent' : ''} ${selectionMode ? 'cursor-pointer' : ''}`}
+      } ${selectionMode ? 'cursor-pointer' : ''}`}
+      data-selected={selectionMode && selected ? 'true' : 'false'}
       onClick={selectionMode ? () => onSelect(task) : undefined}
     >
       {selectionMode ? (
@@ -64,25 +70,23 @@ export default function TaskCard({ task, subject, onToggle, onEdit, onDelete, se
         <h3 className={`truncate text-body font-semibold leading-snug ${task.completed ? 'text-rp-muted line-through' : 'text-rp-text'}`}>
           {task.title}
         </h3>
-        <p className="mt-0.5 flex items-center gap-1.5 truncate text-small text-rp-muted">
-          {subject && (
-            <>
-              <span
-                className="h-1.5 w-1.5 shrink-0 rounded-full"
-                style={{ backgroundColor: color.colorVar }}
-                aria-hidden="true"
-              />
-              <span className="truncate">{subject.name}</span>
-            </>
-          )}
-          {dateInfo && (
-            <>
-              <span aria-hidden="true">·</span>
-              <span className={`shrink-0 ${dateInfo.tone}`}>{dateInfo.label}</span>
-            </>
-          )}
-        </p>
+        {subject && (
+          <p className="mt-0.5 flex items-center gap-1.5 truncate text-small text-rp-muted">
+            <span
+              className="h-1.5 w-1.5 shrink-0 rounded-full"
+              style={{ backgroundColor: color.colorVar }}
+              aria-hidden="true"
+            />
+            <span className="truncate">{subject.name}</span>
+          </p>
+        )}
       </div>
+
+      {dateInfo && (
+        <span className={`mono hidden shrink-0 text-small sm:block ${dateInfo.tone}`}>
+          {dateInfo.label}
+        </span>
+      )}
 
       {!selectionMode && (
         <div className="flex shrink-0 items-center">

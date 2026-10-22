@@ -111,7 +111,7 @@ export default function TasksPage() {
 
   return (
     <div className="space-y-7">
-      <section className="rise">
+      <section className="rise margin-rule">
         <h1 className="text-page text-rp-text">Tvoje naloge</h1>
         <p className="mt-2 max-w-xl text-body text-rp-muted">
           Poišči nalogo, preveri najbližje roke in označi opravljeno. Vsaka zaključena
@@ -276,7 +276,7 @@ export default function TasksPage() {
             }
           />
         ) : (
-          <div className="grid gap-2">
+          <div className="sheet ledger">
             {filtered.map((task) => (
               <TaskCard
                 key={task.id}

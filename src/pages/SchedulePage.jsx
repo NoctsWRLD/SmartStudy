@@ -81,7 +81,7 @@ export default function SchedulePage() {
 
   return (
     <div className="space-y-6">
-      <section className="rise flex flex-wrap items-end justify-between gap-4">
+      <section className="rise margin-rule flex flex-wrap items-end justify-between gap-4">
         <div>
           <h1 className="text-page text-rp-text">Urnik</h1>
           <p className="mt-1 text-small text-rp-muted">{weekLabel}</p>
@@ -123,7 +123,7 @@ export default function SchedulePage() {
       </section>
 
       <section className="rise" aria-label="Teden">
-        <div className="overflow-hidden rounded-lg border border-rp-line bg-rp-panel">
+        <div className="sheet overflow-hidden">
           <div className="grid grid-cols-7 divide-x divide-rp-line">
             {weekDays.map((day, index) => {
               const dayTasks = getTasksForDay(day);

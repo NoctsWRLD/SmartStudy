@@ -78,7 +78,7 @@ export default function FlashcardsPage() {
 
   return (
     <div className="space-y-7">
-      <section className="rise">
+      <section className="rise margin-rule">
         <h1 className="text-page text-rp-text">Kartice</h1>
         <p className="mt-2 max-w-xl text-body text-rp-muted">
           Učenje s karticami utrdi spomin: preberi vprašanje, odgovori na glas, nato preveri.
@@ -113,8 +113,8 @@ export default function FlashcardsPage() {
       ) : studying && card ? (
         <section className="mx-auto max-w-xl" aria-label="Učenje">
           <div className="mb-3 flex items-center justify-between text-small text-rp-muted">
-            <span>Kartica {index + 1} od {order.length}</span>
-            <span>{knownCount} od {deckCards.length} osvojenih</span>
+            <span className="mono">Kartica {index + 1} / {order.length}</span>
+            <span className="mono">{knownCount} / {deckCards.length} osvojenih</span>
           </div>
           <div
             className="mb-3 h-1.5 overflow-hidden rounded-full bg-rp-fill"

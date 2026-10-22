@@ -79,42 +79,46 @@ const HERO_RAIL = [
 
 function TodayPanel() {
   return (
-    <div className="card w-full max-w-sm overflow-hidden">
-      <div className="border-b border-rp-line px-5 py-4">
-        <p className="text-label text-rp-muted">Ponedeljek, 21. oktober</p>
-        <ul className="rail mt-3" aria-label="Učni pas tedna">
-          {HERO_RAIL.map((segment) => (
-            <li key={segment.day} className="rail-seg" data-tone={segment.tone}>
-              <span aria-hidden="true" style={{ width: `${segment.value * 100}%` }} />
-            </li>
-          ))}
-        </ul>
-        <ul className="mt-2 flex gap-[3px]" aria-hidden="true">
-          {HERO_RAIL.map((segment) => (
-            <li key={segment.day} className="flex-1 text-center text-[11px] leading-4 text-rp-muted">
-              {segment.day}
+    <div className="sheet w-full max-w-sm overflow-hidden">
+      <div className="flex items-baseline justify-between gap-3 border-b border-rp-line px-5 py-3.5">
+        <p className="text-small font-semibold text-rp-text">Danes</p>
+        <p className="mono text-small text-rp-muted">ponedeljek, 21. oktober</p>
+      </div>
+
+      <ul className="rail mx-5 mt-4" aria-label="Učni pas tedna">
+        {HERO_RAIL.map((segment) => (
+          <li key={segment.day} className="rail-seg" data-tone={segment.tone}>
+            <span aria-hidden="true" style={{ width: `${segment.value * 100}%` }} />
+          </li>
+        ))}
+      </ul>
+      <ul className="mx-5 mb-4 mt-2 flex gap-[3px]" aria-hidden="true">
+        {HERO_RAIL.map((segment) => (
+          <li key={segment.day} className="flex-1 text-center text-[11px] leading-4 text-rp-muted">
+            {segment.day}
+          </li>
+        ))}
+      </ul>
+
+      <div className="border-t border-rp-line px-5 py-4">
+        <ul>
+          {[
+            ['08:00', 'Matematika', 'Pouk'],
+            ['10:00', 'Fizika', 'Pouk'],
+            ['13:00', 'Dnevnik — esej', 'Naloga'],
+          ].map(([time, title, kind]) => (
+            <li key={time} className="flex items-baseline gap-3 border-b border-rp-line py-2 last:border-0">
+              <span className="mono w-12 shrink-0 text-small text-rp-muted">{time}</span>
+              <span className="truncate text-body font-medium text-rp-text">{title}</span>
+              <span className="ml-auto shrink-0 text-small text-rp-muted">{kind}</span>
             </li>
           ))}
         </ul>
       </div>
 
-      <ul className="grid gap-2 px-5 py-4">
-        {[
-          ['08:00', 'Matematika', 'Predmet'],
-          ['10:00', 'Fizika', 'Predmet'],
-          ['13:00', 'Naloga — Dnevnik', 'Naloga'],
-        ].map(([time, title, kind]) => (
-          <li key={time} className="flex items-baseline gap-3">
-            <span className="tnum w-12 shrink-0 text-small text-rp-muted">{time}</span>
-            <span className="truncate text-body font-medium text-rp-text">{title}</span>
-            <span className="ml-auto shrink-0 text-[11px] text-rp-muted">{kind}</span>
-          </li>
-        ))}
-      </ul>
-
-      <div className="flex items-center justify-between border-t border-rp-line px-5 py-3.5">
+      <div className="flex items-center justify-between gap-3 border-t border-rp-line px-5 py-3">
         <span className="text-small text-rp-muted">Preverjanje čez 4 dni</span>
-        <span className="chip chip-accent">Fokus 25:00</span>
+        <span className="mono chip chip-accent">25:00</span>
       </div>
     </div>
   );
@@ -191,13 +195,14 @@ export default function LandingPage() {
         <section className="mx-auto max-w-6xl px-4 pb-16 pt-14 md:px-6 md:pb-24 md:pt-20">
           <div className="grid items-center gap-12 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,.95fr)]">
             <div>
-              <p className="text-label text-rp-accent">Za dijake, dijakinje in študente</p>
+              <p className="text-label text-rp-accent">Šolski dnevnik</p>
               <h1 className="mt-4 text-hero text-rp-text">
-                Vidi, kaj moraš naučiti še danes.
+                En dnevnik za celoten šolski dan.
               </h1>
               <p className="mt-5 max-w-lg text-body leading-7 text-rp-subtle">
-                Scribe združi predmete, naloge, preverjanja, urnik in kartice v en
-                pregled, ki ga odpreš na računalniku ali telefonu.
+                Scribe združi predmete, naloge, preverjanja, urnik, kartice in sošolce.
+                Brez oglasov in brez nepotrebnih okrasitev — samo zapiski, roki in
+                odštevanje.
               </p>
               <div className="mt-8 flex flex-wrap gap-3">
                 <Link to="/register" className="btn-primary !px-6 !py-3">Ustvari račun</Link>
@@ -258,19 +263,16 @@ export default function LandingPage() {
                 </p>
               </div>
 
-              <ol className="grid gap-3">
+              <ol className="ledger sheet">
                 {STEPS.map(([title, copy], index) => (
-                  <li key={title} className="card flex gap-4 p-5">
-                    <span
-                      className="tnum grid h-9 w-9 shrink-0 place-items-center rounded-md bg-rp-accent/10 text-body font-bold text-rp-accent"
-                      aria-hidden="true"
-                    >
-                      {index + 1}
+                  <li key={title} className="ledger-row flex gap-4 px-5 py-4">
+                    <span className="mono shrink-0 text-body font-bold text-rp-accent" aria-hidden="true">
+                      {String(index + 1).padStart(2, '0')}
                     </span>
-                    <div>
-                      <h3 className="text-subtitle text-rp-text">{title}</h3>
-                      <p className="mt-1.5 text-body leading-6 text-rp-muted">{copy}</p>
-                    </div>
+                    <span>
+                      <span className="block text-subtitle text-rp-text">{title}</span>
+                      <span className="mt-1 block text-body leading-6 text-rp-muted">{copy}</span>
+                    </span>
                   </li>
                 ))}
               </ol>
@@ -312,6 +314,7 @@ export default function LandingPage() {
             <h2 className="text-page text-rp-text">Odpri predmete in dodaj prvo nalogo.</h2>
             <p className="mt-3 text-body text-rp-muted">
               Račun ustvariš v enem koraku, nato dodaš prvega predmeta in prvo nalogo.
+              Svojega sošolca poiščeš po kodi, ki jo dobiš od njega.
             </p>
             <div className="mt-7 flex flex-wrap justify-center gap-3">
               <Link to="/register" className="btn-primary !px-6 !py-3">Ustvari račun</Link>

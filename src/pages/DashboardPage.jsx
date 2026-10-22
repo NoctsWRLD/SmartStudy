@@ -72,7 +72,7 @@ export default function DashboardPage() {
 
   return (
     <div className="space-y-8">
-      <section className="rise" aria-labelledby="dash-title">
+      <section className="rise margin-rule" aria-labelledby="dash-title">
         <p className="text-small text-rp-muted lg:hidden">{dateLabel}</p>
         <h1 id="dash-title" className="mt-2 max-w-2xl text-page text-rp-text">
           {greeting}, {displayName}.
@@ -106,13 +106,13 @@ export default function DashboardPage() {
       )}
 
       <section
-        className="rise grid grid-cols-2 gap-4 border-y border-rp-line py-5 sm:grid-cols-4"
+        className="rise grid grid-cols-2 divide-x divide-y divide-rp-line border-y border-rp-line py-5 sm:grid-cols-4 sm:divide-y-0"
         aria-label="Pregled napredka"
       >
-        <StatTile value={pending.length} label="odprtih nalog" />
-        <StatTile value={dueToday} label="zapade danes" tone="text-rp-accent" />
-        <StatTile value={overdue} label="zamujenih" tone={overdue > 0 ? 'text-rp-danger' : 'text-rp-text'} />
-        <StatTile value={`${completion}%`} label="narejeno" tone="text-rp-success" />
+        <StatTile className="px-4 first:pl-0 sm:first:pl-0" value={pending.length} label="odprtih nalog" />
+        <StatTile className="px-4" value={dueToday} label="zapade danes" tone="text-rp-accent" />
+        <StatTile className="px-4 sm:pl-4" value={overdue} label="zamujenih" tone={overdue > 0 ? 'text-rp-danger' : 'text-rp-text'} />
+        <StatTile className="px-4" value={`${completion}%`} label="narejeno" tone="text-rp-success" />
       </section>
 
       <div className="grid items-start gap-5 xl:grid-cols-[minmax(0,1.45fr)_minmax(17rem,.85fr)]">
@@ -124,7 +124,7 @@ export default function DashboardPage() {
           {tasksLoading ? (
             <div className="card p-4"><Skeleton lines={4} /></div>
           ) : upcoming.length ? (
-            <div className="grid gap-2">
+            <div className="ledger">
               {upcoming.map((task) => (
                 <TaskCard
                   key={task.id}
@@ -176,31 +176,36 @@ export default function DashboardPage() {
             action={<Link to="/subjects" className="btn-primary !py-2.5 !text-small">Odpri predmete</Link>}
           />
         ) : (
-          <div className="grid gap-3 sm:grid-cols-2">
-            {subjects.slice(0, 4).map((subject) => {
+          <div className="flex gap-3 overflow-x-auto pb-2">
+            {subjects.slice(0, 6).map((subject) => {
               const color = getSubjectColor(subject.colorIndex);
               const subjectTasks = tasks.filter((task) => task.subjectId === subject.id);
               const done = subjectTasks.filter((task) => task.completed).length;
               const progress = subjectTasks.length ? Math.round((done / subjectTasks.length) * 100) : 0;
               const subjectCards = cards.filter((card) => card.subjectId === subject.id);
               return (
-                <Link key={subject.id} to="/subjects" className="card card-hover block p-4">
-                  <div className="flex items-center gap-3">
+                <Link
+                  key={subject.id}
+                  to="/subjects"
+                  className="card-hover w-52 shrink-0 rounded-t-md border border-b-0 border-rp-line bg-rp-raised p-4 transition-colors hover:border-rp-line-strong"
+                  style={{ borderTop: `3px solid ${color.colorVar}` }}
+                >
+                  <div className="flex items-center gap-2.5">
                     <span
-                      className={`grid h-10 w-10 shrink-0 place-items-center rounded-md text-sm font-bold ${color.bg} ${color.text} ${color.border} border`}
+                      className={`grid h-8 w-8 shrink-0 place-items-center rounded-xs text-small font-bold ${color.bg} ${color.text} ${color.border} border`}
                       aria-hidden="true"
                     >
                       {subject.name?.[0]?.toUpperCase() || '•'}
                     </span>
-                    <div className="min-w-0 flex-1">
-                      <h3 className="truncate text-body font-semibold text-rp-text">{subject.name}</h3>
-                      <p className="text-small text-rp-muted">
-                        {countedNoun(subjectTasks.length, 'naloga', 'nalogi', 'naloge', 'nalog')} · {progress}%
-                      </p>
-                    </div>
+                    <span className="min-w-0">
+                      <span className="block truncate text-body font-semibold text-rp-text">{subject.name}</span>
+                      <span className="block truncate text-small text-rp-muted">
+                        {countedNoun(subjectTasks.length, 'naloga', 'nalogi', 'naloge', 'nalog')}
+                      </span>
+                    </span>
                   </div>
                   <div
-                    className="mt-3 h-1.5 overflow-hidden rounded-full bg-rp-fill"
+                    className="mt-3 h-1 overflow-hidden rounded-full bg-rp-fill"
                     role="progressbar"
                     aria-valuenow={progress}
                     aria-valuemin={0}
@@ -209,7 +214,9 @@ export default function DashboardPage() {
                   >
                     <div className="h-full rounded-full" style={{ width: `${progress}%`, backgroundColor: color.colorVar }} />
                   </div>
-                  <p className="mt-2 text-[11px] text-rp-muted">{countedNoun(subjectCards.length, 'kartica', 'kartici', 'kartice', 'kartic')}</p>
+                  <p className="mt-2 text-small text-rp-muted">
+                    {countedNoun(subjectCards.length, 'kartica', 'kartici', 'kartice', 'kartic')}
+                  </p>
                 </Link>
               );
             })}

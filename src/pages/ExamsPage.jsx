@@ -43,15 +43,12 @@ export default function ExamsPage() {
   function ExamRow({ exam }) {
     const info = countdown(exam.date, today);
     return (
-      <div className="row-item flex items-center gap-4 px-4 py-3.5">
-        <div
-          className="grid h-11 w-11 shrink-0 place-items-center rounded-md bg-rp-accent/[.1] text-center"
-          aria-hidden="true"
-        >
-          <div>
-            <p className="tnum text-base font-bold leading-none text-rp-accent">{exam.date.slice(8, 10)}</p>
-            <p className="mt-0.5 text-[10px] font-semibold text-rp-muted">{exam.date.slice(5, 7)}.</p>
-          </div>
+      <div className="ledger-row flex items-center gap-4 px-4 py-4">
+        <div className="flex w-14 shrink-0 flex-col items-center" aria-hidden="true">
+          <span className="mono text-xl font-bold leading-none text-rp-text">
+            {exam.date.slice(8, 10)}
+          </span>
+          <span className="mono mt-1 text-small text-rp-muted">{exam.date.slice(5, 7)}.</span>
         </div>
         <div className="min-w-0 flex-1">
           <h3 className="truncate text-body font-semibold text-rp-text">{exam.title}</h3>
@@ -60,7 +57,7 @@ export default function ExamsPage() {
           </p>
         </div>
         <span
-          className={`shrink-0 rounded-full px-3 py-1 text-small font-semibold ${
+          className={`mono shrink-0 rounded-md px-3 py-1 text-small font-semibold ${
             info.urgent ? 'bg-rp-danger/10 text-rp-danger' : 'bg-rp-overlay text-rp-subtle'
           }`}
         >
@@ -88,7 +85,7 @@ export default function ExamsPage() {
 
   return (
     <div className="space-y-7">
-      <section className="rise">
+      <section className="rise margin-rule">
         <h1 className="text-page text-rp-text">Preverjanja</h1>
         <p className="mt-2 max-w-xl text-body text-rp-muted">
           Vsi testi, spraševanja in izpiti na enem mestu — z odštevanjem, da se pravočasno
@@ -125,7 +122,7 @@ export default function ExamsPage() {
           <section aria-label="Prihajajoča preverjanja">
             <h2 className="text-title mb-3 text-rp-text">Prihaja ({upcoming.length})</h2>
             {upcoming.length ? (
-              <div className="grid gap-2">
+              <div className="sheet ledger">
                 {upcoming.map((exam) => <ExamRow key={exam.id} exam={exam} />)}
               </div>
             ) : (
@@ -135,7 +132,7 @@ export default function ExamsPage() {
           {past.length > 0 && (
             <section aria-label="Pretekla preverjanja" className="opacity-70">
               <h2 className="text-title mb-3 text-rp-text">Preteklo ({past.length})</h2>
-              <div className="grid gap-2">
+              <div className="sheet ledger">
                 {past.map((exam) => <ExamRow key={exam.id} exam={exam} />)}
               </div>
             </section>
