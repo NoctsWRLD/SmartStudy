@@ -92,11 +92,9 @@ export default function AddFriendModal({ isOpen, onClose, onSent, initialUser = 
       setMessage(
         result.reason === 'self'
           ? 'To si ti.'
-          : result.reason === 'already-friend'
-            ? 'Že sta prijatelja.'
-            : result.reason === 'already-sent'
-              ? 'Zahteva je že poslana.'
-              : 'Zahteve ni bilo mogoče poslati. Poskusi znova.',
+          : result.reason === 'exists'
+            ? 'Zahteva je že poslana ali pa sta že prijatelja.'
+            : 'Zahteve ni bilo mogoče poslati. Poskusi znova.',
       );
     } catch (error) {
       console.error('Pošiljanje zahteve ni uspelo:', error);

@@ -187,7 +187,7 @@ export function useSentRequests() {
  * Every account has one code. It is created on first use and can be replaced
  * from the settings if it leaks.
  */
-export function useFriendCode(currentUser, savedCode) {
+export function useFriendCode(currentUser, savedCode, profile) {
   const [code, setCode] = useState(savedCode || '');
   const [loading, setLoading] = useState(Boolean(currentUser?.uid));
   const [error, setError] = useState(null);
@@ -202,7 +202,7 @@ export function useFriendCode(currentUser, savedCode) {
     (async () => {
       try {
         const { ensureFriendCode } = await import('../services/friendService');
-        const result = await ensureFriendCode(currentUser.uid, savedCode);
+        const result = await ensureFriendCode(currentUser.uid, savedCode, profile);
         if (!cancelled) {
           setCode(result);
           setError(null);
@@ -216,14 +216,14 @@ export function useFriendCode(currentUser, savedCode) {
     })();
 
     return () => { cancelled = true; };
-  }, [currentUser?.uid, savedCode]);
+  }, [currentUser?.uid, savedCode, profile]);
 
   const regenerate = useMemo(() => async () => {
     const { regenerateFriendCode } = await import('../services/friendService');
-    const next = await regenerateFriendCode(currentUser.uid, code);
+    const next = await regenerateFriendCode(currentUser.uid, code, profile);
     setCode(next);
     return next;
-  }, [currentUser?.uid, code]);
+  }, [currentUser?.uid, code, profile]);
 
   return { code, loading, error, regenerate };
 }
@@ -239,23 +239,41 @@ export async function sendFriendRequest(fromUser, toUid, toName) {
   if (!fromUser?.uid || !toUid) return { ok: false, reason: 'invalid' };
   if (fromUser.uid === toUid) return { ok: false, reason: 'self' };
 
+  // The rules compare the names with the profiles on the server, so the
+  // request carries exactly those names — never a name typed by hand.
+  const [senderProfile, targetProfile] = await Promise.all([
+    getDoc(doc(db, 'publicProfiles', fromUser.uid)),
+    getDoc(doc(db, 'publicProfiles', toUid)),
+  ]);
+  const fromName = senderProfile.exists()
+    ? senderProfile.data()?.displayName
+    : fromUser.displayName || 'Učenec';
+  const resolvedToName = targetProfile.exists()
+    ? targetProfile.data()?.displayName
+    : toName || 'Učenec';
+
+  // The document id is derived from the two accounts, so a second attempt
+  // collides with the first one instead of creating a duplicate. The rules
+  // refuse that collision, and the refusal is the answer: the request is
+  // already there.
   const requestId = requestPairId(fromUser.uid, toUid);
   const requestRef = doc(db, 'friendRequests', requestId);
 
-  const existing = await getDoc(requestRef);
-  if (existing.exists()) {
-    const status = existing.data()?.status;
-    return { ok: false, reason: status === 'accepted' ? 'already-friend' : 'already-sent' };
+  try {
+    await setDoc(requestRef, {
+      fromUid: fromUser.uid,
+      fromName,
+      toUid,
+      toName: resolvedToName,
+      status: 'pending',
+      createdAt: serverTimestamp(),
+    });
+  } catch (error) {
+    if (error.code === 'permission-denied') {
+      return { ok: false, reason: 'exists' };
+    }
+    throw error;
   }
-
-  await setDoc(requestRef, {
-    fromUid: fromUser.uid,
-    fromName: fromUser.displayName || 'Učenec',
-    toUid,
-    toName,
-    status: 'pending',
-    createdAt: serverTimestamp(),
-  });
 
   return { ok: true, requestId };
 }

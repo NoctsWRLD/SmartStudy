@@ -77,7 +77,7 @@ export default function SettingsPage() {
   const { cards } = useFlashcards();
   const { sessions } = useFocusSessions();
   const { friends } = useFriends();
-  const { code: friendCode, regenerate } = useFriendCode(currentUser, userProfile?.friendCode);
+  const { code: friendCode, regenerate } = useFriendCode(currentUser, userProfile?.friendCode, userProfile);
   const navigate = useNavigate();
 
   const [displayName, setDisplayName] = useState(currentUser?.displayName || '');

@@ -95,7 +95,11 @@ service cloud.firestore {
         && request.resource.data.uid == request.auth.uid
         && request.resource.data.createdAt == request.time
         && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.friendCode == code;
-      allow update: if false;
+      // A code is never rewritten; at most the same code is written again.
+      allow update: if signedIn()
+        && resource.data.uid == request.auth.uid
+        && request.resource.data.uid == resource.data.uid
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['createdAt']);
       allow delete: if signedIn() && resource.data.uid == request.auth.uid;
     }
 

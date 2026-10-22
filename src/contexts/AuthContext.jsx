@@ -27,8 +27,14 @@ export function AuthProvider({ children }) {
   async function register(email, password, displayName) {
     const result = await createUserWithEmailAndPassword(auth, email, password);
     await updateProfile(result.user, { displayName });
-    const { createUserProfile } = await import('../services/profileService');
-    await createUserProfile(result.uid, { displayName, email });
+    try {
+      const { createUserProfile } = await import('../services/profileService');
+      await createUserProfile(result.uid, { displayName, email });
+    } catch (error) {
+      // The account exists even when the profile write fails; the profile is
+      // created the next time the account is opened.
+      console.error('Ustvarjanje profila ni uspelo:', error);
+    }
     return result;
   }
 
@@ -84,9 +90,11 @@ export function AuthProvider({ children }) {
       setSessionResolved(true);
       if (!user) return;
 
-      // Backfill a minimal public profile for accounts created before profile privacy was added.
+      // Backfill the profile documents for accounts created before they
+      // existed, or created while the write was blocked.
       try {
-        const { ensurePublicProfile } = await import('../services/profileService');
+        const { ensureUserDocument, ensurePublicProfile } = await import('../services/profileService');
+        await ensureUserDocument(user.uid, { displayName: user.displayName, email: user.email });
         await ensurePublicProfile(user.uid, user.displayName);
       } catch (error) {
         console.error('Public profile initialization failed:', error);

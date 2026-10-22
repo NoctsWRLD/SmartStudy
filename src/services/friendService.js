@@ -17,39 +17,92 @@ import { generateCode, isValidCode, normalizeCode } from '../utils/friendCode';
  * rules check that a code document may only be created for the account that
  * owns it.
  */
-export async function ensureFriendCode(uid, currentCode) {
+
+/** Is there already a document for this code? */
+async function codeExists(code) {
+  const snapshot = await getDoc(doc(db, 'userCodes', code));
+  return snapshot.exists();
+}
+
+/** Write the code into the user's own document, creating it when needed. */
+async function storeCodeInProfile(uid, code, profile) {
+  const userRef = doc(db, 'users', uid);
+  const snapshot = await getDoc(userRef);
+
+  if (!snapshot.exists()) {
+    await setDoc(userRef, {
+      displayName: profile?.displayName || 'Učenec',
+      email: profile?.email || '',
+      school: profile?.school || '',
+      photoURL: '',
+      createdAt: serverTimestamp(),
+      friendCode: code,
+    });
+    return;
+  }
+
+  await updateDoc(userRef, { friendCode: code });
+}
+
+/**
+ * The account's code. It is created on first use and can be replaced from the
+ * settings if it leaks.
+ */
+export async function ensureFriendCode(uid, currentCode, profile) {
   if (currentCode && isValidCode(currentCode)) {
     // The code document may be missing after an interrupted write.
-    const codeRef = doc(db, 'userCodes', currentCode);
-    const existing = await getDoc(codeRef);
-    if (!existing.exists()) {
-      await setDoc(codeRef, { uid, createdAt: serverTimestamp() });
+    if (!(await codeExists(currentCode))) {
+      await storeCodeInProfile(uid, currentCode, profile);
+      await setDoc(doc(db, 'userCodes', currentCode), { uid, createdAt: serverTimestamp() });
     }
     return currentCode;
   }
 
-  const code = generateCode();
-  await updateDoc(doc(db, 'users', uid), { friendCode: code });
-  await setDoc(doc(db, 'userCodes', code), { uid, createdAt: serverTimestamp() });
-  return code;
+  for (let attempt = 0; attempt < 5; attempt += 1) {
+    const code = generateCode();
+    if (await codeExists(code)) continue;
+
+    // The profile knows the code first, so a half-finished write never leaves
+    // an account without a usable code.
+    await storeCodeInProfile(uid, code, profile);
+
+    // Two devices can ask for a code at the same moment. The profile holds
+    // the one that actually stuck, so both runs settle on the same code.
+    const stored = (await getDoc(doc(db, 'users', uid))).data()?.friendCode;
+    const effective = stored && isValidCode(stored) ? stored : code;
+
+    if (!(await codeExists(effective))) {
+      await setDoc(doc(db, 'userCodes', effective), { uid, createdAt: serverTimestamp() });
+    }
+    return effective;
+  }
+
+  throw new Error('Kode prijatelja ni bilo mogoče ustvariti. Poskusi znova.');
 }
 
 /**
  * Replace the user's code. The new code is written first, so a failure
  * halfway through never leaves the account without a usable code.
  */
-export async function regenerateFriendCode(uid, previousCode) {
-  const code = generateCode();
-  await updateDoc(doc(db, 'users', uid), { friendCode: code });
-  await setDoc(doc(db, 'userCodes', code), { uid, createdAt: serverTimestamp() });
-  if (previousCode && previousCode !== code) {
-    try {
-      await deleteDoc(doc(db, 'userCodes', previousCode));
-    } catch {
-      // The old code is harmless on its own: it only points at this account.
+export async function regenerateFriendCode(uid, previousCode, profile) {
+  for (let attempt = 0; attempt < 5; attempt += 1) {
+    const code = generateCode();
+    if (await codeExists(code)) continue;
+
+    await storeCodeInProfile(uid, code, profile);
+    await setDoc(doc(db, 'userCodes', code), { uid, createdAt: serverTimestamp() });
+
+    if (previousCode && previousCode !== code) {
+      try {
+        await deleteDoc(doc(db, 'userCodes', previousCode));
+      } catch {
+        // The old code is harmless on its own: it only points at this account.
+      }
     }
+    return code;
   }
-  return code;
+
+  throw new Error('Nove kode ni bilo mogoče ustvariti. Poskusi znova.');
 }
 
 /**
