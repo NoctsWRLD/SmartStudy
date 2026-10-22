@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import Modal from '../Modal';
+import { useAuth } from '../../contexts/AuthContext';
 import { authErrorMessage } from '../../utils/authErrors';
 
 /**
@@ -7,6 +8,7 @@ import { authErrorMessage } from '../../utils/authErrors';
  * is never asked to type it into a form they might not recognise.
  */
 export default function ReauthModal({ isOpen, onClose, onConfirm, title, description, confirmLabel = 'Potrdi' }) {
+  const { currentUser } = useAuth();
   const [password, setPassword] = useState('');
   const [error, setError] = useState(null);
   const [busy, setBusy] = useState(false);
@@ -40,6 +42,14 @@ export default function ReauthModal({ isOpen, onClose, onConfirm, title, descrip
       size="sm"
     >
       <form onSubmit={handleSubmit}>
+        <input
+          type="text"
+          name="username"
+          value={currentUser?.email || ''}
+          readOnly
+          autoComplete="username"
+          hidden
+        />
         <label className="field-label" htmlFor="reauth-password">Trenutno geslo</label>
         <input
           id="reauth-password"

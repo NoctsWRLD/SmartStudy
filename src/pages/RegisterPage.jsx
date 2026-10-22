@@ -72,7 +72,7 @@ export default function RegisterPage() {
           value={email}
           onChange={(event) => setEmail(event.target.value)}
           placeholder="tia@sola.si"
-          autoComplete="email"
+          autoComplete="username"
         />
         <div className="grid gap-3.5 sm:grid-cols-2">
           <AuthField

@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import Modal from '../Modal';
+import { useAuth } from '../../contexts/AuthContext';
 import { authErrorMessage } from '../../utils/authErrors';
 
 /**
@@ -8,6 +9,7 @@ import { authErrorMessage } from '../../utils/authErrors';
  * not as a warning, but as a fact.
  */
 export default function DeleteAccountModal({ isOpen, onClose, onConfirm, displayName }) {
+  const { currentUser } = useAuth();
   const [typedName, setTypedName] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState(null);
@@ -45,6 +47,14 @@ export default function DeleteAccountModal({ isOpen, onClose, onConfirm, display
       size="sm"
     >
       <form onSubmit={handleSubmit}>
+        <input
+          type="text"
+          name="username"
+          value={currentUser?.email || ''}
+          readOnly
+          autoComplete="username"
+          hidden
+        />
         <p className="text-small leading-5 text-rp-muted">
           Tega ni mogoče razveljaviti. Za varnost vpiši svoje ime in geslo.
         </p>

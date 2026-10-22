@@ -51,7 +51,7 @@ export default function LoginPage() {
           value={email}
           onChange={(event) => setEmail(event.target.value)}
           placeholder="tia@sola.si"
-          autoComplete="email"
+          autoComplete="username"
         />
         <AuthField
           label="Geslo"
