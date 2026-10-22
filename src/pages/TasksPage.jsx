@@ -110,7 +110,7 @@ export default function TasksPage() {
   }
 
   return (
-    <div className="space-y-7">
+    <div className="space-y-6">
       <section className="rise margin-rule">
         <h1 className="text-page text-rp-text">Tvoje naloge</h1>
         <p className="mt-2 max-w-xl text-body text-rp-muted">

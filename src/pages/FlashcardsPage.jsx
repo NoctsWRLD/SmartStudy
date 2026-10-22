@@ -77,7 +77,7 @@ export default function FlashcardsPage() {
   const card = studying ? currentCard() : null;
 
   return (
-    <div className="space-y-7">
+    <div className="space-y-6">
       <section className="rise margin-rule">
         <h1 className="text-page text-rp-text">Kartice</h1>
         <p className="mt-2 max-w-xl text-body text-rp-muted">

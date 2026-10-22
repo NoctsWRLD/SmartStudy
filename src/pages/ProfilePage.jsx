@@ -18,7 +18,7 @@ export default function ProfilePage() {
   const displayName = currentUser?.displayName?.trim() || 'Učenec';
 
   return (
-    <div className="mx-auto max-w-2xl space-y-5">
+    <div className="max-w-2xl space-y-5">
       <section className="rise">
         <h1 className="text-page text-rp-text">Moj profil</h1>
         <p className="mt-2 max-w-xl text-body text-rp-muted">

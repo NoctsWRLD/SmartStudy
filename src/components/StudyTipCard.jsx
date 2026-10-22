@@ -13,10 +13,10 @@ const TIPS = [
 export default function StudyTipCard() {
   const tip = TIPS[getDayOfYear(getSlovenianDateKey()) % TIPS.length];
   return (
-    <section className="card p-5" aria-labelledby="study-tip-title">
+    <section className="margin-rule" aria-labelledby="study-tip-title">
       <p className="text-label text-rp-muted">Namig za danes</p>
-      <h2 id="study-tip-title" className="mt-1.5 text-title text-rp-text">{tip.title}</h2>
-      <p className="mt-2 text-body text-rp-muted">{tip.copy}</p>
+      <h2 id="study-tip-title" className="mt-1.5 text-body font-semibold text-rp-text">{tip.title}</h2>
+      <p className="mt-1.5 text-small leading-5 text-rp-muted">{tip.copy}</p>
     </section>
   );
 }

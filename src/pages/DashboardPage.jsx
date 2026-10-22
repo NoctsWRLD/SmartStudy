@@ -71,7 +71,7 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6">
       <section className="rise margin-rule" aria-labelledby="dash-title">
         <p className="text-small text-rp-muted lg:hidden">{dateLabel}</p>
         <h1 id="dash-title" className="mt-2 max-w-2xl text-page text-rp-text">

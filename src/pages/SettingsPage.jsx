@@ -262,8 +262,8 @@ export default function SettingsPage() {
   const focusMinutes = sessions.reduce((sum, session) => sum + (session.minutes || 0), 0);
 
   return (
-    <div className="mx-auto max-w-3xl space-y-5">
-      <section className="rise">
+    <div className="max-w-3xl space-y-5">
+      <section className="rise margin-rule">
         <h1 className="text-page text-rp-text">Nastavitve</h1>
         <p className="mt-2 max-w-xl text-body text-rp-muted">
           Vse o svojem računu, videzu in načinu učenja je na enem mestu.
@@ -413,9 +413,13 @@ export default function SettingsPage() {
         description="Koda tebe poišče med sošolci. Deli jo s tistimi, ki jih želiš dodati."
       >
         <div className="flex flex-wrap items-center gap-3">
-          <span className="mono rounded-md border border-rp-line bg-rp-sunken px-4 py-2 text-xl tracking-[0.2em] text-rp-text">
-            {friendCode || '…'}
-          </span>
+          {friendCode ? (
+            <span className="mono rounded-md border border-rp-line bg-rp-sunken px-4 py-2 text-xl tracking-[0.2em] text-rp-text">
+              {friendCode}
+            </span>
+          ) : (
+            <span className="skel h-11 w-40" aria-hidden="true" />
+          )}
           <button type="button" onClick={handleCopyCode} disabled={!friendCode} className="btn-ghost">
             {copied ? <CheckIcon className="h-4 w-4" /> : <CopyIcon className="h-4 w-4" />}
             {copied ? 'Kopirano' : 'Kopiraj kodo'}

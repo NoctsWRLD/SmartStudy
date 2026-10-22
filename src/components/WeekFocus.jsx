@@ -40,13 +40,13 @@ export default function WeekFocus() {
   }));
 
   return (
-    <section className="card p-5" aria-label="Fokus ta teden">
+    <section className="sheet px-5 py-4" aria-label="Fokus ta teden">
       <div className="flex items-baseline justify-between gap-3">
-        <h2 className="text-title text-rp-text">Fokus ta teden</h2>
-        <p className="tnum text-small font-semibold text-rp-muted">{total} min</p>
+        <h2 className="text-body font-semibold text-rp-text">Fokus ta teden</h2>
+        <p className="mono text-small font-semibold text-rp-muted">{total} min</p>
       </div>
 
-      <ul className="rail mt-4" aria-label={`${total} minut fokusa v zadnjih 7 dneh`}>
+      <ul className="rail mt-3" aria-label={`${total} minut fokusa v zadnjih 7 dneh`}>
         {segments.map((segment) => (
           <li key={segment.key} className="rail-seg" data-tone={segment.tone}>
             <span aria-hidden="true" style={{ width: `${Math.round(segment.value * 100)}%` }} />
@@ -67,7 +67,7 @@ export default function WeekFocus() {
         ))}
       </ul>
 
-      <p className="mt-3 text-small text-rp-muted">
+      <p className="mt-3 border-t border-rp-line pt-3 text-small text-rp-muted">
         {streak >= 2
           ? `${streak}-dnevni niz. Kar tako naprej.`
           : total === 0
